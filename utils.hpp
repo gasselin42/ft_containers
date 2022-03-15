@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/14 15:18:25 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/15 13:12:36 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ namespace ft
 
 	template <class T1, class T2>
 		struct pair {
+			typedef T1 first_type;
+			typedef T2 second_type;
+
+			first_type first;
+			second_type second;
+
 			pair();
 			
 			template<class U, class V>
