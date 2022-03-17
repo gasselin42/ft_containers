@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/16 14:07:07 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/17 15:37:07 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,3 +126,20 @@
 // 	std::cout << std::endl;
 // 	return (0);
 // }
+
+#include "vector.hpp"
+
+template <typename T>
+void fill_vector(T &cont)
+{
+	for (int i = 0; i < 45; i++)
+		cont.push_back(i + 1);
+}
+
+int main()
+{
+	ft::vector<int> vec;
+	fill_vector(vec);
+	std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
+	return (0);
+}
