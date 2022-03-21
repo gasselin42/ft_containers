@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Vector.hpp                                         :+:      :+:    :+:   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/17 15:41:19 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/18 11:31:19 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ namespace ft
 					}
 					return (i);
 				}
+
 			template <class InputIterator>
 				difference_type get_diff(InputIterator first, InputIterator last)
 					{
@@ -133,9 +134,14 @@ namespace ft
 						this->clear();
 				}
 
-			iterator begin();
-			const_iterator begin() const;
-			iterator end();
+			iterator begin()
+				{ return (this->_cont_start); }
+
+			const_iterator begin() const
+				{ return (this->_cont_start); }
+
+			iterator end()
+				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
 			const_iterator end() const;
 			reverse_iterator rbegin();
 			const_reverse_iterator rbegin() const;
@@ -252,11 +258,22 @@ namespace ft
 					this->_cont_size--;
 				}
 
-			iterator insert(iterator position, const value_type& val);
-			void insert(iterator position, size_type n, const value_type& val);
-			
+			iterator insert(iterator position, const value_type& val)
+			{
+				
+			}
+
+			void insert(iterator position, size_type n, const value_type& val)
+			{
+				
+			}
+
 			template <class InputIterator>
-				void insert(iterator position, InputIterator first, InputIterator last);
+				void insert(iterator position, InputIterator first, InputIterator last)
+				 {
+					 // Verify if InputIterator is integral
+					 
+				 }
 
 			iterator erase(iterator position);
 			iterator erase(iterator first, iterator last);
