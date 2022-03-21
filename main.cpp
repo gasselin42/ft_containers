@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/17 15:37:07 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:42:38 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@
 // }
 
 #include "vector.hpp"
+#include "iterators.hpp"
 
 template <typename T>
 void fill_vector(T &cont)
@@ -138,8 +139,19 @@ void fill_vector(T &cont)
 
 int main()
 {
+	// int range_array[] = {47, 152, -325, 9, 14444};
+
 	ft::vector<int> vec;
+	ft::vector<int> vec2;
+	ft::vector<int>::iterator it;
+	it = vec.begin();
 	fill_vector(vec);
-	std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
+	// vec.insert(vec.begin(), 50);
+	fill_vector(vec2);
+	// std::cout << "Bonjour" << "\n";
+	vec.insert(it+10, vec2.begin(), vec2.begin()+10);
+	for (int i = 0; i < 60; i++)
+		std::cout << vec[i] << "\n";
+	// std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
 	return (0);
 }

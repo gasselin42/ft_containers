@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.hpp                                         :+:      :+:    :+:   */
+/*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/18 11:31:19 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:59:31 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ namespace ft
 			typedef typename 	allocator_type::const_reference					const_reference;
 			typedef typename	allocator_type::pointer							pointer;
 			typedef typename	allocator_type::const_pointer					const_pointer;
-			typedef				ft::RandomIterator<value_type>					iterator;
-			typedef				ft::ConstRandomIterator<value_type>				const_iterator;
-			typedef				ft::ReverseRandomIterator<iterator>				reverse_iterator;
-			typedef				ft::ConstReverseRandomIterator<const_iterator>	const_reverse_iterator;
+			typedef				ft::random_access_iterator<value_type>			iterator;
+			typedef				ft::random_access_iterator<const value_type>	const_iterator;
+			typedef				ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef				ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 			typedef				ptrdiff_t										difference_type;
 			typedef				size_t											size_type;
 			
@@ -109,7 +109,7 @@ namespace ft
 					{
 						// **** Verify if InputIterator is an integral type ****
 						// difference_type diff = last - first;
-						difference_type diff = get_diff(first, last);
+						difference_type diff = this->get_diff(first, last);
 						size_type n = get_next_capacity(diff);
 						_cont_start = _alloc.allocate(n);
 						_cont_end = _cont_start + n;
@@ -142,7 +142,10 @@ namespace ft
 
 			iterator end()
 				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
-			const_iterator end() const;
+
+			const_iterator end() const
+				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
+
 			reverse_iterator rbegin();
 			const_reverse_iterator rbegin() const;
 			reverse_iterator rend();
@@ -182,7 +185,7 @@ namespace ft
 								_old_start++;
 								this->_cont_end++;
 							}
-							_alloc.deallocate(_old_start2, this->_cont_size / 2);
+							_alloc.deallocate(_old_start2, this->_cont_size);
 						}
 					} catch (const std::length_error& e) {
 						std::cerr << e.what() << "\n";
@@ -260,19 +263,83 @@ namespace ft
 
 			iterator insert(iterator position, const value_type& val)
 			{
-				
+				try {	
+					if (this->_cont_size == this->max_size())
+						throw (std::length_error("vector::insert"));
+				} catch (const std::length_error& e) {
+					std::cerr << e.what() << "\n";
+					return (this->_cont_start);
+				}
+				size_type i = 0;
+				iterator it = begin();
+				while (it + i != position && i < this->_cont_size)
+					i++;
+				// size_type diff = this->_cont_end - position;
+				// std::cout << diff << "\n";
+				if (this->_cont_size == this->_cont_capacity)
+					this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
+				for (size_type j = i; j < this->_cont_size; j++)
+					this->_alloc.construct(this->_cont_end - i, *(this->_cont_end - 1 - i));
+				this->_cont_end++;
+				this->_alloc.construct(this->_cont_start + i, val);
+				return (this->_cont_start + i);
 			}
 
 			void insert(iterator position, size_type n, const value_type& val)
 			{
-				
+				// std::cout << "Hello\n";
+				if (n == 0)
+					return ;
+				try {	
+					if ((this->_cont_size + n) > this->max_size())
+						throw (std::length_error("vector::insert"));
+				} catch (const std::length_error& e) {
+					std::cerr << e.what() << "\n";
+					return ;
+				}
+				// size_type diff = get_diff(&(*position), this->_cont_end);
+				// std::cout << diff << "\n\n";
+				// if ((this->_cont_size + n) > this->_cont_capacity)
+				// 	this->reserve(this->_cont_capacity + n);
+				// for (size_type i = 0; i < diff; i++)
+				// 	this->_alloc.construct(this->_cont_end + n - i, *(this->_cont_end - 1 - i));
+				// this->_cont_end += n;
+				// for (size_type j = 0; j < n; j++)
+				// 	this->_alloc.construct(&(*position) + j, val);
+				while (n--)
+					position = insert(position, val) + 1;
 			}
 
 			template <class InputIterator>
 				void insert(iterator position, InputIterator first, InputIterator last)
 				 {
-					 // Verify if InputIterator is integral
-					 
+
+					// Verify if InputIterator is integral
+					size_type diff_insert = get_diff(first, last);
+					if (diff_insert == 0)
+						return ;
+					try {	
+						if ((this->_cont_size + diff_insert) > this->max_size())
+							throw (std::length_error("vector::insert"));
+					} catch (const std::length_error& e) {
+						std::cerr << e.what() << "\n";
+						return ;
+					}
+					// size_type diff = get_diff(pointer(position), this->_cont_end);
+					// size_type diff_start = this->_cont_size - diff;
+					// std::cout << diff_insert << "\n";
+					// if ((this->_cont_size + diff_insert) > this->_cont_capacity)
+					// 	this->reserve(this->_cont_capacity + diff_insert);
+					// for (size_type i = 0; i < diff; i++)
+					// 	this->_alloc.construct(this->_cont_end + diff_insert - i, *(this->_cont_end - 1 - i));
+					// this->_cont_end += diff_insert;
+					// for (size_type j = 0; j < diff_insert; j++)
+					// 	this->_alloc.construct(this->_cont_start + diff_start + j, *first++);
+					while (first != last)
+					{
+						position = insert(position, *first) + 1;
+						first++;
+					}
 				 }
 
 			iterator erase(iterator position);
