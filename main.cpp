@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/21 15:42:38 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/22 15:48:11 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,9 @@
 
 #include "vector.hpp"
 #include "iterators.hpp"
+#include <vector>
+#include <iterator>
+#include <cstring>
 
 template <typename T>
 void fill_vector(T &cont)
@@ -137,21 +140,86 @@ void fill_vector(T &cont)
 		cont.push_back(i + 1);
 }
 
+template <typename T>
+void fill_vector2(T &cont)
+{
+	for (int i = 0; i < 10; i++)
+		cont.push_back(i);
+}
+
 int main()
 {
 	// int range_array[] = {47, 152, -325, 9, 14444};
 
-	ft::vector<int> vec;
-	ft::vector<int> vec2;
-	ft::vector<int>::iterator it;
-	it = vec.begin();
-	fill_vector(vec);
+	// const std::string extra(6, 'b');
+	ft::vector<int> ft_vec;
+	ft::vector<int> ft_vec2;
+	// std::vector<int> vec;
+	// std::vector<int> vec2;
+	std::cout << ft_vec.capacity() << "\n";
+	// int myarray [] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+	fill_vector(ft_vec);
+	fill_vector(ft_vec2);
+	ft_vec.assign(5, 50);
+
+	for (size_t i = 0; i < ft_vec.size(); i++)
+		std::cout << ft_vec[i] << "\n";
+	std::cout << ft_vec.capacity() << "\n";
+	std::cout << "\n";
+	ft_vec.assign(ft_vec2.begin()+22, ft_vec2.begin()+27);
+	for (size_t i = 0; i < ft_vec.size(); i++)
+		std::cout << ft_vec[i] << "\n";
+	std::cout << ft_vec.capacity() << "\n";
+	// fill_vector2(vec2);
+	// fill_vector2(ft_vec);
+	// std::vector<int>::iterator it = vec.begin();
 	// vec.insert(vec.begin(), 50);
-	fill_vector(vec2);
-	// std::cout << "Bonjour" << "\n";
-	vec.insert(it+10, vec2.begin(), vec2.begin()+10);
-	for (int i = 0; i < 60; i++)
-		std::cout << vec[i] << "\n";
+
+	// ft_vec.insert(vec.begin(), myarray, myarray+9)
+	// vec.insert(it+10, 10, 50);
+	// ft_vec.insert(it, 50);
+
+	// for (int i = 0; i < 65; i++)
+		// std::cout << vec[i] << "\n";
+
+
+		
+
+	/* ERASE */
+	// for (unsigned long i = 0; i < ft_vec.size(); i++)
+	// 	std::cout << ft_vec[i] << " ";
+	// std::cout << '\n';
+ 
+    // ft_vec.erase(ft_vec.begin());
+
+	// for (unsigned long i = 0; i < ft_vec.size(); i++)
+	// 	std::cout << ft_vec[i] << " ";
+	// std::cout << '\n';
+ 
+    // ft_vec.erase(ft_vec.begin()+2, ft_vec.begin()+5);
+
+	// for (unsigned long i = 0; i < ft_vec.size(); i++)
+	// 	std::cout << ft_vec[i] << " ";
+	// std::cout << '\n';
+ 
+    // for (ft::vector<int>::iterator it = ft_vec.begin(); it != ft_vec.end(); ) {
+    //     if (*it % 2 == 0) {
+    //         it = ft_vec.erase(it);
+    //     } else {
+    //         ++it;
+    //     }
+    // }
+
+	// for (unsigned long i = 0; i < ft_vec.size(); i++)
+	// 	std::cout << ft_vec[i] << " ";
+	// std::cout << '\n';
+	/* --------------- */
+
+
+	
+
+
 	// std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
 	return (0);
 }

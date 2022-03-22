@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/15 13:12:36 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/22 15:13:57 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 
 namespace ft
 {
+	template <bool B, class T = void> struct enable_if {};
+	template <class T> struct enable_if<true, T> { typedef T type; };
+	
 	template <class Arg1, class Arg2, class Result>
 		struct binary_function {
 			typedef Arg1 first_argument_type;

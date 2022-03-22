@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/21 15:59:31 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/22 16:10:56 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,17 @@ namespace ft
 				}
 
 			template <class InputIterator>
-				vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+				vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 					: 	_alloc(alloc),
 						_cont_start(NULL),
 						_cont_end(NULL),
 						_cont_size(0),
 						_cont_capacity(0)
 					{
-						// **** Verify if InputIterator is an integral type ****
-						// difference_type diff = last - first;
+						// Verify if InputIterator is integral
+						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+							throw (std::length_error("vector::constructor"));
 						difference_type diff = this->get_diff(first, last);
 						size_type n = get_next_capacity(diff);
 						_cont_start = _alloc.allocate(n);
@@ -125,13 +127,27 @@ namespace ft
 					this->_alloc.deallocate(this->_cont_start, this->_cont_capacity);
 				}
 
+			// size_type get_size(void) { return (_cont_size); }
+			// size_type get_capacity(void) { return (_cont_capacity); }
+
 			// Member functions
 			vector& operator=(const vector& x)
 				{
 					if (*this == x)
 						return (*this);
 					if (this->_cont_start != NULL)
+					{
 						this->clear();
+						this->_alloc.deallocate(this->_cont_start, this->_cont_capacity);
+					}
+					this->_cont_start = this->_alloc.allocate(x.capacity());
+					this->_cont_end = this->_cont_start;
+					this->_cont_capacity = x.capacity();
+					this->_cont_size = x.size();
+					this->_alloc = x._alloc;
+					if (this->_cont_size)
+						this->assign(x.begin(), x.end());
+					return (*this);
 				}
 
 			iterator begin()
@@ -146,10 +162,17 @@ namespace ft
 			const_iterator end() const
 				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
 
-			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;
-			reverse_iterator rend();
-			const_reverse_iterator rend() const;
+			reverse_iterator rbegin()
+				{ return (reverse_iterator(this->end() - 1)); }
+
+			const_reverse_iterator rbegin() const
+				{ return (reverse_iterator(this->end() - 1)); }
+
+			reverse_iterator rend()
+				{ return (reverse_iterator(this->begin() - 1)); }
+
+			const_reverse_iterator rend() const
+				{ return (reverse_iterator(this->begin() - 1)); }
 
 			size_type size() const
 				{ return (this->_cont_size); }
@@ -157,7 +180,23 @@ namespace ft
 			size_type max_size() const
 				{ return (this->_alloc.max_size()); }
 
-			void resize(size_type n, value_type val = value_type());
+			void resize(size_type n, value_type val = value_type())
+				{
+					if (n > this->max_size())
+						throw (std::length_error("vector::reserve"));
+					else if (n < this->_cont_size)
+					{
+						while (this->_cont_size > n)
+							this->pop_back();
+					}
+					else
+					{
+						if (n > this->_cont_capacity)
+							this->reserve(n);
+						while (this->_cont_size < n)
+							this->push_back(val);
+					}
+				}
 
 			size_type capacity() const
 				{ return (this->_cont_capacity); }
@@ -167,28 +206,24 @@ namespace ft
 
 			void reserve(size_type n)
 				{
-					try {	
-						if (this->_cont_size == this->max_size())
-							throw (std::length_error("vector::reserve"));
-						if (n > this->_cont_capacity)
+					if (this->_cont_size == this->max_size())
+						throw (std::length_error("vector::reserve"));
+					else if (n > this->_cont_capacity)
+					{
+						n = get_next_capacity(n);
+						pointer _old_start = this->_cont_start;
+						pointer _old_start2 = this->_cont_start;
+						pointer _old_end = this->_cont_end;
+						this->_cont_start = _alloc.allocate(n);
+						this->_cont_end = this->_cont_start;
+						this->_cont_capacity = n;
+						while (_old_start != _old_end)
 						{
-							n = get_next_capacity(n);
-							pointer _old_start = this->_cont_start;
-							pointer _old_start2 = this->_cont_start;
-							pointer _old_end = this->_cont_end;
-							this->_cont_start = _alloc.allocate(n);
-							this->_cont_end = this->_cont_start;
-							this->_cont_capacity = n;
-							while (_old_start != _old_end)
-							{
-								this->_alloc.construct(this->_cont_end, *_old_start);
-								_old_start++;
-								this->_cont_end++;
-							}
-							_alloc.deallocate(_old_start2, this->_cont_size);
+							this->_alloc.construct(this->_cont_end, *_old_start);
+							_old_start++;
+							this->_cont_end++;
 						}
-					} catch (const std::length_error& e) {
-						std::cerr << e.what() << "\n";
+						_alloc.deallocate(_old_start2, this->_cont_size);
 					}
 				}
 
@@ -199,25 +234,19 @@ namespace ft
 				{ return (*(this->_cont_start + n)); }
 			
 			reference at(size_type n)
-				{
-					try {	
-						if (n >= this->_cont_size)
-							throw (std::out_of_range("vector::at"));
+				{	
+					if (n >= this->_cont_size)
+						throw (std::out_of_range("vector::at"));
+					else
 						return (*(this->_cont_start + n));
-					} catch (const std::out_of_range& e) {
-						std::cerr << e.what() << "\n";
-					}
 				}
 
 			const_reference at(size_type n) const
 				{
-					try {	
-						if (n >= this->_cont_size)
-							throw (std::out_of_range("vector::at"));
+					if (n >= this->_cont_size)
+						throw (std::out_of_range("vector::at"));
+					else
 						return (*(this->_cont_start + n));
-					} catch (const std::out_of_range& e) {
-						std::cerr << e.what() << "\n";
-					}
 				}
 
 			reference front()
@@ -232,23 +261,54 @@ namespace ft
 			const_reference back() const
 				{ return (*(this->_cont_end - 1)); }
 			
-			template <class InputIterator>
-				void assign(InputIterator first, InputIterator last);
+			void assign(size_type n, const value_type& val)
+				{
+					if (n > this->max_size())
+						throw (std::length_error("vector::assign"));
+					else
+					{
+						this->clear();
+						if (n > this->_cont_capacity)
+							this->reserve(n);
+						while (n--)
+							this->push_back(val);
+					}
+				}
 
-			void assign(size_type n, const value_type& val);
+			template <class InputIterator>
+				void assign(InputIterator first, InputIterator last,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+					{
+						// Verify if InputIterator is integral
+						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+							throw (std::length_error("vector::assign"));
+						size_type diff = get_diff(first, last);
+						if (diff > this->max_size())
+							throw (std::length_error("vector::assign"));
+						else if (first != last)
+						{
+							this->clear();
+							if (diff > this->_cont_capacity)
+								this->reserve(diff);
+							while (first != last)
+							{
+								this->push_back(*first);
+								first++;
+							}
+							
+						}
+					}
 
 			void push_back(const value_type& val)
-				{
-					try {	
-						if (this->_cont_size == this->max_size())
-							throw (std::length_error("vector::push_back"));
+				{	
+					if (this->_cont_size == this->max_size())
+						throw (std::length_error("vector::push_back"));
+					else {
 						if (this->_cont_capacity == 0 || this->_cont_size == this->_cont_capacity)
 							this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
 						this->_alloc.construct(this->_cont_end, val);
 						this->_cont_end++;
 						this->_cont_size++;
-					} catch (const std::length_error& e) {
-						std::cerr << e.what() << "\n";
 					}
 				}
 
@@ -257,111 +317,121 @@ namespace ft
 					if (this->_cont_size == 0)
 						return ;
 					this->_cont_end--;
-					this->_alloc.destroy(*(this->_cont_end));
+					this->_alloc.destroy(this->_cont_end);
 					this->_cont_size--;
 				}
 
 			iterator insert(iterator position, const value_type& val)
-			{
-				try {	
-					if (this->_cont_size == this->max_size())
-						throw (std::length_error("vector::insert"));
-				} catch (const std::length_error& e) {
-					std::cerr << e.what() << "\n";
-					return (this->_cont_start);
+				{
+					try {	
+						if (this->_cont_size == this->max_size())
+							throw (std::length_error("vector::insert"));
+					} catch (const std::length_error& e) {
+						std::cerr << e.what() << "\n";
+						return (this->_cont_start);
+					}
+					iterator it = begin();
+					size_type i = get_diff(it, position);
+					if (this->_cont_size == this->_cont_capacity)
+						this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
+					for (size_type j = 0; j < this->_cont_size - i; j++) {
+						this->_alloc.construct(this->_cont_end - j, *(this->_cont_end - 1 - j));
+						this->_alloc.destroy(this->_cont_end - 1 - j);
+					}
+					this->_cont_end++;
+					this->_cont_size++;
+					this->_alloc.construct(this->_cont_start + i, val);
+					return (this->_cont_start + i);
 				}
-				size_type i = 0;
-				iterator it = begin();
-				while (it + i != position && i < this->_cont_size)
-					i++;
-				// size_type diff = this->_cont_end - position;
-				// std::cout << diff << "\n";
-				if (this->_cont_size == this->_cont_capacity)
-					this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
-				for (size_type j = i; j < this->_cont_size; j++)
-					this->_alloc.construct(this->_cont_end - i, *(this->_cont_end - 1 - i));
-				this->_cont_end++;
-				this->_alloc.construct(this->_cont_start + i, val);
-				return (this->_cont_start + i);
-			}
 
 			void insert(iterator position, size_type n, const value_type& val)
-			{
-				// std::cout << "Hello\n";
-				if (n == 0)
-					return ;
-				try {	
-					if ((this->_cont_size + n) > this->max_size())
-						throw (std::length_error("vector::insert"));
-				} catch (const std::length_error& e) {
-					std::cerr << e.what() << "\n";
-					return ;
-				}
-				// size_type diff = get_diff(&(*position), this->_cont_end);
-				// std::cout << diff << "\n\n";
-				// if ((this->_cont_size + n) > this->_cont_capacity)
-				// 	this->reserve(this->_cont_capacity + n);
-				// for (size_type i = 0; i < diff; i++)
-				// 	this->_alloc.construct(this->_cont_end + n - i, *(this->_cont_end - 1 - i));
-				// this->_cont_end += n;
-				// for (size_type j = 0; j < n; j++)
-				// 	this->_alloc.construct(&(*position) + j, val);
-				while (n--)
-					position = insert(position, val) + 1;
-			}
-
-			template <class InputIterator>
-				void insert(iterator position, InputIterator first, InputIterator last)
-				 {
-
-					// Verify if InputIterator is integral
-					size_type diff_insert = get_diff(first, last);
-					if (diff_insert == 0)
+				{
+					if (n == 0)
 						return ;
 					try {	
-						if ((this->_cont_size + diff_insert) > this->max_size())
+						if ((this->_cont_size + n) > this->max_size())
 							throw (std::length_error("vector::insert"));
 					} catch (const std::length_error& e) {
 						std::cerr << e.what() << "\n";
 						return ;
 					}
-					// size_type diff = get_diff(pointer(position), this->_cont_end);
-					// size_type diff_start = this->_cont_size - diff;
-					// std::cout << diff_insert << "\n";
-					// if ((this->_cont_size + diff_insert) > this->_cont_capacity)
-					// 	this->reserve(this->_cont_capacity + diff_insert);
-					// for (size_type i = 0; i < diff; i++)
-					// 	this->_alloc.construct(this->_cont_end + diff_insert - i, *(this->_cont_end - 1 - i));
-					// this->_cont_end += diff_insert;
-					// for (size_type j = 0; j < diff_insert; j++)
-					// 	this->_alloc.construct(this->_cont_start + diff_start + j, *first++);
-					while (first != last)
-					{
-						position = insert(position, *first) + 1;
-						first++;
-					}
-				 }
+					while (n--)
+						position = insert(position, val) + 1;
+				}
 
-			iterator erase(iterator position);
-			iterator erase(iterator first, iterator last);
+			template <class InputIterator>
+				void insert(iterator position, InputIterator first, InputIterator last,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+					{
+						// Verify if InputIterator is integral
+						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+							throw (std::length_error("vector::insert"));
+						if (first == last)
+							return ;
+						size_type diff_insert = get_diff(first, last);
+						try {	
+							if ((this->_cont_size + diff_insert) > this->max_size())
+								throw (std::length_error("vector::insert"));
+						} catch (const std::length_error& e) {
+							std::cerr << e.what() << "\n";
+							return ;
+						}
+						while (first != last)
+						{
+							position = insert(position, *first) + 1;
+							first++;
+						}
+					}
+
+			iterator erase(iterator position)
+				{
+					if (position >= this->end())
+						return (iterator(this->end()));
+					pointer pos = &(*position);
+					this->_alloc.destroy(&(*position));
+					if (position != this->end() - 1)
+					{
+						size_type diff = get_diff(position, this->end() - 1);
+						for (size_type j = 0; j < diff; j++) {
+							this->_alloc.construct(&(*position) + j, *(position + j + 1));
+							this->_alloc.destroy(&(*position) + j + 1);
+						}
+					}
+					this->_cont_end--;
+					this->_cont_size--;
+					return (iterator(pos));
+				}
+
+			iterator erase(iterator first, iterator last)
+				{
+					difference_type diff = get_diff(first, last);
+					if (first == last || first >= this->end())
+						return (this->end());
+					while (diff--) {
+						first = erase(first);
+						if (first >= this->end())
+							break ;
+					}
+					return (first);
+				}
 
 			void swap(vector& x)
-			{
-				allocator_type 	tmp_alloc = this->_alloc;
-				pointer			tmp_cont_start = this->_cont_start;
-				pointer			tmp_cont_end = this->_cont_end;
-				size_t			tmp_cont_size = this->_cont_size;
+				{
+					allocator_type 	tmp_alloc = this->_alloc;
+					pointer			tmp_cont_start = this->_cont_start;
+					pointer			tmp_cont_end = this->_cont_end;
+					size_t			tmp_cont_size = this->_cont_size;
 
-				this->_alloc = x._alloc;
-				this->_cont_start = x._cont_start;
-				this->_cont_end = x._cont_end;
-				this->_cont_size = x._cont_size;
+					this->_alloc = x._alloc;
+					this->_cont_start = x._cont_start;
+					this->_cont_end = x._cont_end;
+					this->_cont_size = x._cont_size;
 
-				x._alloc = tmp_alloc;
-				x._cont_start = tmp_cont_start;
-				x._cont_end = tmp_cont_end;
-				x._cont_size = tmp_cont_size;
-			}
+					x._alloc = tmp_alloc;
+					x._cont_start = tmp_cont_start;
+					x._cont_end = tmp_cont_end;
+					x._cont_size = tmp_cont_size;
+				}
 
 			void clear()
 				{
