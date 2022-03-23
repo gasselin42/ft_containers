@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/22 15:13:57 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:50:26 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #ifndef UTILS_HPP
 #define UTILS_HPP
+
+#include "pair.hpp"
 
 namespace ft
 {
@@ -33,51 +35,40 @@ namespace ft
 				{ return x < y; }
 		};
 
-	template <class T1, class T2>
-		struct pair {
-			typedef T1 first_type;
-			typedef T2 second_type;
+	
 
-			first_type first;
-			second_type second;
+	template <class InputIt1, class InputIt2>
+		bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
+									 InputIt2 first2, InputIt2 last2)
+			{
+				while (first1!=last1)
+				{
+					if (first2==last2 || *first2<*first1)
+						return false;
+					else if (*first1 < *first2)
+						return true;
+					++first1;
+					++first2;
+				}
+				return (first2 != last2);
+			}
 
-			pair();
-			
-			template<class U, class V>
-				pair(const pair<U, V>& pr);
-
-			pair(const first_type& a, const second_type& b);
-
-			pair& operator=(const pair& pr);
-		};
-
-	template <class T1, class T2>
-		bool operator== (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return lhs.first == rhs.first && lhs.second == rhs.second; }
-
-	template <class T1, class T2>
-		bool operator!= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return !(lhs == rhs); }
-
-	template <class T1, class T2>
-		bool operator<  (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second); }
-
-	template <class T1, class T2>
-		bool operator<= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return !(rhs < lhs); }
-
-	template <class T1, class T2>
-		bool operator>  (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return rhs < lhs; }
-
-	template <class T1, class T2>
-		bool operator>= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
-			{ return !(lhs < rhs); }
-
-	template <class T1, class T2>
-		ft::pair<T1, T2> make_pair(T1 x, T2 y)
-			{ return ( ft::pair<T1, T2>(x, y) ); }
+	template <class InputIt1, class InputIt2, class Compare>
+		bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
+									 InputIt2 first2, InputIt2 last2,
+									 Compare comp)
+			{
+				while (first1 != last1)
+				{
+					if (comp(*first2, *first1))
+						return false;
+					else if (comp(*first1, *first2))
+						return true;
+					++first1;
+					++first2;
+				}
+				return (first2 != last2);
+			}
 }
 
 #endif

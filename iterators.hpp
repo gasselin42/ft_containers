@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/22 16:04:22 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/23 14:00:48 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,33 @@ namespace ft
 	template <typename T>
 		struct is_integral : public is_integral_type<T> {};
 
-	template <>
-		struct is_iterator<ft::random_access_iterator_tag> : public is_iterator_valid<true, ft::random_access_iterator_tag> {};
+
+
+
+	template <class T>
+		struct is_iterator_tag : public is_iterator_valid<false, T> {};
 
 	template <>
-		struct is_iterator<ft::bidirectional_iterator_tag> : public is_iterator_valid<true, ft::bidirectional_iterator_tag> {};
+		struct is_iterator_tag<ft::random_access_iterator_tag> : public is_iterator_valid<true, ft::random_access_iterator_tag> {};
 
 	template <>
-		struct is_iterator<ft::forward_iterator_tag> : public is_iterator_valid<true, ft::forward_iterator_tag> {};
+		struct is_iterator_tag<ft::bidirectional_iterator_tag> : public is_iterator_valid<true, ft::bidirectional_iterator_tag> {};
 
 	template <>
-		struct is_iterator<ft::output_iterator_tag> : public is_iterator_valid<true, ft::output_iterator_tag> {};
+		struct is_iterator_tag<ft::forward_iterator_tag> : public is_iterator_valid<true, ft::forward_iterator_tag> {};
+
+	template <>
+		struct is_iterator_tag<ft::output_iterator_tag> : public is_iterator_valid<true, ft::output_iterator_tag> {};
 	
 	template <>
-		struct is_iterator<ft::input_iterator_tag> : public is_iterator_valid<true, ft::input_iterator_tag> {};
+		struct is_iterator_tag<ft::input_iterator_tag> : public is_iterator_valid<true, ft::input_iterator_tag> {};
 
 	template <typename T>
-		struct is_iterator : public is_iterator_valid<false, T> {};
+		struct is_iterator : public is_iterator_tag<T> {};
+
+
+
+
 
 	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
 		class iterator {
@@ -143,7 +153,9 @@ namespace ft
 		class random_access_iterator : ft::iterator<ft::random_access_iterator_tag, T>
 		{
 			public:
-				// typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type difference_type;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type difference_type;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type value_type;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category iterator_category;
 				typedef T*	pointer;
 				typedef T&	reference;
 
@@ -243,11 +255,11 @@ namespace ft
 					return temp;
 				}
 
-				reverse_iterator operator+(int n) { return (reverse_iterator(_it - n)); }
-				reverse_iterator operator-(int n) { return (reverse_iterator(_it + n)); }
+				reverse_iterator operator+(difference_type n) const { return (reverse_iterator(_it - n)); }
+				reverse_iterator operator-(difference_type n) const { return (reverse_iterator(_it + n)); }
 
-				reverse_iterator operator+=(int n) { _it -= n; return (*this); }
-				reverse_iterator operator-=(int n) { _it += n; return (*this); }
+				reverse_iterator operator+=(difference_type n) { _it -= n; return (*this); }
+				reverse_iterator operator-=(difference_type n) { _it += n; return (*this); }
 
 
 				iterator_type base() const { return (_it); }
@@ -255,6 +267,7 @@ namespace ft
 			private:
 				iterator_type _it;
 		};
+
 		template <class Iterator>
 			reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it)
 				{ return (rev_it + n); }

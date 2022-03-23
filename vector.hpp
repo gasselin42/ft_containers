@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/22 16:10:56 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/23 13:54:05 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ namespace ft
 						_cont_capacity(0)
 					{
 						// Verify if InputIterator is integral
-						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::constructor"));
 						difference_type diff = this->get_diff(first, last);
 						size_type n = get_next_capacity(diff);
@@ -163,16 +163,16 @@ namespace ft
 				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
 
 			reverse_iterator rbegin()
-				{ return (reverse_iterator(this->end() - 1)); }
+				{ return (reverse_iterator(this->end())); }
 
 			const_reverse_iterator rbegin() const
-				{ return (reverse_iterator(this->end() - 1)); }
+				{ return (reverse_iterator(this->end())); }
 
 			reverse_iterator rend()
-				{ return (reverse_iterator(this->begin() - 1)); }
+				{ return (reverse_iterator(this->begin())); }
 
 			const_reverse_iterator rend() const
-				{ return (reverse_iterator(this->begin() - 1)); }
+				{ return (reverse_iterator(this->begin())); }
 
 			size_type size() const
 				{ return (this->_cont_size); }
@@ -280,7 +280,7 @@ namespace ft
 						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 					{
 						// Verify if InputIterator is integral
-						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::assign"));
 						size_type diff = get_diff(first, last);
 						if (diff > this->max_size())
@@ -364,7 +364,7 @@ namespace ft
 						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 					{
 						// Verify if InputIterator is integral
-						if (!(ft::is_iterator_valid<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::insert"));
 						if (first == last)
 							return ;

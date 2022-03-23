@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/22 15:48:11 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/23 13:51:04 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,25 +153,15 @@ int main()
 
 	// const std::string extra(6, 'b');
 	ft::vector<int> ft_vec;
-	ft::vector<int> ft_vec2;
-	// std::vector<int> vec;
+	// ft::vector<int> ft_vec2;
+	std::vector<int> vec;
 	// std::vector<int> vec2;
-	std::cout << ft_vec.capacity() << "\n";
 	// int myarray [] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
 	fill_vector(ft_vec);
-	fill_vector(ft_vec2);
-	ft_vec.assign(5, 50);
+	// fill_vector(ft_vec2);
 
-	for (size_t i = 0; i < ft_vec.size(); i++)
-		std::cout << ft_vec[i] << "\n";
-	std::cout << ft_vec.capacity() << "\n";
-	std::cout << "\n";
-	ft_vec.assign(ft_vec2.begin()+22, ft_vec2.begin()+27);
-	for (size_t i = 0; i < ft_vec.size(); i++)
-		std::cout << ft_vec[i] << "\n";
-	std::cout << ft_vec.capacity() << "\n";
-	// fill_vector2(vec2);
+	fill_vector(vec);
 	// fill_vector2(ft_vec);
 	// std::vector<int>::iterator it = vec.begin();
 	// vec.insert(vec.begin(), 50);
@@ -183,8 +173,13 @@ int main()
 	// for (int i = 0; i < 65; i++)
 		// std::cout << vec[i] << "\n";
 
-
-		
+	ft::vector<int>::reverse_iterator rit = ft_vec.rbegin();
+	for (; rit!= ft_vec.rend(); rit++)
+    	std::cout << *rit << " ";
+	std::cout << "\n";
+	std::vector<int>::reverse_iterator rit2 = vec.rbegin();
+	for (; rit2!= vec.rend(); rit2++)
+    	std::cout << *rit2 << " ";
 
 	/* ERASE */
 	// for (unsigned long i = 0; i < ft_vec.size(); i++)
