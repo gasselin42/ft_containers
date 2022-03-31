@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/23 13:54:05 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:23:02 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,15 @@ namespace ft
 			
 			// Note that if a constructor has any arguments that do not
 			// have default values, it is not a default constructor.
-			explicit vector(const allocator_type& alloc = allocator_type())
+			vector()
+				: 	_alloc(),
+					_cont_start(NULL),
+					_cont_end(NULL),
+					_cont_size(0),
+					_cont_capacity(0)
+				{}
+			
+			explicit vector(const Alloc& alloc)
 				: 	_alloc(alloc),
 					_cont_start(NULL),
 					_cont_end(NULL),
@@ -86,7 +94,7 @@ namespace ft
 					_cont_capacity(0)
 				{}
 
-			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
+			explicit vector(size_type n, const T& val = T(), const Alloc& alloc = Alloc())
 				: 	_alloc(alloc),
 					_cont_start(NULL),
 					_cont_end(NULL),
@@ -100,7 +108,7 @@ namespace ft
 				}
 
 			template <class InputIterator>
-				vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+				vector(InputIterator first, InputIterator last, const Alloc& alloc = Alloc(),
 						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 					: 	_alloc(alloc),
 						_cont_start(NULL),
@@ -127,10 +135,10 @@ namespace ft
 					this->_alloc.deallocate(this->_cont_start, this->_cont_capacity);
 				}
 
-			// size_type get_size(void) { return (_cont_size); }
-			// size_type get_capacity(void) { return (_cont_capacity); }
-
 			// Member functions
+			allocator_type get_allocator() const
+				{ return (this->_alloc); }
+
 			vector& operator=(const vector& x)
 				{
 					if (*this == x)
@@ -166,13 +174,13 @@ namespace ft
 				{ return (reverse_iterator(this->end())); }
 
 			const_reverse_iterator rbegin() const
-				{ return (reverse_iterator(this->end())); }
+				{ return (const_reverse_iterator(this->end())); }
 
 			reverse_iterator rend()
 				{ return (reverse_iterator(this->begin())); }
 
 			const_reverse_iterator rend() const
-				{ return (reverse_iterator(this->begin())); }
+				{ return (const_reverse_iterator(this->begin())); }
 
 			size_type size() const
 				{ return (this->_cont_size); }
@@ -180,7 +188,7 @@ namespace ft
 			size_type max_size() const
 				{ return (this->_alloc.max_size()); }
 
-			void resize(size_type n, value_type val = value_type())
+			void resize(size_type n, T val = T())
 				{
 					if (n > this->max_size())
 						throw (std::length_error("vector::reserve"));
@@ -261,7 +269,7 @@ namespace ft
 			const_reference back() const
 				{ return (*(this->_cont_end - 1)); }
 			
-			void assign(size_type n, const value_type& val)
+			void assign(size_type n, const T& val)
 				{
 					if (n > this->max_size())
 						throw (std::length_error("vector::assign"));
@@ -299,7 +307,7 @@ namespace ft
 						}
 					}
 
-			void push_back(const value_type& val)
+			void push_back(const T& val)
 				{	
 					if (this->_cont_size == this->max_size())
 						throw (std::length_error("vector::push_back"));
@@ -321,7 +329,7 @@ namespace ft
 					this->_cont_size--;
 				}
 
-			iterator insert(iterator position, const value_type& val)
+			iterator insert(iterator position, const T& val)
 				{
 					try {	
 						if (this->_cont_size == this->max_size())
@@ -344,7 +352,7 @@ namespace ft
 					return (this->_cont_start + i);
 				}
 
-			void insert(iterator position, size_type n, const value_type& val)
+			void insert(iterator position, size_type n, const T& val)
 				{
 					if (n == 0)
 						return ;

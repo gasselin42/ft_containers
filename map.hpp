@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/23 15:31:46 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:47:31 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include "utils.hpp"
 #include "memory"
+#include "BST.hpp"
 
 namespace ft
 {
@@ -33,16 +34,16 @@ namespace ft
 			typedef typename	allocator_type::const_reference 			const_reference;
 			typedef typename	allocator_type::pointer 					pointer;
 			typedef typename	allocator_type::const_pointer 				const_pointer;
-			typedef				ft::bidir_iterator<value_type> 				iterator;
-			typedef				ft::const_bidir_iterator<value_type> 		const_iterator;
-			typedef				ft::reverse_iterator<bidir_iterator> 		reverse_iterator;
-			typedef				ft::reverse_iterator<const_bidir_iterator> 	const_reverse_iterator;
-			typedef typename	ptrdiff_t									difference_type;
-			typedef typename	size_t										size_type;
+			typedef				ft::bidir_iterator<value_type, key_compare> iterator;
+			typedef				ft::bidir_iterator<const value_type, key_compare>	const_iterator;
+			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
+			typedef				ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
+			typedef				ptrdiff_t									difference_type;
+			typedef				size_t										size_type;
 
-			class value_compare
-			{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-				friend class map;
+			class value_compare : ft::binary_function<value_type, value_type, bool>
+			{
+				friend class map<key_type, mapped_type, key_compare, allocator_type>;
 				protected:
 					Compare comp;
 					value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
@@ -50,18 +51,16 @@ namespace ft
 					typedef bool result_type;
 					typedef value_type first_argument_type;
 					typedef value_type second_argument_type;
-
 					bool operator() (const value_type& x, const value_type& y) const
 						{ return comp(x.first, y.first); }
 			};
 
 		private:
-			allocator_type 	_alloc;
-			pointer			_cont_start;
-			pointer			_cont_end;
-			size_type		_cont_size;
-			size_type		_cont_capacity;
-			Compare			_comp;
+			allocator_type 				_alloc;
+			size_type					_cont_size;
+			size_type					_cont_capacity;
+			Compare						_comp;
+			BST<value_type, Compare>	_bst;
 
 		public:	
 			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
@@ -77,18 +76,43 @@ namespace ft
 			~map();
 
 			// Member functions
+			allocator_type get_allocator() const
+				{ return (this->_alloc); }
+
 			map& operator=(const map& x);
-			iterator begin();
-			const_iterator begin() const;
-			iterator end();
-			const_iterator end() const;
-			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;
-			reverse_iterator rend();
-			const_reverse_iterator rend() const;
-			bool empty() const;
-			size_type size() const;
-			size_type max_size() const;
+
+			iterator begin()
+				{ return (this->_bst._begin); }
+
+			const_iterator begin() const
+				{ return (this->_bst._begin); }
+
+			iterator end()
+				{ return ((this->empty()) ? this->_bst._begin : this->_bst._end); }
+
+			const_iterator end() const
+				{ return ((this->empty()) ? this->_bst._begin : this->_bst._end); }
+
+			reverse_iterator rbegin()
+				{ return (reverse_iterator(this->end())); }
+
+			const_reverse_iterator rbegin() const
+				{ return (const_reverse_iterator(this->end())); }
+
+			reverse_iterator rend()
+				{ return (reverse_iterator(this->begin())); }
+
+			const_reverse_iterator rend() const
+				{ return (const_reverse_iterator(this->begin())); }
+
+			bool empty() const
+				{ return (this->_cont_size == 0); }
+
+			size_type size() const
+				{ return (this->_cont_size); }
+
+			size_type max_size() const
+				{ return (this->_bst.max_size()); }
 
 			// Check if key_type is already present in the map before insertion
 			mapped_type& operator[](const key_type& k);
@@ -123,6 +147,30 @@ namespace ft
 			ft::pair<iterator, iterator> equal_range(const key_type& k);
 			ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const;
 	};
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator==(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs == rhs); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator!=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs != rhs); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator<(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs < rhs); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator<=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs <= rhs); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator>(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs > rhs); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator>=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (lhs >= rhs); }
 }
 
 #endif

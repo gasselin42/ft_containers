@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/23 13:51:04 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/31 15:13:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@
 
 #include "vector.hpp"
 #include "iterators.hpp"
+#include "map.hpp"
 #include <vector>
 #include <iterator>
 #include <cstring>
@@ -173,13 +174,13 @@ int main()
 	// for (int i = 0; i < 65; i++)
 		// std::cout << vec[i] << "\n";
 
-	ft::vector<int>::reverse_iterator rit = ft_vec.rbegin();
-	for (; rit!= ft_vec.rend(); rit++)
-    	std::cout << *rit << " ";
-	std::cout << "\n";
-	std::vector<int>::reverse_iterator rit2 = vec.rbegin();
-	for (; rit2!= vec.rend(); rit2++)
-    	std::cout << *rit2 << " ";
+	// ft::vector<int>::reverse_iterator rit = ft_vec.rbegin();
+	// for (; rit!= ft_vec.rend(); rit++)
+    // 	std::cout << *rit << " ";
+	// std::cout << "\n";
+	// std::vector<int>::reverse_iterator rit2 = vec.rbegin();
+	// for (; rit2!= vec.rend(); rit2++)
+    // 	std::cout << *rit2 << " ";
 
 	/* ERASE */
 	// for (unsigned long i = 0; i < ft_vec.size(); i++)

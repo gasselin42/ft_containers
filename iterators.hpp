@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/23 14:00:48 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/03/31 15:53:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define ITERATORS_HPP
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "utils.hpp"
 
 namespace ft
@@ -153,11 +154,11 @@ namespace ft
 		class random_access_iterator : ft::iterator<ft::random_access_iterator_tag, T>
 		{
 			public:
-				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type difference_type;
-				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type value_type;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type 	difference_type;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type 		value_type;
 				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category iterator_category;
-				typedef T*	pointer;
-				typedef T&	reference;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::pointer			pointer;
+				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
 
 				random_access_iterator() : _ptr(NULL) {}
 				random_access_iterator(pointer ptr) : _ptr(ptr) {}
