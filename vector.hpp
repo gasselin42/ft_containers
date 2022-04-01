@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/31 16:23:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:45:04 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,18 +143,9 @@ namespace ft
 				{
 					if (*this == x)
 						return (*this);
-					if (this->_cont_start != NULL)
-					{
-						this->clear();
-						this->_alloc.deallocate(this->_cont_start, this->_cont_capacity);
-					}
-					this->_cont_start = this->_alloc.allocate(x.capacity());
+					this->clear();
 					this->_cont_end = this->_cont_start;
-					this->_cont_capacity = x.capacity();
-					this->_cont_size = x.size();
-					this->_alloc = x._alloc;
-					if (this->_cont_size)
-						this->assign(x.begin(), x.end());
+					this->insert(this->begin(), x.begin(), x.end());
 					return (*this);
 				}
 
