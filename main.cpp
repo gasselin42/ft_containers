@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/31 15:13:52 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/06 11:54:29 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,16 +153,16 @@ int main()
 	// int range_array[] = {47, 152, -325, 9, 14444};
 
 	// const std::string extra(6, 'b');
-	ft::vector<int> ft_vec;
+	// ft::vector<int> ft_vec;
 	// ft::vector<int> ft_vec2;
-	std::vector<int> vec;
+	// std::vector<int> vec;
 	// std::vector<int> vec2;
 	// int myarray [] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-	fill_vector(ft_vec);
+	// fill_vector(ft_vec);
 	// fill_vector(ft_vec2);
 
-	fill_vector(vec);
+	// fill_vector(vec);
 	// fill_vector2(ft_vec);
 	// std::vector<int>::iterator it = vec.begin();
 	// vec.insert(vec.begin(), 50);
@@ -213,7 +213,9 @@ int main()
 	/* --------------- */
 
 
-	
+	ft::map<int, int> map1;
+
+	std::cout << map1.size() << "\n";
 
 
 	// std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";

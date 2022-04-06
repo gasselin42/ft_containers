@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/01 16:03:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/06 14:48:51 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include "memory"
 #include "BST.hpp"
+#include <stdexcept>
 
 namespace ft
 {
@@ -58,7 +59,7 @@ namespace ft
 		private:
 			allocator_type 		_alloc;
 			Compare				_comp;
-			BST<value_type>		_bst;
+			BST<value_type, key_compare>	_bst;
 
 			template <class InputIterator>
 				difference_type get_diff(InputIterator first, InputIterator last)
@@ -72,18 +73,21 @@ namespace ft
 						return (diff);
 					}
 
-		public:	
-			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+		public:
+			map() {}
+		
+			explicit map(const key_compare& comp, const allocator_type& alloc = allocator_type()) {}
 			
 			template <class InputIterator>
 				map(InputIterator first, InputIterator last,
 					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type());
+					const allocator_type& alloc = allocator_type()) {}
 			
 			map(const map& x)
 				{ *this = x; }
 
-			~map();
+			~map()
+				{ this->_bst.destroyBST(this->_bst.getRoot()); }
 
 			// Member functions
 			allocator_type get_allocator() const
@@ -132,6 +136,27 @@ namespace ft
 
 			size_type max_size() const
 				{ return (this->_bst.max_size()); }
+
+			mapped_type& at(const key_type& k)
+				{
+					iterator map_it;
+
+					map_it = this->find(k);
+					if (map_it != this->end())
+						return ((*map_it).value.second);
+					else
+						throw (std::out_of_range("map::at"));
+				}
+			const mapped_type& at(const key_type& k) const
+				{
+					iterator map_it;
+
+					map_it = this->find(k);
+					if (map_it != this->end())
+						return ((*map_it).value.second);
+					else
+						throw (std::out_of_range("map::at"));
+				}
 
 			// Check if key_type is already present in the map before insertion
 			mapped_type& operator[](const key_type& k)
@@ -253,6 +278,7 @@ namespace ft
 
 			ft::pair<iterator, iterator> equal_range(const key_type& k)
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
+
 			ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
 	};

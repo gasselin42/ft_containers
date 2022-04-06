@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/31 16:01:05 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/06 14:52:53 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ namespace ft
 			public:
 
 				bidir_iterator() {}
+
+				bidir_iterator(T * node)
+					: _node(node)
+					{}
+
 				virtual ~bidir_iterator() {}
 		};
 }
