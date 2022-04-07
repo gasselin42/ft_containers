@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/06 14:53:24 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:12:06 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,35 +74,39 @@ namespace ft
 				typedef Node_Alloc node_alloc;
 				typedef	size_t	size_type;
 				typedef T value_type;
-				typedef Compare comp;
 				typedef ft::bidir_iterator<Node, Compare> iterator;
+				typedef ft::const_bidir_iterator<Node, Compare> const_iterator;
 
-			private:
-				node_ptr _begin;
-				node_ptr _end;
-				node_ptr _root;
+			// private:
+				// node_ptr _begin;
+				// node_ptr _end;
+				// node_ptr _root;
+				node_ptr _tri_ptr;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
 
 			public:
-				BST(const node_alloc& alloc = node_alloc(), const comp& comparisor = comp())
-					: 	_begin(NULL),
-						_end(NULL),
-						_root(NULL),
+				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
+					: 	_tri_ptr(NULL),
 						_node_alloc(alloc),
 						_map_size(0),
-						_comp(comparisor)
-					{}
+						_comp(comp)
+					{
+						_tri_ptr = _node_alloc.allocate(1);
+						_node_alloc.construct(_tri_ptr, Node());
+					}
 				
-				~BST() {}
-
-				node_ptr getRoot()
-					{ return (this->_root); }
+				~BST() 
+					{
+						_node_alloc.destroy(_tri_ptr);
+						_node_alloc.deallocate(_tri_ptr, 1);
+						_tri_ptr = NULL;
+					}
 
 				node_ptr findNode(const value_type node_to_find)
 					{
-						node_ptr current = _root;
+						node_ptr current = _tri_ptr->parent;
 
 						while (true)
 						{
@@ -122,17 +126,15 @@ namespace ft
 				ft::pair<iterator, bool> insertPair(const value_type node_to_add)
 					{
 						node_ptr new_node = _node_alloc.allocate(1);
-						node_ptr current = _root;
+						node_ptr current = _tri_ptr->parent;
 						bool side = false;
 						
-						if (_root == NULL)
+						if (_tri_ptr->parent == NULL)
 						{
 							_map_size++;
 							_node_alloc.construct(new_node, Node(node_to_add, NULL, NULL, NULL));
-							_root = new_node;
-							_begin = new_node;
-							_end = new_node->right;
-							return (ft::make_pair(iterator(new_node), true));
+							_tri_ptr->parent = new_node;
+							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
 						else if (findNode(node_to_add) == NULL)
 						{
@@ -150,33 +152,56 @@ namespace ft
 									side = true;
 								}
 							}
+
 							_map_size++;
 							_node_alloc.construct(new_node, Node(node_to_add, current->parent, NULL, NULL));
+
 							if (side)
 								current->parent->right = new_node;
 							else
 								current->parent->left = new_node;
-							return (ft::make_pair(iterator(new_node), true));
+
+							if (node_to_add.first < _tri_ptr->left->value.first)
+								_tri_ptr->left = new_node;
+							else if (node_to_add.first > _tri_ptr->right->value.first)
+								_tri_ptr->right = new_node;
+
+							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
 						else
 						{
 							_node_alloc.deallocate(new_node, 1);
-							return (ft::make_pair(iterator(findNode(node_to_add)), false));
+							return (ft::make_pair(iterator(findNode(node_to_add), _tri_ptr), false));
 						}
 					}
 
 				void destroyBST(node_ptr node)
 					{
+						bool side;
+						
 						if(node->left != NULL)
+						{
+							side = true;
 							visitNode(node->left);
+						}
 							
 						if(node->right != NULL)
+						{
+							side = false;
 							visitNode(node->right);
+						}
 							
 						if(node->left == NULL && node->right == NULL)
 						{
 							this->_node_alloc.destroy(node);
 							this->_node_alloc.deallocate(node, 1);
+							if (node->parent != NULL)
+							{
+								if (side)
+									node->parent->left = NULL;
+								else
+									node->parent->right = NULL;
+							}
 						}
 					}
 
@@ -216,15 +241,7 @@ namespace ft
 
 				void transfer_map(self& x)
 					{
-						size_type _size = x.get_size();
-
-						// if (_size-- > 0)
-						// {
-						// 	this->insertPair(*(x._root));
-						// 	this->_begin = this->_root;
-						// 	this->_end = this->_root;
-						// }
-						if (_size)
+						if (this->_map_size)
 							visitNode(x._root);
 					}
 

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/06 14:48:51 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/07 15:51:02 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ namespace ft
 			typedef typename	allocator_type::const_reference 			const_reference;
 			typedef typename	allocator_type::pointer 					pointer;
 			typedef typename	allocator_type::const_pointer 				const_pointer;
-			typedef				ft::bidir_iterator<value_type, key_compare> iterator;
-			typedef				ft::bidir_iterator<const value_type, key_compare>	const_iterator;
+			typedef	typename	ft::BST<value_type, key_compare>::iterator	iterator;
+			typedef	typename	ft::BST<value_type, key_compare>::const_iterator const_iterator;
 			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
 			typedef				ptrdiff_t									difference_type;
@@ -87,7 +87,7 @@ namespace ft
 				{ *this = x; }
 
 			~map()
-				{ this->_bst.destroyBST(this->_bst.getRoot()); }
+				{ this->_bst.destroyBST(this->_bst._tri_ptr->parent); }
 
 			// Member functions
 			allocator_type get_allocator() const
@@ -105,16 +105,16 @@ namespace ft
 				}
 
 			iterator begin()
-				{ return (this->_bst._begin); }
+				{ return (iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			const_iterator begin() const
-				{ return (this->_bst._begin); }
+				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			iterator end()
-				{ return ((this->empty()) ? this->_bst._begin : this->_bst._end); }
+				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right), _bst._tri_ptr)); }
 
 			const_iterator end() const
-				{ return ((this->empty()) ? this->_bst._begin : this->_bst._end); }
+				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right), _bst._tri_ptr)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
@@ -153,7 +153,7 @@ namespace ft
 
 					map_it = this->find(k);
 					if (map_it != this->end())
-						return ((*map_it).value.second);
+						return ((*map_it).second);
 					else
 						throw (std::out_of_range("map::at"));
 				}

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/31 15:53:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:04:32 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ namespace ft
 				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
 				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
 				
-				reverse_iterator() : _it(NULL) {}
+				reverse_iterator() : _it() {}
 				
 				explicit reverse_iterator(iterator_type it) : _it(it) {}
 
