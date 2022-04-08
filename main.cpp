@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/07 15:46:19 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:51:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,22 +214,28 @@ int main()
 
 
 	ft::map<int, int> map1;
-	const ft::map<int, int> map2;
+	// const ft::map<int, int> map2;
 	ft::map<int, int>::iterator it;
-	ft::map<int, int>::const_iterator it2;
-	ft::map<int, int> map3;
-	const ft::map<int, int> map4;
-	ft::map<int, int>::reverse_iterator rit;
-	ft::map<int, int>::const_reverse_iterator rit2;
+	// ft::map<int, int>::const_iterator it2;
+	// ft::map<int, int> map3;
+	// const ft::map<int, int> map4;
+	// ft::map<int, int>::reverse_iterator rit;
+	// ft::map<int, int>::const_reverse_iterator rit2;
 
+	// it = map1.begin();
+	// it2 = map2.begin();
+	// it = map1.end();
+	// it2 = map2.end();
+	// rit = map3.rbegin();
+	// rit2 = map4.rbegin();
+	// rit = map3.rend();
+	// rit2 = map4.rend();
+
+	map1.insert(ft::make_pair<int, int>(111, 222));
+	map1.insert(ft::make_pair<int, int>(333, 444));
 	it = map1.begin();
-	it2 = map2.begin();
-	it = map1.end();
-	it2 = map2.end();
-	rit = map3.rbegin();
-	rit2 = map4.rbegin();
-	rit = map3.rend();
-	rit2 = map4.rend();
+	std::cout << (*it++).first << "\n";
+	std::cout << (*it++).first << "\n";
 
 	std::cout << map1.size() << "\n";
 	std::cout << map1.max_size() << "\n";

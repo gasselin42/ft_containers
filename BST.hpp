@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/07 16:12:06 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/08 15:25:01 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,11 @@ namespace ft
 				typedef ft::bidir_iterator<Node, Compare> iterator;
 				typedef ft::const_bidir_iterator<Node, Compare> const_iterator;
 
-			// private:
-				// node_ptr _begin;
-				// node_ptr _end;
-				// node_ptr _root;
 				node_ptr _tri_ptr;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
 
-			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
 					: 	_tri_ptr(NULL),
 						_node_alloc(alloc),
@@ -134,13 +129,16 @@ namespace ft
 							_map_size++;
 							_node_alloc.construct(new_node, Node(node_to_add, NULL, NULL, NULL));
 							_tri_ptr->parent = new_node;
+							_tri_ptr->left = new_node;
+							_tri_ptr->right = new_node;
 							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
 						else if (findNode(node_to_add) == NULL)
 						{
-							// add new_node
+							node_ptr tmp;
 							while (current != NULL)
 							{
+								tmp = current;
 								if (_comp(node_to_add.first, current->value.first))
 								{
 									current = current->left;
@@ -154,16 +152,16 @@ namespace ft
 							}
 
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, current->parent, NULL, NULL));
+							std::cout << this->_map_size << "\n";
+							_node_alloc.construct(new_node, Node(node_to_add, tmp, NULL, NULL));
 
 							if (side)
-								current->parent->right = new_node;
+								tmp->right = new_node;
 							else
-								current->parent->left = new_node;
-
-							if (node_to_add.first < _tri_ptr->left->value.first)
+								tmp->left = new_node;
+							if (_comp(node_to_add.first, _tri_ptr->left->value.first) == true)
 								_tri_ptr->left = new_node;
-							else if (node_to_add.first > _tri_ptr->right->value.first)
+							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
 								_tri_ptr->right = new_node;
 
 							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
@@ -175,34 +173,23 @@ namespace ft
 						}
 					}
 
-				void destroyBST(node_ptr node)
+				void deleteBinaryTree(node_ptr root)
 					{
-						bool side;
-						
-						if(node->left != NULL)
-						{
-							side = true;
-							visitNode(node->left);
+						// Base case: empty tree
+						if (root == NULL) {
+							return;
 						}
-							
-						if(node->right != NULL)
-						{
-							side = false;
-							visitNode(node->right);
-						}
-							
-						if(node->left == NULL && node->right == NULL)
-						{
-							this->_node_alloc.destroy(node);
-							this->_node_alloc.deallocate(node, 1);
-							if (node->parent != NULL)
-							{
-								if (side)
-									node->parent->left = NULL;
-								else
-									node->parent->right = NULL;
-							}
-						}
+					
+						// delete left and right subtree first (Postorder)
+						deleteBinaryTree(root->left);
+						deleteBinaryTree(root->right);
+					
+						// delete the current node after deleting its left and right subtree
+						this->_node_alloc.destroy(root);
+						this->_node_alloc.deallocate(root, 1);
+					
+						// set root as null before returning
+						root = NULL;
 					}
 
 				size_type max_size() const
@@ -243,6 +230,47 @@ namespace ft
 					{
 						if (this->_map_size)
 							visitNode(x._root);
+					}
+
+				void deleteNode(iterator it)
+					{
+						const value_type val = *it;
+						node_ptr ptr = findNode(val);
+
+						if (ptr->left == NULL && ptr->right == NULL)
+						{
+							// if (ptr->parent->right->value == ptr->value)
+							// 	ptr->parent->right = NULL;
+							// else if (ptr->parent->left->value == ptr->value)
+							// 	ptr->parent->left = NULL;
+							
+							this->_node_alloc.destroy(ptr);
+							this->_node_alloc.deallocate(ptr, 1);
+							ptr = NULL;
+							this->_map_size--;
+						}
+						else if (ptr->left != NULL && ptr->right != NULL)
+						{
+							value_type succ_val = *(++it);
+							node_ptr successor = findNode(succ_val);
+							ptr->value = succ_val;
+							deleteNode(it);
+						}
+						else
+						{
+							node_ptr child;
+							bool side;
+
+							if (ptr->left != NULL)
+								child = ptr->left;
+							else if (ptr->right != NULL)
+								child = ptr->right;
+
+							this->_node_alloc.destroy(ptr);
+							this->_node_alloc.deallocate(ptr, 1);
+							ptr = child;
+							this->_map_size--;
+						}
 					}
 
 				size_type get_size() const

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/07 15:51:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:56:03 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 #define MAP_HPP
 
 #include "utils.hpp"
-#include "memory"
 #include "BST.hpp"
+
+#include <memory>
 #include <stdexcept>
 
+#include <iostream>
 namespace ft
 {
 	template < class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
@@ -74,20 +76,37 @@ namespace ft
 					}
 
 		public:
-			map() {}
+			map()
+				: 	_alloc(),
+					_comp(),
+					_bst()
+				{}
 		
-			explicit map(const key_compare& comp, const allocator_type& alloc = allocator_type()) {}
+			explicit map(const key_compare& comp, const allocator_type& alloc = allocator_type()) 
+				: 	_alloc(alloc),
+					_comp(comp),
+					_bst()
+				{}
 			
 			template <class InputIterator>
 				map(InputIterator first, InputIterator last,
 					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type()) {}
+					const allocator_type& alloc = allocator_type(),
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+					: 	_alloc(alloc),
+						_comp(comp),
+						_bst()
+					{
+						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
+							throw (std::length_error("map::constructor"));
+						this->insert(first, last);
+					}
 			
 			map(const map& x)
 				{ *this = x; }
 
 			~map()
-				{ this->_bst.destroyBST(this->_bst._tri_ptr->parent); }
+				{ this->_bst.deleteBinaryTree(this->_bst._tri_ptr->parent); }
 
 			// Member functions
 			allocator_type get_allocator() const
@@ -111,10 +130,10 @@ namespace ft
 				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			iterator end()
-				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right), _bst._tri_ptr)); }
+				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
 
 			const_iterator end() const
-				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right), _bst._tri_ptr)); }
+				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
@@ -143,7 +162,7 @@ namespace ft
 
 					map_it = this->find(k);
 					if (map_it != this->end())
-						return ((*map_it).value.second);
+						return ((*map_it).second);
 					else
 						throw (std::out_of_range("map::at"));
 				}
@@ -167,7 +186,7 @@ namespace ft
 					if (this->find(val.first) != this->end())
 						return (ft::make_pair(this->find(val.first), false));
 					else
-						return (ft::make_pair(this->insert(this->_bst._root, val), true));
+						return (ft::make_pair((_bst.insertPair(val)).first, true));
 				}
 
 			// position: This does not specify the position where the insertion is to be done,
@@ -177,6 +196,7 @@ namespace ft
 			iterator insert(iterator position, const value_type& val)
 				{
 					(void)position;
+					return ((this->insert(val)).first);
 				}
 			
 			template <class InputIterator>
@@ -193,7 +213,14 @@ namespace ft
 			void erase(iterator position)
 				{ this->erase((*position).first); }
 
-			size_type erase(const key_type& k);
+			size_type erase(const key_type& k)
+				{
+					iterator it = this->find(k);
+					if (it == this->end())
+						return (0);
+					_bst.deleteNode(it);
+					return (1);
+				}
 
 			void erase(iterator first, iterator last)
 				{
@@ -203,11 +230,10 @@ namespace ft
 
 			// Both maps must have the same templates
 			void swap(map& x)
-				{
-					this->_bst.swap(x._bst);
-				}
+				{ this->_bst.swap(x._bst); }
 
-			void clear();
+			void clear()
+				{ this->erase(this->begin(), this->end()); }
 			
 			key_compare key_comp() const
 				{ return (value_compare(key_compare())); }
@@ -219,6 +245,7 @@ namespace ft
 				{
 					iterator start = this->begin();
 
+					// std::cout << (*start).first << "A\n";
 					while (start != this->end())
 					{
 						if ((*start).first == k)
@@ -231,6 +258,7 @@ namespace ft
 			const_iterator find(const key_type& k) const
 				{
 					const_iterator start = this->begin();
+					// std::cout << (*start).first << "A\n";
 
 					while (start != this->end())
 					{
