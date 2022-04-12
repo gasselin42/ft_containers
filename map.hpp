@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/08 14:56:03 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/12 15:20:57 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include <iostream>
 namespace ft
 {
 	template < class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
@@ -116,9 +115,10 @@ namespace ft
 				{
 					if (*this == x)
 						return (*this);
-					this->clear();
-					this->_bst._begin = NULL;
-					this->_bst._end = NULL;
+					this->_bst.deleteBinaryTree(_bst._tri_ptr->parent);
+					this->_bst._tri_ptr->left = NULL;
+					this->_bst._tri_ptr->right = NULL;
+					this->_bst._tri_ptr->parent = NULL;
 					this->_bst.transfer_map(x._bst);
 					return (*this);
 				}
@@ -130,10 +130,10 @@ namespace ft
 				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			iterator end()
-				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
+				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._end), _bst._tri_ptr)); }
 
 			const_iterator end() const
-				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
+				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._end), _bst._tri_ptr)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
@@ -179,7 +179,7 @@ namespace ft
 
 			// Check if key_type is already present in the map before insertion
 			mapped_type& operator[](const key_type& k)
-				{ return ((this->insert(ft::make_pair(k,mapped_type())).first)->second); }
+				{ return ((this->insert(ft::make_pair(k, mapped_type())).first)->second); }
 
 			ft::pair<iterator, bool> insert(const value_type& val)
 				{
@@ -245,10 +245,9 @@ namespace ft
 				{
 					iterator start = this->begin();
 
-					// std::cout << (*start).first << "A\n";
 					while (start != this->end())
 					{
-						if ((*start).first == k)
+						if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
 							return (start);
 						start++;
 					}
@@ -258,11 +257,10 @@ namespace ft
 			const_iterator find(const key_type& k) const
 				{
 					const_iterator start = this->begin();
-					// std::cout << (*start).first << "A\n";
 
 					while (start != this->end())
 					{
-						if ((*start).first == k)
+						if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
 							return (start);
 						start++;
 					}

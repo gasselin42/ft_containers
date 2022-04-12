@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/08 13:46:19 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/12 13:38:57 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,64 @@ namespace ft
 		class bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 		{
 			public:
-				typedef typename T::value_type 		value_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type 	difference_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category iterator_category;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer			pointer;
+				typedef typename T::value_type																	value_type;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
 
 
 			private:
-				T* _ptr;
+				T*	_ptr;
 				T*	_tri_ptr;
 				Compare	_comp;
+
+				T* find_max(T* ptr)
+					{
+						T* current;
+
+						current = ptr;
+						while (current->right != NULL)
+							current = current->right;
+						return (current);
+					}
+
+				T* find_min(T* ptr)
+					{
+						T* current;
+
+						current = ptr;
+						while (current->left != NULL)
+							current = current->left;
+						return (current);
+					}
 				
 				T* get_next_ptr()
 					{
 						T* current;
-						
-						if (_ptr->value == _tri_ptr->right->value || _ptr->value == _tri_ptr->parent->value || _ptr->right != NULL)
+
+						if (_tri_ptr->right != NULL && _tri_ptr->right->value == _ptr->value)
 							return (_ptr->right);
+
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left)->value == _ptr->value)
+							return (_tri_ptr->parent);
+						
+						if (_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value)
+						{
+							if (_ptr->right == NULL || _ptr->right->left == NULL)
+								return (_ptr->right);
+							else
+								return (find_min(_ptr->right));
+						}
+						
+						if (_ptr->right != NULL)
+							return (find_min(_ptr->right));
 						
 						if (_ptr->right == NULL)
 						{
-							if (_ptr->parent->left->value == _ptr->value)
+							if (_ptr->parent->left != NULL && _ptr->parent->left->value == _ptr->value)
 								return (_ptr->parent);
-							else if (_ptr->parent->right->value == _ptr->value)
+							else if (_ptr->parent->right != NULL && _ptr->parent->right->value == _ptr->value)
 							{
 								current = _ptr->parent;
 								while (_comp(current->value.first, _ptr->value.first) == true)
@@ -62,14 +96,28 @@ namespace ft
 					{
 						T* current;
 						
-						if (_ptr->value == _tri_ptr->left->value || _ptr->value == _tri_ptr->parent->value || _ptr->left != NULL)
+						if (_tri_ptr->left != NULL && _tri_ptr->left->value == _ptr->value)
 							return (_ptr->left);
+
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right)->value == _ptr->value)
+							return (_tri_ptr->parent);
+						
+						if (_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value)
+						{
+							if (_ptr->left == NULL || _ptr->left->right == NULL)
+								return (_ptr->left);
+							else
+								return (find_max(_ptr->left));
+						}
+						
+						if (_ptr->left != NULL)
+							return (find_max(_ptr->left));
 
 						if (_ptr->left == NULL)
 						{
-							if (_ptr->parent->right->value == _ptr->value)
+							if (_ptr->parent->right != NULL && _ptr->parent->right->value == _ptr->value)
 								return (_ptr->parent);
-							else if (_ptr->parent->left->value == _ptr->value)
+							else if (_ptr->parent->left != NULL && _ptr->parent->left->value == _ptr->value)
 							{
 								current = _ptr->parent;
 								while (_comp(current->value.first, _ptr->value.first) == false)
@@ -124,23 +172,25 @@ namespace ft
 		class const_bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 		{
 			public:
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type 	difference_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type 		value_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category iterator_category;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer			pointer;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
+				typedef typename T::value_type 																	value_type;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
+				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
 
 
 			private:
-				pointer _ptr;
-				pointer	_tri_ptr;
+				T*	_ptr;
+				T*	_tri_ptr;
 				Compare	_comp;
 				
-				pointer get_next_ptr()
+				T* get_next_ptr()
 					{
-						pointer current;
+						T* current;
 						
-						if (_ptr->value == _tri_ptr->right->value || _ptr->value == _tri_ptr->parent->value || _ptr->right != NULL)
+						if ((_tri_ptr->right != NULL && _ptr->value == _tri_ptr->right->value) ||
+							(_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value) ||
+							 _ptr->right != NULL)
 							return (_ptr->right);
 						
 						if (_ptr->right == NULL)
@@ -159,18 +209,20 @@ namespace ft
 						return (_ptr);
 					}
 
-				pointer get_prev_ptr()
+				T* get_prev_ptr()
 					{
-						pointer current;
+						T* current;
 						
-						if (_ptr->value == _tri_ptr->left->value || _ptr->value == _tri_ptr->parent->value || _ptr->left != NULL)
+						if ((_tri_ptr->left != NULL && _ptr->value == _tri_ptr->left->value) || 
+							(_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value) ||
+							 _ptr->left != NULL)
 							return (_ptr->left);
 
 						if (_ptr->left == NULL)
 						{
-							if (_ptr->parent->right->value == _ptr->value)
+							if (_ptr->parent->right != NULL && _ptr->parent->right->value == _ptr->value)
 								return (_ptr->parent);
-							else if (_ptr->parent->left->value == _ptr->value)
+							else if (_ptr->parent->left != NULL && _ptr->parent->left->value == _ptr->value)
 							{
 								current = _ptr->parent;
 								while (_comp(current->value.first, _ptr->value.first) == false)
@@ -185,7 +237,7 @@ namespace ft
 			public:
 
 				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
-				const_bidir_iterator(pointer ptr, pointer tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
+				const_bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
 				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs) { _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~const_bidir_iterator() {}
