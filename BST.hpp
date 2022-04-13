@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/12 16:08:10 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 10:52:28 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ namespace ft
 				typedef ft::const_bidir_iterator<Node, Compare> const_iterator;
 
 				node_ptr _tri_ptr;
-				node_ptr _begin;
-				node_ptr _end;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
@@ -95,7 +93,7 @@ namespace ft
 						node_ptr current;
 
 						current = _tri_ptr->parent;
-						while (current->right != _end)
+						while (current->right != NULL)
 							current = current->right;
 						return (current);
 					}
@@ -105,7 +103,7 @@ namespace ft
 						node_ptr current;
 
 						current = _tri_ptr->parent;
-						while (current->left != _begin)
+						while (current->left != NULL)
 							current = current->left;
 						return (current);
 					}
@@ -113,18 +111,12 @@ namespace ft
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
 					: 	_tri_ptr(NULL),
-						_begin(NULL),
-						_end(NULL),
 						_node_alloc(alloc),
 						_map_size(0),
 						_comp(comp)
 					{
 						_tri_ptr = _node_alloc.allocate(1);
 						_node_alloc.construct(_tri_ptr, Node());
-						_begin = _node_alloc.allocate(1);
-						_node_alloc.construct(_begin, Node());
-						_end = _node_alloc.allocate(1);
-						_node_alloc.construct(_end, Node());
 					}
 				
 				~BST() 
@@ -132,14 +124,6 @@ namespace ft
 						_node_alloc.destroy(_tri_ptr);
 						_node_alloc.deallocate(_tri_ptr, 1);
 						_tri_ptr = NULL;
-
-						_node_alloc.destroy(_begin);
-						_node_alloc.deallocate(_begin, 1);
-						_begin = NULL;
-
-						_node_alloc.destroy(_end);
-						_node_alloc.deallocate(_end, 1);
-						_end = NULL;
 					}
 
 				node_ptr findNode(const value_type node_to_find)
@@ -148,7 +132,7 @@ namespace ft
 
 						while (true)
 						{
-							if (current == NULL || current == _begin || current == _end)
+							if (current == NULL)
 								break ;
 							if (_comp(node_to_find.first, current->value.first) == false &&
 								_comp(current->value.first, node_to_find.first) == false)
@@ -172,10 +156,6 @@ namespace ft
 						{
 							_map_size++;
 							_node_alloc.construct(new_node, Node(node_to_add, NULL, NULL, NULL));
-							_begin->parent = new_node;
-							_end->parent = new_node;
-							new_node->left = _begin;
-							new_node->right = _end;
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
@@ -184,7 +164,7 @@ namespace ft
 						else if (findNode(node_to_add) == NULL)
 						{
 							node_ptr tmp;
-							while (current != NULL && current != _begin && current != _end)
+							while (current != NULL)
 							{
 								tmp = current;
 								if (_comp(node_to_add.first, current->value.first))
@@ -207,17 +187,9 @@ namespace ft
 							else
 								tmp->left = new_node;
 							if (_comp(node_to_add.first, _tri_ptr->left->value.first) == true)
-							{
 								_tri_ptr->left = new_node;
-								new_node->left = _begin;
-								_begin->parent = new_node;
-							}
 							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
-							{
 								_tri_ptr->right = new_node;
-								new_node->right = _end;
-								_end->parent = new_node;
-							}
 
 							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
@@ -231,9 +203,8 @@ namespace ft
 				void deleteBinaryTree(node_ptr root)
 					{
 						// Base case: empty tree
-						if (root == NULL || root == _begin || root == _end) {
-							return;
-						}
+						if (root == NULL)
+							return ;
 					
 						// delete left and right subtree first (Postorder)
 						deleteBinaryTree(root->left);
@@ -261,14 +232,6 @@ namespace ft
 						this->_tri_ptr = x._tri_ptr;
 						x._tri_ptr = tmp;
 
-						tmp = this->_begin;
-						this->_begin = x._begin;
-						x._begin = tmp;
-
-						tmp = this->_end;
-						this->_end = x._end;
-						x._end = tmp;
-
 						tmp_size = this->_map_size;
 						this->_map_size = x._map_size;
 						x._map_size = tmp_size;
@@ -290,20 +253,8 @@ namespace ft
 
 				void transfer_map(self& x)
 					{
-						this->_begin->parent = NULL;
-						this->_end->parent = NULL;
 						if (x._map_size)
-						{
 							visitNode(x._root);
-							
-							node_ptr node_min = this->find_min();
-							node_min->left = this->_begin;
-							this->_begin->parent = node_min;
-							
-							node_ptr node_max = this->find_max();
-							node_min->right = this->_end;
-							this->_end->parent = node_max;
-						}
 					}
 
 				void deleteNode(iterator it)
@@ -311,36 +262,45 @@ namespace ft
 						const value_type val = *it;
 						node_ptr ptr = findNode(val);
 
-						if ((ptr->left == NULL && ptr->right == NULL) ||
-							(ptr->left == NULL && ptr->rigth == _end) ||
-							(ptr->right == NULL && ptr->left == _begin))
+						if (ptr->left == NULL && ptr->right == NULL)
 						{
-							// if (ptr->parent->right->value == ptr->value)
-							// 	ptr->parent->right = NULL;
-							// else if (ptr->parent->left->value == ptr->value)
-							// 	ptr->parent->left = NULL;
+							if (ptr->parent != NULL && ptr->parent->right == ptr)
+								ptr->parent->right = NULL;
+							else if (ptr->parent != NULL && ptr->parent->left == ptr)
+								ptr->parent->left = NULL;
 							
+							if (ptr == _tri_ptr->parent)
+							{
+								_tri_ptr->parent = NULL;
+								_tri_ptr->left = NULL;
+								_tri_ptr->right = NULL;
+							}
 							this->_node_alloc.destroy(ptr);
 							this->_node_alloc.deallocate(ptr, 1);
 							ptr = NULL;
 							this->_map_size--;
 						}
-						else if (ptr->left != NULL && ptr->right == _end)
-						{
-							if (ptr->parent != NULL)
-							{
-								ptr->parent->right = ptr->left;
-								ptr->left->parent = ptr->parent;
-							}
-							this->_node_alloc.destroy(ptr);
-							this->_node_alloc.deallocate(ptr, 1);
-						}
 						else if (ptr->left != NULL && ptr->right != NULL)
 						{
 							value_type succ_val = *(++it);
-							node_ptr successor = findNode(succ_val);
-							ptr->value = succ_val;
 							deleteNode(it);
+							node_ptr new_node = _node_alloc.allocate(1);
+							_node_alloc.construct(new_node, Node(succ_val, ptr->parent, ptr->left, ptr->right));
+							if (ptr->left)
+								ptr->left->parent = new_node;
+							if (ptr->right)
+								ptr->right->parent = new_node;
+							if (ptr->parent)
+							{
+								if (ptr->parent->left == ptr)
+									ptr->parent->left = new_node;
+								else if (ptr->parent->right == ptr)
+									ptr->parent->right = new_node;
+							}
+							if (ptr == _tri_ptr->parent)
+								_tri_ptr->parent = new_node;
+							this->_node_alloc.destroy(ptr);
+							this->_node_alloc.deallocate(ptr, 1);
 						}
 						else
 						{
@@ -367,22 +327,12 @@ namespace ft
 							this->_node_alloc.deallocate(ptr, 1);
 							this->_map_size--;
 						}
-
-						node_ptr node_min = find_min();
-						node_ptr node_max = find_max();
-
-						if (node_min->left != _begin)
+						
+						if (_map_size)
 						{
-							node_min->left = _begin;
-							_begin->parent = node_min;
+							_tri_ptr->left = find_min();
+							_tri_ptr->right = find_max();
 						}
-						if (node_max->right != _end)
-						{
-							node_max->right = _end;
-							_end->parent = node_max;
-						}
-						_tri_ptr->left = node_min;
-						_tri_ptr->right = node_max;
 					}
 
 				size_type get_size() const

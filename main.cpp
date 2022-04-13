@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/12 15:16:03 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 09:53:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int main()
 	// std::cout << '\n';
 	/* --------------- */
 
-	std::map<int, std::string> myMap;
+	ft::map<int, std::string> myMap;
 	// std::map<int, std::string>::iterator mit;
 	// ft::map<int, std::string> map1;
 	// ft::map<int, std::string> map2;
@@ -309,33 +309,34 @@ int main()
 
 	// std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
 
-	std::map<int, std::string> myMap2;
-	myMap.insert(std::make_pair<int, std::string>(44, "root"));
+	// std::map<int, std::string> myMap2;
+	myMap.insert(ft::make_pair<int, std::string>(44, "root"));
 
-	myMap.insert(std::make_pair<int, std::string>(17, "left"));
-	myMap.insert(std::make_pair<int, std::string>(28, "left"));
-	myMap.insert(std::make_pair<int, std::string>(29, "left"));
+	myMap.insert(ft::make_pair<int, std::string>(17, "left"));
+	myMap.insert(ft::make_pair<int, std::string>(28, "left"));
+	myMap.insert(ft::make_pair<int, std::string>(29, "left"));
 
-	myMap2.insert(std::make_pair<int, std::string>(88, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(97, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(65, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(54, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(82, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(76, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(80, "right"));
-	myMap2.insert(std::make_pair<int, std::string>(78, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(88, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(97, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(65, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(54, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(82, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(76, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(80, "right"));
+	myMap.insert(ft::make_pair<int, std::string>(78, "right"));
 
-	myMap2 = myMap;
-	std::cout << myMap2.size() << "\n";
+	myMap.erase(65);
 
-	std::map<int, std::string>::iterator mit;
+	// std::cout << myMap2.size() << "\n";
 
-	mit = myMap2.begin();
-	while (mit != myMap2.end())
-	{
-		std::cout << (*mit).first << " " << (*mit).second << "\n";
-		mit++;
-	}
+	// std::map<int, std::string>::iterator mit;
+
+	// mit = myMap2.begin();
+	// while (mit != myMap2.end())
+	// {
+	// 	std::cout << (*mit).first << " " << (*mit).second << "\n";
+	// 	mit++;
+	// }
 
 	// std::map<std::string, std::string> myMap;
 	// std::map<std::string, std::string, cmpByStringLength>::iterator mit;

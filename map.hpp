@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/12 15:20:57 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 10:19:44 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 
 #include <memory>
 #include <stdexcept>
+
+#include <iostream>
 
 namespace ft
 {
@@ -130,10 +132,10 @@ namespace ft
 				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			iterator end()
-				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._end), _bst._tri_ptr)); }
+				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
 
 			const_iterator end() const
-				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._end), _bst._tri_ptr)); }
+				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
