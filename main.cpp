@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/13 09:53:41 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 12:55:53 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,8 @@ int main()
 
 	// std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
 
-	// std::map<int, std::string> myMap2;
+	ft::map<int, std::string> myMap2;
+
 	myMap.insert(ft::make_pair<int, std::string>(44, "root"));
 
 	myMap.insert(ft::make_pair<int, std::string>(17, "left"));
@@ -325,18 +326,31 @@ int main()
 	myMap.insert(ft::make_pair<int, std::string>(80, "right"));
 	myMap.insert(ft::make_pair<int, std::string>(78, "right"));
 
-	myMap.erase(65);
+	myMap2 = myMap;
 
-	// std::cout << myMap2.size() << "\n";
+	// std::cout << myMap.size() << "\n";
 
-	// std::map<int, std::string>::iterator mit;
+	ft::map<int, std::string>::iterator mit;
 
-	// mit = myMap2.begin();
-	// while (mit != myMap2.end())
+	mit = myMap2.begin();
+	while (mit != myMap2.end())
+	{
+		std::cout << (*mit).first << " " << (*mit).second << "\n";
+		mit++;
+	}
+
+	// myMap.erase(44);
+	// std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
+
+	// std::cout << myMap.size() << "\n";
+
+	// mit = myMap.begin();
+	// while (mit != myMap.end())
 	// {
 	// 	std::cout << (*mit).first << " " << (*mit).second << "\n";
 	// 	mit++;
 	// }
+
 
 	// std::map<std::string, std::string> myMap;
 	// std::map<std::string, std::string, cmpByStringLength>::iterator mit;

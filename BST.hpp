@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/13 10:52:28 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 13:01:09 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,10 +251,10 @@ namespace ft
 							return ;
 					}
 
-				void transfer_map(self& x)
+				void transfer_map(const self& x)
 					{
 						if (x._map_size)
-							visitNode(x._root);
+							visitNode(x._tri_ptr->parent);
 					}
 
 				void deleteNode(iterator it)

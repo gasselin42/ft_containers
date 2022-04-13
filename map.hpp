@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/13 10:19:44 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/13 13:10:20 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ namespace ft
 
 			map& operator=(const map& x)
 				{
-					if (*this == x)
+					if (this == &x)
 						return (*this);
 					this->_bst.deleteBinaryTree(_bst._tri_ptr->parent);
 					this->_bst._tri_ptr->left = NULL;
