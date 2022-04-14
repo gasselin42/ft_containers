@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/13 13:10:20 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/14 15:33:50 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 
 #include <memory>
 #include <stdexcept>
-
-#include <iostream>
 
 namespace ft
 {
