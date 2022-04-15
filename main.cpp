@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/14 15:51:10 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/15 13:54:55 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,6 +399,27 @@ int main()
 
 	// std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
 
-	map_tests();
+	std::map<int, std::string> stl_map;
+	ft::map<int, std::string> ft_map;
+
+	std::cout << stl_map.max_size() << "\n";
+	std::cout << ft_map.max_size() << "\n\n";
+
+	stl_map.insert(std::make_pair(42, "root"));
+	ft_map.insert(ft::make_pair(42, "root"));
+
+	std::cout << stl_map.max_size() << "\n";
+	std::cout << ft_map.max_size() << "\n";
+
+	// std::map<int, std::string>::iterator it1 = ft_map.begin();
+	// std::map<int, std::string>::iterator it2 = ft_map.end();
+	// std::map<int, std::string>::reverse_iterator it3 = ft_map.rbegin();
+	// std::map<int, std::string>::reverse_iterator it4 = ft_map.rend();
+
+	// std::cout << &(*it1) << "\n";
+	// std::cout << &(*it2) << "\n";
+	// std::cout << &(*it3) << "\n";
+	// std::cout << &(*it4) << "\n";
+	// map_tests();
 	return (0);
 }

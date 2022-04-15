@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/14 15:33:50 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/15 12:36:24 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 
 #include <memory>
 #include <stdexcept>
+
+#include <iostream>
 
 namespace ft
 {
@@ -96,6 +98,7 @@ namespace ft
 						_comp(comp),
 						_bst()
 					{
+						std::cout << "Hello3\n";
 						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("map::constructor"));
 						this->insert(first, last);
@@ -127,7 +130,7 @@ namespace ft
 				{ return (iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			const_iterator begin() const
-				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
+				{ std::cout << "Hello\n"; return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
 
 			iterator end()
 				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
@@ -236,10 +239,10 @@ namespace ft
 				{ this->erase(this->begin(), this->end()); }
 			
 			key_compare key_comp() const
-				{ return (value_compare(key_compare())); }
+				{ return (key_compare()); }
 			
 			value_compare value_comp() const
-				{ return (value_compare()); }
+				{ return (value_compare(key_compare())); }
 			
 			iterator find(const key_type& k)
 				{

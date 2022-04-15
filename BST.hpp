@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/13 13:01:09 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/15 14:28:43 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ namespace ft
 				BST_Node* left;
 				BST_Node* right;
 
-				BST_Node()
-					:	value(),
-						parent(NULL),
-						left(NULL),
-						right(NULL)
-					{}
+				BST_Node (BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
+		            :	value(),
+		                parent(_parent),
+		                left(_left),
+		                right(_right)
+		            {}
 				
 				BST_Node(const value_type& val, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
 					:	value(val),
@@ -53,7 +53,7 @@ namespace ft
 						right(rhs.right)
 					{}
 
-				~BST_Node() {}
+				virtual ~BST_Node() {}
 
 				BST_Node& operator=(const BST_Node& rhs)
 					{
