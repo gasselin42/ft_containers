@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/14 15:55:15 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/14 16:44:28 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,53 @@ void fill_std_map(std::map<int, std::string>& myMap)
 	myMap.insert(std::make_pair<int, std::string>(76, "right"));
 	myMap.insert(std::make_pair<int, std::string>(80, "right"));
 	myMap.insert(std::make_pair<int, std::string>(78, "right"));
+}
+
+template <class Ta, class Tb>
+bool compare_maps(std::map<Ta, Tb>& stl_map, ft::map<Ta, Tb>& ft_map)
+{
+	bool passed = true;
+	if (stl_map.empty() != ft_map.empty())
+	{
+		passed = false;
+		std::cout << BRED << "map::empty don't match" << NC << "\n";
+	}
+
+	if (stl_map.size() != ft_map.size())
+	{
+		passed = false;
+		std::cout << BRED << "map::size don't match" << NC << "\n";
+	}
+
+	if (stl_map.max_size() != ft_map.max_size())
+	{
+		passed = false;
+		std::cout << BRED << "map::max_size don't match" << NC << "\n";
+	}
+	
+	if (!passed)
+		return (passed);
+	else
+	{
+		typename std::map<Ta, Tb>::const_iterator stl_it;
+		typename ft::map<Ta, Tb>::const_iterator ft_it;
+
+		stl_it = stl_map.begin();
+		ft_it = ft_map.begin();
+
+		while (stl_it != stl_map.end())
+		{
+			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			{
+				std::cout << BRED << "Map contents don't match" << NC << "\n";
+				return (false);
+			}
+			stl_it++;
+			ft_it++;
+		}
+	}
+
+	std::cout << BGRN << "PASSED!" << NC << "\n";
 }
 
 void map_tests(void)
