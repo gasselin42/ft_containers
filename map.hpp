@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 10:59:20 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/19 16:04:16 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,9 @@ namespace ft
 
 			~map()
 				{ this->_bst.deleteBinaryTree(this->_bst._tri_ptr->parent); }
+
+			void call_test()
+				{ this->_bst.test(); }
 
 			// Member functions
 			allocator_type get_allocator() const

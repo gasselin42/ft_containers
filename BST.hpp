@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/15 14:28:43 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/19 16:02:30 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,25 @@ namespace ft
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
+
+				void test(void)
+				{
+					node_ptr _tmp_ptr;
+					_tmp_ptr = _node_alloc.allocate(1);
+					_node_alloc.construct(_tmp_ptr, Node());
+
+					_tri_ptr->left = _tmp_ptr;
+					_tri_ptr->right = _tmp_ptr;
+
+					std::cout << &(_tri_ptr->left) << "\n";
+					std::cout << &(_tri_ptr->right) << "\n";
+
+					std::cout << &(*_tri_ptr->left) << "\n";
+					std::cout << &(*_tri_ptr->right) << "\n";
+
+					this->_node_alloc.destroy(_tmp_ptr);
+					this->_node_alloc.deallocate(_tmp_ptr, 1);
+				}
 
 			private:
 				node_ptr find_max()

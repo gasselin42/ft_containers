@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 12:11:15 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/19 15:54:25 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -929,17 +929,159 @@ void map_tests(void)
 	std::cout << BRED << "|       OBSERVERS       |" << NC << "\n";
 	std::cout << BRED << "-------------------------" << NC << "\n\n";
 
+
+
+	std::cout << BLUE << "Key_comp " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+		
+		size_t stl_count = 0;
+		size_t ft_count = 0;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		std::map<int, std::string>::key_compare stl_comp = stl_map.key_comp();
+		ft::map<int, std::string>::key_compare ft_comp = ft_map.key_comp();
+
+		std::map<int, std::string>::iterator stl_it = stl_map.begin();
+		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
+
+		while (stl_it != stl_map.end())
+			if (stl_comp((*stl_it++).first, 80))
+				stl_count++;
+
+		while (ft_it != ft_map.end())
+			if (ft_comp((*ft_it++).first, 80))
+				ft_count++;
+
+		if (stl_count != ft_count)
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+		
+
+	std::cout << BLUE << "Value_comp " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+		
+		size_t stl_count = 0;
+		size_t ft_count = 0;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		std::pair<int, std::string> stl_pair = std::make_pair<int, std::string>(80, "root");
+		ft::pair<int, std::string> ft_pair = ft::make_pair<int, std::string>(80, "root");
+
+		std::map<int, std::string>::iterator stl_it = stl_map.begin();
+		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
+
+		while (stl_it != stl_map.end())
+			if (stl_map.value_comp()(*stl_it++, stl_pair))
+				stl_count++;
+
+		while (ft_it != ft_map.end())
+			if (ft_map.value_comp()(*ft_it++, ft_pair))
+				ft_count++;
+
+		if (stl_count != ft_count)
+			throw ko;
+		
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+		
+
 	std::cout << "\n";
 
 	std::cout << BRED << "-------------------------" << NC << "\n";
 	std::cout << BRED << "|       OPERATIONS      |" << NC << "\n";
 	std::cout << BRED << "-------------------------" << NC << "\n\n";
 
+
+
+	std::cout << BLUE << "Find " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		ft::map<int, std::string>::iterator it = ft_map.find(80);
+		if (&(*it) != &(*ft_map.begin()) || &(*it) != &(*ft_map.end()))
+			throw ko;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		it = (ft_map.insert(ft::make_pair(55, "right"))).first;
+		stl_map.insert(std::make_pair(55, "right"));
+
+		std::map<int, std::string>::iterator stl_it = stl_map.find(55);
+		ft::map<int, std::string>::iterator ft_it = ft_map.find(55);
+
+		if (&(*it) != &(*ft_it))
+			throw ko;
+
+		stl_it++;
+		ft_it++;
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+		
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Find - Const " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		const ft::map<int, std::string> ft_map_begin1(ft_map);
+
+		ft::map<int, std::string>::const_iterator it = ft_map_begin1.find(80);
+		if (&(*it) != &(*ft_map_begin1.begin()) || &(*it) != &(*ft_map_begin1.end()))
+			throw ko;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		const std::map<int, std::string> stl_map_begin(stl_map);
+		const ft::map<int, std::string> ft_map_begin2(ft_map);
+
+		std::map<int, std::string>::const_iterator stl_it = stl_map_begin.find(54);
+		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin2.find(54);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		stl_it++;
+		ft_it++;
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	
+
 	std::cout << "\n";
 
 	std::cout << BRED << "-------------------------" << NC << "\n";
 	std::cout << BRED << "|       ALLOCATOR       |" << NC << "\n";
 	std::cout << BRED << "-------------------------" << NC << "\n\n";
+
+
 
 	std::cout << BLUE << "Get allocator " << NC;
 	try {
@@ -948,7 +1090,18 @@ void map_tests(void)
 
 		if (stl_map.get_allocator() != ft_map.get_allocator())
 			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << "\n";
+
+	std::cout << BRED << "-------------------------" << NC << "\n";
+	std::cout << BRED << "|  NON-MEMBER FUNCTIONS |" << NC << "\n";
+	std::cout << BRED << "-------------------------" << NC << "\n\n";
+
+
 }
