@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/15 13:54:55 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/19 11:56:47 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,22 +311,34 @@ int main()
 
 	// std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
 
-	// ft::map<int, std::string> myMap2;
+	std::map<int, std::string> myMap;
 
-	// myMap.insert(ft::make_pair<int, std::string>(44, "root"));
+	myMap.insert(std::make_pair<int, std::string>(44, "root"));
 
-	// myMap.insert(ft::make_pair<int, std::string>(17, "left"));
-	// myMap.insert(ft::make_pair<int, std::string>(28, "left"));
-	// myMap.insert(ft::make_pair<int, std::string>(29, "left"));
+	myMap.insert(std::make_pair<int, std::string>(17, "left"));
+	myMap.insert(std::make_pair<int, std::string>(28, "left"));
+	myMap.insert(std::make_pair<int, std::string>(29, "left"));
 
-	// myMap.insert(ft::make_pair<int, std::string>(88, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(97, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(65, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(54, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(82, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(76, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(80, "right"));
-	// myMap.insert(ft::make_pair<int, std::string>(78, "right"));
+	myMap.insert(std::make_pair<int, std::string>(88, "right"));
+	myMap.insert(std::make_pair<int, std::string>(97, "right"));
+	myMap.insert(std::make_pair<int, std::string>(65, "right"));
+	myMap.insert(std::make_pair<int, std::string>(54, "right"));
+	myMap.insert(std::make_pair<int, std::string>(82, "right"));
+	myMap.insert(std::make_pair<int, std::string>(76, "right"));
+	myMap.insert(std::make_pair<int, std::string>(80, "right"));
+	myMap.insert(std::make_pair<int, std::string>(78, "right"));
+
+	// myMap.insert(myMap.find(88), std::make_pair(19, "left"));
+	myMap.erase(myMap.begin(), myMap.begin());
+
+	std::map<int, std::string>::iterator stl_it = myMap.begin();
+
+	while (stl_it != myMap.end())
+	{
+		std::cout << (*stl_it).first << " " << (*stl_it).second << "\n";
+		stl_it++;
+	}
+	// std::cout << (*stl_it).first << " " << (*stl_it).second << "\n";
 
 	// myMap2 = myMap;
 
@@ -399,17 +411,17 @@ int main()
 
 	// std::cout << vec.size() << " " << vec.max_size() << " " << vec.capacity() << "\n";
 
-	std::map<int, std::string> stl_map;
-	ft::map<int, std::string> ft_map;
+	// std::map<int, std::string> stl_map;
+	// ft::map<int, std::string> ft_map;
 
-	std::cout << stl_map.max_size() << "\n";
-	std::cout << ft_map.max_size() << "\n\n";
+	// std::cout << stl_map.max_size() << "\n";
+	// std::cout << ft_map.max_size() << "\n\n";
 
-	stl_map.insert(std::make_pair(42, "root"));
-	ft_map.insert(ft::make_pair(42, "root"));
+	// stl_map.insert(std::make_pair(42, "root"));
+	// ft_map.insert(ft::make_pair(42, "root"));
 
-	std::cout << stl_map.max_size() << "\n";
-	std::cout << ft_map.max_size() << "\n";
+	// std::cout << stl_map.max_size() << "\n";
+	// std::cout << ft_map.max_size() << "\n";
 
 	// std::map<int, std::string>::iterator it1 = ft_map.begin();
 	// std::map<int, std::string>::iterator it2 = ft_map.end();

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/15 12:36:24 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/19 10:59:20 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ namespace ft
 					else
 						throw (std::out_of_range("map::at"));
 				}
+
 			const mapped_type& at(const key_type& k) const
 				{
 					iterator map_it;
