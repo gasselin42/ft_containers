@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/15 12:57:15 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 13:10:03 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ namespace ft
 
 				T*	_ptr;
 				T*	_tri_ptr;
+				T*	_exts;
 				Compare	_comp;
 
 			private:
@@ -58,31 +59,26 @@ namespace ft
 					{
 						T* current;
 
-						if (_ptr == _tri_ptr->left->left)
+						if (_ptr == _exts->right)
+							return (NULL);
+
+						if (_ptr == _exts->left)
 							return (_tri_ptr->left);
 
-						if (_tri_ptr->right != NULL && _tri_ptr->right->value == _ptr->value)
-							return (_ptr->right);
+						if (_ptr == find_max(_tri_ptr->parent))
+							return (_exts->right);
 
-						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left)->value == _ptr->value)
+						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left) == _ptr)
 							return (_tri_ptr->parent);
-						
-						if (_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value)
-						{
-							if (_ptr->right == NULL || _ptr->right->left == NULL)
-								return (_ptr->right);
-							else
-								return (find_min(_ptr->right));
-						}
 						
 						if (_ptr->right != NULL)
 							return (find_min(_ptr->right));
 						
 						if (_ptr->right == NULL)
 						{
-							if (_ptr->parent->left != NULL && _ptr->parent->left->value == _ptr->value)
+							if (_ptr->parent->left != NULL && _ptr->parent->left == _ptr)
 								return (_ptr->parent);
-							else if (_ptr->parent->right != NULL && _ptr->parent->right->value == _ptr->value)
+							else if (_ptr->parent->right != NULL && _ptr->parent->right == _ptr)
 							{
 								current = _ptr->parent;
 								while (_comp(current->value.first, _ptr->value.first) == true)
@@ -97,32 +93,27 @@ namespace ft
 				T* get_prev_ptr()
 					{
 						T* current;
+						
+						if (_ptr == _exts->left)
+							return (NULL);
 
-						if (_ptr == _tri_ptr->right->right)
+						if (_ptr == _exts->right)
 							return (_tri_ptr->right);
-						
-						if (_tri_ptr->left != NULL && _tri_ptr->left->value == _ptr->value)
-							return (_ptr->left);
 
-						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right)->value == _ptr->value)
+						if (_ptr == find_min(_tri_ptr->parent))
+							return (_exts->left);
+
+						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right) == _ptr)
 							return (_tri_ptr->parent);
-						
-						if (_tri_ptr->parent != NULL && _ptr->value == _tri_ptr->parent->value)
-						{
-							if (_ptr->left == NULL || _ptr->left->right == NULL)
-								return (_ptr->left);
-							else
-								return (find_max(_ptr->left));
-						}
 						
 						if (_ptr->left != NULL)
 							return (find_max(_ptr->left));
 
 						if (_ptr->left == NULL)
 						{
-							if (_ptr->parent->right != NULL && _ptr->parent->right->value == _ptr->value)
+							if (_ptr->parent->right != NULL && _ptr->parent->right == _ptr)
 								return (_ptr->parent);
-							else if (_ptr->parent->left != NULL && _ptr->parent->left->value == _ptr->value)
+							else if (_ptr->parent->left != NULL && _ptr->parent->left == _ptr)
 							{
 								current = _ptr->parent;
 								while (_comp(current->value.first, _ptr->value.first) == false)
@@ -136,10 +127,11 @@ namespace ft
 
 			public:
 
-				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
-				bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
-				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
-				bidir_iterator& operator=(const bidir_iterator& rhs) { _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
+				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
+				bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
+				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
+				bidir_iterator& operator=(const bidir_iterator& rhs)
+					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
 				virtual ~bidir_iterator() {}
 
 				reference operator*(void) const { return (this->_ptr->value); }

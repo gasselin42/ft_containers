@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 16:02:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 14:33:14 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,30 +83,12 @@ namespace ft
 				typedef ft::const_bidir_iterator<Node, Compare> const_iterator;
 
 				node_ptr _tri_ptr;
+				node_ptr _exts;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
 
-				void test(void)
-				{
-					node_ptr _tmp_ptr;
-					_tmp_ptr = _node_alloc.allocate(1);
-					_node_alloc.construct(_tmp_ptr, Node());
-
-					_tri_ptr->left = _tmp_ptr;
-					_tri_ptr->right = _tmp_ptr;
-
-					std::cout << &(_tri_ptr->left) << "\n";
-					std::cout << &(_tri_ptr->right) << "\n";
-
-					std::cout << &(*_tri_ptr->left) << "\n";
-					std::cout << &(*_tri_ptr->right) << "\n";
-
-					this->_node_alloc.destroy(_tmp_ptr);
-					this->_node_alloc.deallocate(_tmp_ptr, 1);
-				}
-
-			private:
+			public:
 				node_ptr find_max()
 					{
 						node_ptr current;
@@ -129,20 +111,45 @@ namespace ft
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
-					: 	_tri_ptr(NULL),
-						_node_alloc(alloc),
+					: 	_node_alloc(alloc),
 						_map_size(0),
 						_comp(comp)
 					{
 						_tri_ptr = _node_alloc.allocate(1);
 						_node_alloc.construct(_tri_ptr, Node());
+
+						_exts = _node_alloc.allocate(1);
+						_node_alloc.construct(_exts, Node());
+
+						_exts->right = _node_alloc.allocate(1);
+						_node_alloc.construct(_exts->right, Node());
+
+						_exts->left = _node_alloc.allocate(1);
+						_node_alloc.construct(_exts->left, Node());
+
+						_tri_ptr->parent = _exts->right;
+						_tri_ptr->left = _exts->right;
+						_tri_ptr->right = _exts->right;
 					}
 				
 				~BST() 
 					{
+						
 						_node_alloc.destroy(_tri_ptr);
 						_node_alloc.deallocate(_tri_ptr, 1);
 						_tri_ptr = NULL;
+
+						_node_alloc.destroy(_exts->right);
+						_node_alloc.deallocate(_exts->right, 1);
+						_exts->right = NULL;
+
+						_node_alloc.destroy(_exts->left);
+						_node_alloc.deallocate(_exts->left, 1);
+						_exts->left = NULL;
+						
+						_node_alloc.destroy(_exts);
+						_node_alloc.deallocate(_exts, 1);
+						_exts = NULL;
 					}
 
 				node_ptr findNode(const value_type node_to_find)
@@ -171,14 +178,14 @@ namespace ft
 						node_ptr current = _tri_ptr->parent;
 						bool side = false;
 						
-						if (_tri_ptr->parent == NULL)
+						if (_tri_ptr->parent == _exts->right)
 						{
 							_map_size++;
 							_node_alloc.construct(new_node, Node(node_to_add, NULL, NULL, NULL));
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
-							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
+							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
 						}
 						else if (findNode(node_to_add) == NULL)
 						{
@@ -210,12 +217,12 @@ namespace ft
 							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
 								_tri_ptr->right = new_node;
 
-							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
+							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
 						}
 						else
 						{
 							_node_alloc.deallocate(new_node, 1);
-							return (ft::make_pair(iterator(findNode(node_to_add), _tri_ptr), false));
+							return (ft::make_pair(iterator(findNode(node_to_add), _tri_ptr, _exts), false));
 						}
 					}
 
@@ -245,11 +252,16 @@ namespace ft
 				void swap(self& x)
 					{
 						node_ptr tmp;
+						node_ptr tmp2;
 						size_type tmp_size;
 						
 						tmp = this->_tri_ptr;
 						this->_tri_ptr = x._tri_ptr;
 						x._tri_ptr = tmp;
+
+						tmp2 = this->_exts;
+						this->_exts = x._exts;
+						x._exts = tmp2;
 
 						tmp_size = this->_map_size;
 						this->_map_size = x._map_size;
@@ -290,9 +302,9 @@ namespace ft
 							
 							if (ptr == _tri_ptr->parent)
 							{
-								_tri_ptr->parent = NULL;
-								_tri_ptr->left = NULL;
-								_tri_ptr->right = NULL;
+								_tri_ptr->parent = _exts->right;
+								_tri_ptr->left = _exts->right;
+								_tri_ptr->right = _exts->right;
 							}
 							this->_node_alloc.destroy(ptr);
 							this->_node_alloc.deallocate(ptr, 1);
@@ -336,21 +348,20 @@ namespace ft
 							else if (ptr->parent != NULL && ptr->parent->right == ptr)
 								side = false;
 
-							if (side)
-								ptr->parent->left = child;
-							else
-								ptr->parent->right = child;
-							child->parent = ptr->parent;
+							if (ptr == _tri_ptr->parent)
+								_tri_ptr->parent = child;
+							else 
+							{
+								if (side)
+									ptr->parent->left = child;
+								else
+									ptr->parent->right = child;
+								child->parent = ptr->parent;
+							}
 
 							this->_node_alloc.destroy(ptr);
 							this->_node_alloc.deallocate(ptr, 1);
 							this->_map_size--;
-						}
-						
-						if (_map_size)
-						{
-							_tri_ptr->left = find_min();
-							_tri_ptr->right = find_max();
 						}
 					}
 

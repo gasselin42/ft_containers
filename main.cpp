@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 16:05:47 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 14:38:08 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,32 +222,15 @@ int main()
 	// std::cout << '\n';
 	/* --------------- */
 
-	// ft::map<int, std::string> myMap;
-	// std::map<int, std::string>::iterator mit;
-	// ft::map<int, std::string> map1;
-	// ft::map<int, std::string> map2;
-	// const ft::map<int, int> map2;
-	// ft::map<int, std::string>::reverse_iterator rit;
-	// ft::map<int, int>::const_iterator it2;
-	// ft::map<int, int> map3;
-	// const ft::map<int, int> map4;
-	// ft::map<int, int>::reverse_iterator rit;
-	// ft::map<int, int>::const_reverse_iterator rit2;
+	ft::map<int, std::string> map1;
+	// map1.size();
+	// std::cout << "Hello\n";
 
-	// it = map1.begin();
-	// it2 = map2.begin();
-	// it = map1.end();
-	// it2 = map2.end();
-	// rit = map3.rbegin();
-	// rit2 = map4.rbegin();
-	// rit = map3.rend();
-	// rit2 = map4.rend();
 
-	// map1.insert(ft::make_pair<int, std::string>(44, "root"));
-
-	// map1.insert(ft::make_pair<int, std::string>(17, "left"));
-	// map1.insert(ft::make_pair<int, std::string>(28, "left"));
-	// map1.insert(ft::make_pair<int, std::string>(29, "left"));
+	map1.insert(ft::make_pair<int, std::string>(17, "left"));
+	map1.insert(ft::make_pair<int, std::string>(28, "left"));
+	map1.insert(ft::make_pair<int, std::string>(29, "left"));
+	map1.insert(ft::make_pair<int, std::string>(44, "root"));
 
 	// map1.insert(ft::make_pair<int, std::string>(88, "right"));
 	// map1.insert(ft::make_pair<int, std::string>(97, "right"));
@@ -257,6 +240,14 @@ int main()
 	// map1.insert(ft::make_pair<int, std::string>(76, "right"));
 	// map1.insert(ft::make_pair<int, std::string>(80, "right"));
 	// map1.insert(ft::make_pair<int, std::string>(78, "right"));
+
+	ft::map<int, std::string>::iterator it = map1.begin();
+
+	while (it != map1.end())
+	{
+		std::cout << (*it).first << "\n";
+		++it;
+	}
 
 	// map2.insert(ft::make_pair<int, std::string>(10, "root"));
 
@@ -311,8 +302,7 @@ int main()
 
 	// std::cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
 
-	ft::map<int, std::string> ft_map;
-	ft_map.call_test();
+	// ft::map<int, std::string> ft_map;
 
 	// std::map<int, std::string> myMap;
 

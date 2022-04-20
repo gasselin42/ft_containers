@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 15:54:25 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 16:10:59 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1075,6 +1075,237 @@ void map_tests(void)
 
 	
 
+	std::cout << BLUE << "Count " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		for (int i = 0; i < 100; i++)
+			if (stl_map.count(i) != ft_map.count(i))
+				throw ko;
+
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Lower_bound " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		std::map<int, std::string>::iterator stl_it = stl_map.lower_bound(-5);
+		ft::map<int, std::string>::iterator ft_it = ft_map.lower_bound(-5);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		stl_it = stl_map.lower_bound(54);
+		ft_it = ft_map.lower_bound(54);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		ft_it = ft_map.lower_bound(100);
+
+		if (ft_it != ft_map.end())
+			throw ko;
+		
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Lower_bound - Const " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		const std::map<int, std::string> stl_map_bound(stl_map);
+		const ft::map<int, std::string> ft_map_bound(ft_map);
+
+		std::map<int, std::string>::const_iterator stl_it = stl_map_bound.lower_bound(-5);
+		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.lower_bound(-5);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		stl_it = stl_map_bound.lower_bound(54);
+		ft_it = ft_map_bound.lower_bound(54);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		ft_it = ft_map_bound.lower_bound(100);
+
+		if (ft_it != ft_map_bound.end())
+			throw ko;
+
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Upper_bound " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		std::map<int, std::string>::iterator stl_it = stl_map.upper_bound(-5);
+		ft::map<int, std::string>::iterator ft_it = ft_map.upper_bound(-5);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		stl_it = stl_map.upper_bound(54);
+		ft_it = ft_map.upper_bound(54);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		ft_it = ft_map.upper_bound(100);
+
+		if (ft_it != ft_map.end())
+			throw ko;
+		
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Upper_bound - Const " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		const std::map<int, std::string> stl_map_bound(stl_map);
+		const ft::map<int, std::string> ft_map_bound(ft_map);
+
+		std::map<int, std::string>::const_iterator stl_it = stl_map_bound.upper_bound(-5);
+		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.upper_bound(-5);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		stl_it = stl_map_bound.upper_bound(54);
+		ft_it = ft_map_bound.upper_bound(54);
+
+		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
+			throw ko;
+
+		ft_it = ft_map_bound.upper_bound(100);
+
+		if (ft_it != ft_map_bound.end())
+			throw ko;
+
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Equal_range " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> stl_pr;
+		ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_pr;
+
+		stl_pr = stl_map.equal_range(5);
+		ft_pr = ft_map.equal_range(5);
+
+		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
+			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
+			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
+			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
+			throw ko;
+
+		stl_pr = stl_map.equal_range(50);
+		ft_pr = ft_map.equal_range(50);
+
+		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
+			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
+			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
+			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
+			throw ko;
+
+		ft_pr = ft_map.equal_range(100);
+
+		if (ft_pr.first != ft_map.end() || ft_pr.second != ft_map.end())
+			throw ko;
+		
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Equal_range - Const " << NC;
+	try {
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
+
+		fill_std_map(stl_map);
+		fill_ft_map(ft_map);
+
+		const std::map<int, std::string> stl_map_bound(stl_map);
+		const ft::map<int, std::string> ft_map_bound(ft_map);
+
+		std::pair<std::map<int, std::string>::const_iterator, std::map<int, std::string>::const_iterator> stl_pr;
+		ft::pair<ft::map<int, std::string>::const_iterator, ft::map<int, std::string>::const_iterator> ft_pr;
+
+		stl_pr = stl_map_bound.equal_range(5);
+		ft_pr = ft_map_bound.equal_range(5);
+
+		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
+			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
+			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
+			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
+			throw ko;
+
+		stl_pr = stl_map_bound.equal_range(50);
+		ft_pr = ft_map_bound.equal_range(50);
+
+		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
+			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
+			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
+			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
+			throw ko;
+
+		ft_pr = ft_map_bound.equal_range(100);
+
+		if (ft_pr.first != ft_map_bound.end() || ft_pr.second != ft_map_bound.end())
+			throw ko;
+
+		std::cout << BGRN << "PASSED!" << NC << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
 	std::cout << "\n";
 
 	std::cout << BRED << "-------------------------" << NC << "\n";
@@ -1103,5 +1334,194 @@ void map_tests(void)
 	std::cout << BRED << "|  NON-MEMBER FUNCTIONS |" << NC << "\n";
 	std::cout << BRED << "-------------------------" << NC << "\n\n";
 
+
+
+	std::cout << BLUE << "Operator == " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		if ((stl_map1 == stl_map2) != (ft_map1 == ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Operator != " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+
+		if ((stl_map1 != stl_map2) != (ft_map1 != ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Operator < " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+
+		if ((stl_map1 < stl_map2) != (ft_map1 < ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Operator <= " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+
+		if ((stl_map1 <= stl_map2) != (ft_map1 <= ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+
+	std::cout << BLUE << "Operator > " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+
+		if ((stl_map1 > stl_map2) != (ft_map1 > ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+
+	std::cout << BLUE << "Operator >= " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		fill_std_map(stl_map2);
+		fill_ft_map(ft_map2);
+
+		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+
+		if ((stl_map1 >= stl_map2) != (ft_map1 >= ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Swap " << NC;
+	try {
+		std::map<int, std::string> stl_map1;
+		std::map<int, std::string> stl_map2;
+		ft::map<int, std::string> ft_map1;
+		ft::map<int, std::string> ft_map2;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		swap(stl_map1, stl_map2);
+		swap(ft_map1, ft_map2);
+
+		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1)
+			|| !test_empty_map_iterators(ft_map1))
+			throw ko;
+
+		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
+			throw ko;
+
+		fill_std_map(stl_map1);
+		fill_ft_map(ft_map1);
+
+		stl_map2.erase(stl_map2.find(29), stl_map2.find(82));
+		ft_map2.erase(ft_map2.find(29), ft_map2.find(82));
+		
+		swap(stl_map1, stl_map2);
+		swap(ft_map1, ft_map2);
+
+		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1))
+			throw ko;
+
+		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
+			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
 
 }

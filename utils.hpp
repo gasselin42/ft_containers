@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/11 13:52:27 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 15:56:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ namespace ft
 				{ return x < y; }
 		};
 
-	
-
 	template <class InputIt1, class InputIt2>
 		bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
 									 InputIt2 first2, InputIt2 last2)
 			{
-				while (first1!=last1)
+				while (first1 != last1)
 				{
-					if (first2==last2 || *first2<*first1)
+					if (first2 == last2 || *first2 < *first1)
 						return false;
 					else if (*first1 < *first2)
 						return true;
@@ -68,6 +66,18 @@ namespace ft
 					++first2;
 				}
 				return (first2 != last2);
+			}
+
+	template <class InputIt1, class InputIt2>
+		bool equal (InputIt1 first1, InputIt1 last1, InputIt2 first2)
+			{
+				while (first1 != last1) {
+					if (!(*first1 == *first2))
+						return false;
+					++first1;
+					++first2;
+				}
+				return true;
 			}
 }
 

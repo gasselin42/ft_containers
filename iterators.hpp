@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/07 16:04:32 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 09:47:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,11 @@ namespace ft
 				typedef typename 	ft::iterator_traits<Iterator>::difference_type		difference_type;
 				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
 				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
+
+			private:
+				iterator_type _it;
 				
+			public:
 				reverse_iterator() : _it() {}
 				
 				explicit reverse_iterator(iterator_type it) : _it(it) {}
@@ -262,11 +266,7 @@ namespace ft
 				reverse_iterator operator+=(difference_type n) { _it -= n; return (*this); }
 				reverse_iterator operator-=(difference_type n) { _it += n; return (*this); }
 
-
 				iterator_type base() const { return (_it); }
-
-			private:
-				iterator_type _it;
 		};
 
 		template <class Iterator>

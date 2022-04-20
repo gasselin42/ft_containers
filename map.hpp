@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/19 16:04:16 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/20 16:02:18 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ namespace ft
 			~map()
 				{ this->_bst.deleteBinaryTree(this->_bst._tri_ptr->parent); }
 
-			void call_test()
-				{ this->_bst.test(); }
-
 			// Member functions
 			allocator_type get_allocator() const
 				{ return (this->_alloc); }
@@ -130,16 +127,16 @@ namespace ft
 				}
 
 			iterator begin()
-				{ return (iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
+				{ return (iterator(_bst._tri_ptr->left, _bst._tri_ptr, _bst._exts)); }
 
 			const_iterator begin() const
-				{ std::cout << "Hello\n"; return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr)); }
+				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr, _bst._exts)); }
 
 			iterator end()
-				{ return (iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
+				{ return (iterator(_bst._exts->right, _bst._tri_ptr, _bst._exts)); }
 
 			const_iterator end() const
-				{ return (const_iterator((empty() ? _bst._tri_ptr->left : _bst._tri_ptr->right->right), _bst._tri_ptr)); }
+				{ return (const_iterator(_bst._exts->right, _bst._tri_ptr, _bst._exts)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
@@ -226,6 +223,13 @@ namespace ft
 					if (it == this->end())
 						return (0);
 					_bst.deleteNode(it);
+
+					if (_bst.get_size())
+					{
+						_bst._tri_ptr->left = _bst.find_min();
+						_bst._tri_ptr->right = _bst.find_max();
+					}
+
 					return (1);
 				}
 
@@ -318,27 +322,32 @@ namespace ft
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator==(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs == rhs); }
+			{
+				if (lhs.size() == rhs.size())
+					if (ft::equal(lhs.begin(), lhs.end(), rhs.begin()))
+						return (true);
+				return (false);
+			}
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator!=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs != rhs); }
+			{ return (!(lhs == rhs)); }
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator<(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs < rhs); }
-
-	template< class Key, class T, class Compare, class Alloc >
-		bool operator<=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs <= rhs); }
+			{ return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator>(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs > rhs); }
+			{ return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end())); }
+
+	template< class Key, class T, class Compare, class Alloc >
+		bool operator<=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+			{ return (!(lhs > rhs)); }
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator>=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
-			{ return (lhs >= rhs); }
+			{ return (!(lhs < rhs)); }
 
 	template< class Key, class T, class Compare, class Alloc >
 		void swap(ft::map<Key,T,Compare,Alloc>& lhs, ft::map<Key,T,Compare,Alloc>& rhs)
