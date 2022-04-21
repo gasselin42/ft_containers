@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 16:10:59 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/21 09:39:32 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1314,7 +1314,7 @@ void map_tests(void)
 
 
 
-	std::cout << BLUE << "Get allocator " << NC;
+	std::cout << BLUE << "Get_allocator " << NC;
 	try {
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
