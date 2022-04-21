@@ -6,9 +6,12 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 14:38:08 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/21 15:28:18 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#define KO		"\033[1;31mKO\033[0m"
+#define PASSED	"\033[1;32mPASSED!\033[0m"
 
 // #include <iostream>
 // #include <string>
@@ -135,6 +138,7 @@
 #include <iterator>
 #include <cstring>
 #include <utility>
+#include <iostream>
 
 #include "testers.hpp"
 
@@ -222,15 +226,15 @@ int main()
 	// std::cout << '\n';
 	/* --------------- */
 
-	ft::map<int, std::string> map1;
+	// ft::map<int, std::string> map1;
 	// map1.size();
 	// std::cout << "Hello\n";
 
 
-	map1.insert(ft::make_pair<int, std::string>(17, "left"));
-	map1.insert(ft::make_pair<int, std::string>(28, "left"));
-	map1.insert(ft::make_pair<int, std::string>(29, "left"));
-	map1.insert(ft::make_pair<int, std::string>(44, "root"));
+	// map1.insert(ft::make_pair<int, std::string>(17, "left"));
+	// map1.insert(ft::make_pair<int, std::string>(28, "left"));
+	// map1.insert(ft::make_pair<int, std::string>(29, "left"));
+	// map1.insert(ft::make_pair<int, std::string>(44, "root"));
 
 	// map1.insert(ft::make_pair<int, std::string>(88, "right"));
 	// map1.insert(ft::make_pair<int, std::string>(97, "right"));
@@ -241,13 +245,31 @@ int main()
 	// map1.insert(ft::make_pair<int, std::string>(80, "right"));
 	// map1.insert(ft::make_pair<int, std::string>(78, "right"));
 
-	ft::map<int, std::string>::iterator it = map1.begin();
+	// ft::map<int, std::string>::iterator it = map1.begin();
 
-	while (it != map1.end())
-	{
-		std::cout << (*it).first << "\n";
-		++it;
-	}
+	// while (it != map1.end())
+	// {
+	// 	std::cout << (*it).first << "\n";
+	// 	++it;
+	// }
+
+
+		std::vector<int> stl_vec;
+
+		for (int i = 0; i < 25; i++)
+			stl_vec.push_back(i + 1);
+
+		std::vector<int> stl_vec_range(stl_vec.begin(), stl_vec.end());
+	// std::map<int, std::string> stl_map;
+	// std::vector<int> stl_vec;
+
+	// std::map<int, std::string> stl_map_alloc(stl_map.key_comp(), stl_map.get_allocator());
+	// std::vector<int> stl_vec_alloc(stl_vec.get_allocator());
+
+	// if (stl_map.get_allocator() != stl_vec.get_allocator())
+	// 	std::cout << KO << "\n";
+
+	// std::cout << PASSED << "\n";
 
 	// map2.insert(ft::make_pair<int, std::string>(10, "root"));
 

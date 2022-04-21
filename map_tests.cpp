@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/21 09:39:32 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/21 14:33:49 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,22 +129,21 @@ void map_tests(void)
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || test_empty_map_iterators(ft_map))
 			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
 
 
 
-	std::cout << BLUE << "Constructor - Explicit " << NC;
+	std::cout << BLUE << "Constructor - Compare " << NC;
 	try {
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		std::map<int, std::string>::key_compare stl_key = stl_map.key_comp();
@@ -153,9 +152,9 @@ void map_tests(void)
 		std::map<int, std::string> stl_map2(stl_key);
 		ft::map<int, std::string> ft_map2(ft_key);
 
-		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2)
-			|| !test_empty_map_iterators(ft_map2))
+		if (!compare_maps(stl_map2, ft_map2) || !test_empty_map_iterators(ft_map2))
 			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -178,6 +177,7 @@ void map_tests(void)
 
 		if (!compare_maps(stl_map_range, ft_map_range) || !iterate_maps(stl_map_range, ft_map_range))
 			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -834,8 +834,7 @@ void map_tests(void)
 		stl_map.erase(stl_map.begin(), stl_map.end());
 		ft_map.erase(ft_map.begin(), ft_map.end());
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		std::cout << PASSED << "\n";
@@ -857,8 +856,7 @@ void map_tests(void)
 		stl_map1.swap(stl_map2);
 		ft_map1.swap(ft_map2);
 
-		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1)
-			|| !test_empty_map_iterators(ft_map1))
+		if (!compare_maps(stl_map1, ft_map1) || !test_empty_map_iterators(ft_map1))
 			throw ko;
 
 		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
@@ -893,8 +891,7 @@ void map_tests(void)
 		stl_map.clear();
 		ft_map.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		stl_map.insert(std::make_pair<int, std::string>(50, "root"));
@@ -903,8 +900,7 @@ void map_tests(void)
 		stl_map.clear();
 		ft_map.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		fill_std_map(stl_map);
@@ -913,8 +909,7 @@ void map_tests(void)
 		stl_map.clear();
 		ft_map.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map)
-			|| !test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		std::cout << PASSED << "\n";
@@ -1498,8 +1493,7 @@ void map_tests(void)
 		swap(stl_map1, stl_map2);
 		swap(ft_map1, ft_map2);
 
-		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1)
-			|| !test_empty_map_iterators(ft_map1))
+		if (!compare_maps(stl_map1, ft_map1) || !test_empty_map_iterators(ft_map1))
 			throw ko;
 
 		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))

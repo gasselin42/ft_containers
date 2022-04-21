@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/07 15:32:09 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/21 15:37:57 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,21 @@ namespace ft
 				: 	_alloc(alloc),
 					_cont_start(NULL),
 					_cont_end(NULL),
-					_cont_size(n)
+					_cont_size(n),
+					_cont_capacity(0)
 				{
-					n = get_next_capacity(n);
-					this->_cont_capacity = n;
-					_cont_start = _alloc.allocate(n);
+					this->_cont_capacity = get_next_capacity(n);
+					_cont_start = _alloc.allocate(this->_cont_capacity);
 					_cont_end = _cont_start + n;
 					this->assign(n, val);
 				}
+
+			// vector(_ForwardIterator __first, _ForwardIterator __last, const allocator_type& __a,
+            //    typename enable_if<__is_cpp17_forward_iterator<_ForwardIterator>::value &&
+            //                      is_constructible<
+            //                         value_type,
+            //                         typename iterator_traits<_ForwardIterator>::reference>::value>::type* = 0);
+
 
 			template <class InputIterator>
 				vector(InputIterator first, InputIterator last, const Alloc& alloc = Alloc(),
@@ -150,16 +157,16 @@ namespace ft
 				}
 
 			iterator begin()
-				{ return (this->_cont_start); }
+				{ return (iterator(this->_cont_start)); }
 
 			const_iterator begin() const
-				{ return (this->_cont_start); }
+				{ return (const_iterator(this->_cont_start)); }
 
 			iterator end()
-				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
+				{ return (iterator((this->empty()) ? this->_cont_start : this->_cont_end)); }
 
 			const_iterator end() const
-				{ return ((this->empty()) ? this->_cont_start : this->_cont_end); }
+				{ return (const_iterator((this->empty()) ? this->_cont_start : this->_cont_end)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }

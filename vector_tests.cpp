@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/21 10:29:16 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/21 15:57:23 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ void fill_std_vector(std::vector<int>& vec)
 		vec.push_back(i + 1);
 }
 
-template <class Ta, class Tb>
-bool iterate_vectors(std::vector<Ta, Tb>& stl_vector, ft::vector<Ta, Tb>& ft_vector)
+template <class T>
+bool iterate_vectors(std::vector<T>& stl_vector, ft::vector<T>& ft_vector)
 {
-	typename std::vector<Ta, Tb>::iterator stl_it;
-	typename ft::vector<Ta, Tb>::iterator ft_it;
+	typename std::vector<T>::iterator stl_it;
+	typename ft::vector<T>::iterator ft_it;
 
 	stl_it = stl_vector.begin();
 	ft_it = ft_vector.begin();
@@ -65,8 +65,8 @@ bool iterate_vectors(std::vector<Ta, Tb>& stl_vector, ft::vector<Ta, Tb>& ft_vec
 	return (true);
 }
 
-template <class Ta, class Tb>
-bool compare_vectors(std::vector<Ta, Tb>& stl_vector, ft::vector<Ta, Tb>& ft_vector)
+template <class T>
+bool compare_vectors(std::vector<T>& stl_vector, ft::vector<T>& ft_vector)
 {
 	if ((stl_vector.empty() != ft_vector.empty()) ||
 		(stl_vector.size() != ft_vector.size()) ||
@@ -77,11 +77,11 @@ bool compare_vectors(std::vector<Ta, Tb>& stl_vector, ft::vector<Ta, Tb>& ft_vec
 	return (true);
 }
 
-template <class Ta, class Tb>
-bool test_empty_vector_iterators(ft::vector<Ta, Tb>& ft_vector)
+template <class T>
+bool test_empty_vector_iterators(ft::vector<T>& ft_vector)
 {
-	typename ft::vector<Ta, Tb>::iterator ft_it1;
-	typename ft::vector<Ta, Tb>::iterator ft_it2;
+	typename ft::vector<T>::iterator ft_it1;
+	typename ft::vector<T>::iterator ft_it2;
 
 	ft_it1 = ft_vector.begin();
 	ft_it2 = ft_vector.end();
@@ -91,7 +91,6 @@ bool test_empty_vector_iterators(ft::vector<Ta, Tb>& ft_vector)
 
 	return (true);
 }
-
 
 void vector_tests(void)
 {
@@ -106,6 +105,9 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		if (!compare_vectors(stl_vec, ft_vec) || !test_empty_vector_iterators(ft_vec))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -117,6 +119,18 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		if (!compare_vectors(stl_vec, ft_vec) || !test_empty_vector_iterators(ft_vec))
+			throw ko;
+
+		std::vector<int> stl_vec_alloc(stl_vec.get_allocator());
+		ft::vector<int> ft_vec_alloc(ft_vec.get_allocator());
+
+		if (!compare_vectors(stl_vec_alloc, ft_vec_alloc) || !test_empty_vector_iterators(ft_vec_alloc))
+			throw ko;
+
+		// if (stl_vec_alloc.get_allocator() != ft_vec_alloc.get_allocator())
+		// 	throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -125,8 +139,17 @@ void vector_tests(void)
 
 	std::cout << BLUE << "Constructor - Value count " << NC;
 	try {
-		std::vector<int> stl_vec;
-		ft::vector<int> ft_vec;
+		std::vector<int> stl_vec(0, 50);
+		ft::vector<int> ft_vec(0, 50);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !test_empty_vector_iterators(ft_vec))
+			throw ko;
+
+		std::vector<int> stl_vec2(10, 50);
+		ft::vector<int> ft_vec2(10, 50);
+
+		if (!compare_vectors(stl_vec2, ft_vec2) || !iterate_vectors(stl_vec2, ft_vec2))
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -139,6 +162,24 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		std::vector<int> stl_vec_range(stl_vec.begin(), stl_vec.end());
+		ft::vector<int> ft_vec_range(ft_vec.begin(), ft_vec.end());
+
+		if (!compare_vectors(stl_vec_range, ft_vec_range) || !iterate_vectors(stl_vec_range, ft_vec_range))
+			throw ko;
+
+		std::vector<int> stl_vec_range2(stl_vec.begin()+5, stl_vec.begin()+20);
+		ft::vector<int> ft_vec_range2(ft_vec.begin()+5, ft_vec.begin()+20);
+
+		if (!compare_vectors(stl_vec_range2, ft_vec_range2) || !iterate_vectors(stl_vec_range2, ft_vec_range2))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -150,6 +191,18 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		std::vector<int> stl_vec_copy(stl_vec);
+		ft::vector<int> ft_vec_copy(ft_vec);
+
+		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -160,6 +213,18 @@ void vector_tests(void)
 	try {
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		std::vector<int> stl_vec_copy = stl_vec;
+		ft::vector<int> ft_vec_copy = ft_vec;
+
+		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
