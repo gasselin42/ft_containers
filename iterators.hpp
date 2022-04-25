@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 09:47:41 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/25 15:20:56 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,10 @@ namespace ft
 				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::pointer			pointer;
 				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
 
+			private:
+				pointer _ptr;
+
+			public:
 				random_access_iterator() : _ptr(NULL) {}
 				random_access_iterator(pointer ptr) : _ptr(ptr) {}
 				random_access_iterator(const random_access_iterator& rhs) : _ptr(rhs._ptr) {}
@@ -204,8 +208,12 @@ namespace ft
 				bool operator<(const random_access_iterator& rhs) const { return (this->_ptr < rhs._ptr); }
 				bool operator>(const random_access_iterator& rhs) const { return (this->_ptr > rhs._ptr); }
 
-			private:
-				pointer _ptr;
+				reference operator[](difference_type n) { return (*(operator+(n))); }
+
+				// https://en.cppreference.com/w/cpp/language/cast_operator
+				// https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421719#4421719
+				operator random_access_iterator<const T> () const
+					{ return (random_access_iterator<const T>(this->_elem)); }
 		};
 
 	template <class Iterator>

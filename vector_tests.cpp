@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/21 15:57:23 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/25 16:05:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ void fill_std_vector(std::vector<int>& vec)
 		vec.push_back(i + 1);
 }
 
+void test_deep_copy_ft(ft::vector<int>& vec)
+{
+	for (int i = 0; i < 10; i++)
+		vec.at(10+i) = 50+i;
+}
+
+void test_deep_copy_stl(std::vector<int>& vec)
+{
+	for (int i = 0; i < 10; i++)
+		vec.at(10+i) = 50+i;
+}
+
 template <class T>
 bool iterate_vectors(std::vector<T>& stl_vector, ft::vector<T>& ft_vector)
 {
@@ -60,8 +72,10 @@ bool iterate_vectors(std::vector<T>& stl_vector, ft::vector<T>& ft_vector)
 		stl_it++;
 		ft_it++;
 	}
+
 	if (ft_it != ft_vector.end())
 		return (false);
+
 	return (true);
 }
 
@@ -203,6 +217,15 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
 			throw ko;
 
+		test_deep_copy_stl(stl_vec);
+		test_deep_copy_ft(ft_vec);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -226,6 +249,15 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
 			throw ko;
 
+		test_deep_copy_stl(stl_vec);
+		test_deep_copy_ft(ft_vec);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		if (!compare_vectors(stl_vec_copy, ft_vec_copy) || !iterate_vectors(stl_vec_copy, ft_vec_copy))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -245,6 +277,26 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		if (ft_vec.begin() != ft_vec.end())
+			throw ko;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
+
+		while (stl_it != stl_vec.end())
+		{
+			if (*stl_it != *ft_it)
+				throw ko;
+			stl_it++;
+			ft_it++;
+		}
+
+		if (ft_it != ft_vec.end())
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -253,8 +305,33 @@ void vector_tests(void)
 
 	std::cout << BLUE << "Begin - Const " << NC;
 	try {
+		const ft::vector<int> ft_vec_empty;
+
+		if (ft_vec_empty.begin() != ft_vec_empty.end())
+			throw ko;
+		
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		const std::vector<int> stl_vec_begin(stl_vec);
+		const ft::vector<int> ft_vec_begin(ft_vec);
+
+		std::vector<int>::const_iterator stl_it = stl_vec_begin.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_begin.begin();
+
+		while (stl_it != stl_vec_begin.end())
+		{
+			if (*stl_it != *ft_it)
+				throw ko;
+			stl_it++;
+			ft_it++;
+		}
+
+		if (ft_it != ft_vec_begin.end())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -267,6 +344,23 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it = stl_vec.end();
+		ft::vector<int>::iterator ft_it = ft_vec.end();
+
+		while (stl_it != stl_vec.begin())
+		{
+			--stl_it;
+			--ft_it;
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+			
+		if (ft_it != ft_vec.begin())
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -277,6 +371,26 @@ void vector_tests(void)
 	try {
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		const std::vector<int> stl_vec_end(stl_vec);
+		const ft::vector<int> ft_vec_end(ft_vec);
+
+		std::vector<int>::const_iterator stl_it = stl_vec_end.end();
+		ft::vector<int>::const_iterator ft_it = ft_vec_end.end();
+
+		while (stl_it != stl_vec_end.begin())
+		{
+			--stl_it;
+			--ft_it;
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+			
+		if (ft_it != ft_vec_end.begin())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -289,6 +403,26 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		if (ft_vec.rbegin() != ft_vec.rend())
+			throw ko;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+
+		while (stl_it != stl_vec.rend())
+		{
+			if (*stl_it != *ft_it)
+				throw ko;
+			stl_it++;
+			ft_it++;
+		}
+
+		if (ft_it != ft_vec.rend())
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -297,8 +431,33 @@ void vector_tests(void)
 
 	std::cout << BLUE << "Rbegin - Const " << NC;
 	try {
+		const ft::vector<int> ft_vec_empty;
+
+		if (ft_vec_empty.rbegin() != ft_vec_empty.rend())
+			throw ko;
+
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		const std::vector<int> stl_vec_rbegin(stl_vec);
+		const ft::vector<int> ft_vec_rbegin(ft_vec);
+
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_rbegin.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_rbegin.rbegin();
+
+		while (stl_it != stl_vec_rbegin.rend())
+		{
+			if (*stl_it != *ft_it)
+				throw ko;
+			stl_it++;
+			ft_it++;
+		}
+
+		if (ft_it != ft_vec_rbegin.rend())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -311,6 +470,23 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rend();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rend();
+
+		while (stl_it != stl_vec.rbegin())
+		{
+			--stl_it;
+			--ft_it;
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		if (ft_it != ft_vec.rbegin())
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -321,6 +497,26 @@ void vector_tests(void)
 	try {
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		const std::vector<int> stl_vec_rend(stl_vec);
+		const ft::vector<int> ft_vec_rend(ft_vec);
+
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_rend.rend();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_rend.rend();
+
+		while (stl_it != stl_vec_rend.rbegin())
+		{
+			--stl_it;
+			--ft_it;
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		if (ft_it != ft_vec_rend.rbegin())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)

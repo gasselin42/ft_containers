@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/21 14:33:49 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/25 15:59:16 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,24 @@ void fill_std_map(std::map<int, std::string>& myMap)
 	myMap.insert(std::make_pair<int, std::string>(76, "right"));
 	myMap.insert(std::make_pair<int, std::string>(80, "right"));
 	myMap.insert(std::make_pair<int, std::string>(78, "right"));
+}
+
+void test_deep_copy_ft(ft::map<int, std::string>& myMap)
+{
+	(*(myMap.find(29))).second = "unleft";
+	(*(myMap.find(44))).second = "unroot";
+	(*(myMap.find(54))).second = "unright";
+	(*(myMap.find(65))).second = "unright";
+	(*(myMap.find(97))).second = "unright";
+}
+
+void test_deep_copy_stl(std::map<int, std::string>& myMap)
+{
+	(*(myMap.find(29))).second = "unleft";
+	(*(myMap.find(44))).second = "unroot";
+	(*(myMap.find(54))).second = "unright";
+	(*(myMap.find(65))).second = "unright";
+	(*(myMap.find(97))).second = "unright";
 }
 
 template <class Ta, class Tb>
@@ -198,8 +216,19 @@ void map_tests(void)
 		std::map<int, std::string> stl_map_cpy(stl_map);
 		ft::map<int, std::string> ft_map_cpy(ft_map);
 
-		if (compare_maps(stl_map_cpy, ft_map_cpy))
-			std::cout << PASSED << "\n";
+		if (!compare_maps(stl_map_cpy, ft_map_cpy) || !iterate_maps(stl_map_cpy, ft_map_cpy))
+			throw ko;
+
+		test_deep_copy_stl(stl_map);
+		test_deep_copy_ft(ft_map);
+
+		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
+			throw ko;
+
+		if (!compare_maps(stl_map_cpy, ft_map_cpy) || !iterate_maps(stl_map_cpy, ft_map_cpy))
+			throw ko;
+		
+		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
 
@@ -219,8 +248,19 @@ void map_tests(void)
 		std::map<int, std::string> stl_map_assign = stl_map;
 		ft::map<int, std::string> ft_map_assign = ft_map;
 
-		if (compare_maps(stl_map_assign, ft_map_assign))
-			std::cout << PASSED << "\n";
+		if (!compare_maps(stl_map_assign, ft_map_assign) || !iterate_maps(stl_map_assign, ft_map_assign))
+			throw ko;
+
+		test_deep_copy_stl(stl_map);
+		test_deep_copy_ft(ft_map);
+
+		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
+			throw ko;
+
+		if (!compare_maps(stl_map_assign, ft_map_assign) || !iterate_maps(stl_map_assign, ft_map_assign))
+			throw ko;
+		
+		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
 
@@ -239,6 +279,9 @@ void map_tests(void)
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
+		if (ft_map.begin() != ft_map.end())
+			throw ko;
+
 		fill_std_map(stl_map);
 		fill_ft_map(ft_map);
 
@@ -252,8 +295,10 @@ void map_tests(void)
 			stl_it++;
 			ft_it++;
 		}
+		
 		if (ft_it != ft_map.end())
 			throw ko;
+
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -262,6 +307,11 @@ void map_tests(void)
 
 	std::cout << BLUE << "Begin - Const " << NC;
 	try {
+		const ft::map<int, std::string> ft_map_empty;
+		
+		if (ft_map_empty.begin() != ft_map_empty.end())
+			throw ko;
+			
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
@@ -283,6 +333,7 @@ void map_tests(void)
 		}
 		if (ft_it != ft_map_begin.end())
 			throw ko;
+
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -300,20 +351,17 @@ void map_tests(void)
 		std::map<int, std::string>::iterator stl_it = stl_map.end();
 		ft::map<int, std::string>::iterator ft_it = ft_map.end();
 
-		--stl_it;
-		--ft_it;
-
 		while (stl_it != stl_map.begin())
 		{
+			--stl_it;
+			--ft_it;
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
-			stl_it--;
-			ft_it--;
 		}
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+			
 		if (ft_it != ft_map.begin())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -334,20 +382,17 @@ void map_tests(void)
 		std::map<int, std::string>::const_iterator stl_it = stl_map_end.end();
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_end.end();
 
-		--stl_it;
-		--ft_it;
-
 		while (stl_it != stl_map.begin())
 		{
+			--stl_it;
+			--ft_it;
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
-			stl_it--;
-			ft_it--;
 		}
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+
 		if (ft_it != ft_map_end.begin())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -358,6 +403,9 @@ void map_tests(void)
 	try {
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
+
+		if (ft_map.rbegin() != ft_map.rend())
+			throw ko;
 
 		fill_std_map(stl_map);
 		fill_ft_map(ft_map);
@@ -372,8 +420,10 @@ void map_tests(void)
 			stl_it++;
 			ft_it++;
 		}
+
 		if (ft_it != ft_map.rend())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -382,6 +432,11 @@ void map_tests(void)
 		
 	std::cout << BLUE << "Rbegin - Const " << NC;
 	try {
+		const ft::map<int, std::string> ft_map_empty;
+		
+		if (ft_map_empty.rbegin() != ft_map_empty.rend())
+			throw ko;
+			
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
@@ -401,8 +456,10 @@ void map_tests(void)
 			stl_it++;
 			ft_it++;
 		}
+		
 		if (ft_it != ft_map_rbegin.rend())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -420,20 +477,17 @@ void map_tests(void)
 		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rend();
 		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rend();
 
-		--stl_it;
-		--ft_it;
-
 		while (stl_it != stl_map.rbegin())
 		{
+			--stl_it;
+			--ft_it;
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
-			stl_it--;
-			ft_it--;
 		}
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+
 		if (ft_it != ft_map.rbegin())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -454,20 +508,17 @@ void map_tests(void)
 		std::map<int, std::string>::const_reverse_iterator stl_it = stl_map_rend.rend();
 		ft::map<int, std::string>::const_reverse_iterator ft_it = ft_map_rend.rend();
 
-		--stl_it;
-		--ft_it;
-
 		while (stl_it != stl_map.rbegin())
 		{
+			--stl_it;
+			--ft_it;
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
-			stl_it--;
-			ft_it--;
 		}
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+
 		if (ft_it != ft_map_rend.rbegin())
 			throw ko;
+			
 		std::cout << BGRN << "PASSED!" << NC << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }

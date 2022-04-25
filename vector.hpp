@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/21 15:37:57 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/25 14:32:13 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 namespace ft
 {
-	template < class T, class Alloc=std::allocator<T> >
+	template < class T, class Alloc = std::allocator<T> >
 	class vector
 	{
 		public:
