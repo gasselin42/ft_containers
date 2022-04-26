@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:30:27 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/31 10:40:00 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:45:28 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace ft
 			container_type	c;
 		
 		public:
-			explicit stack(const container_type& cont = container_type()) : c(cont) {}
+			explicit stack(const Container& cont = Container()) : c(cont) {}
 
 			stack(const stack& x)
 				{ *this = x; }

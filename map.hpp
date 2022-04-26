@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 16:02:18 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/26 17:02:05 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ namespace ft
 			typedef typename	allocator_type::const_reference 			const_reference;
 			typedef typename	allocator_type::pointer 					pointer;
 			typedef typename	allocator_type::const_pointer 				const_pointer;
-			typedef	typename	ft::BST<value_type, key_compare>::iterator	iterator;
-			typedef	typename	ft::BST<value_type, key_compare>::const_iterator const_iterator;
+			typedef	typename	ft::BST<value_type>::iterator				iterator;
+			typedef	typename	ft::BST<value_type>::const_iterator			const_iterator;
 			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
 			typedef				ptrdiff_t									difference_type;
@@ -83,7 +83,7 @@ namespace ft
 					_bst()
 				{}
 		
-			explicit map(const key_compare& comp, const allocator_type& alloc = allocator_type()) 
+			explicit map(const Compare& comp, const Alloc& alloc = Alloc()) 
 				: 	_alloc(alloc),
 					_comp(comp),
 					_bst()
@@ -91,14 +91,13 @@ namespace ft
 			
 			template <class InputIterator>
 				map(InputIterator first, InputIterator last,
-					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type(),
+					const Compare& comp = Compare(),
+					const Alloc& alloc = Alloc(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 					: 	_alloc(alloc),
 						_comp(comp),
 						_bst()
 					{
-						std::cout << "Hello3\n";
 						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("map::constructor"));
 						this->insert(first, last);
@@ -159,7 +158,7 @@ namespace ft
 			size_type max_size() const
 				{ return (this->_bst.max_size()); }
 
-			mapped_type& at(const key_type& k)
+			T& at(const Key& k)
 				{
 					iterator map_it;
 
@@ -170,7 +169,7 @@ namespace ft
 						throw (std::out_of_range("map::at"));
 				}
 
-			const mapped_type& at(const key_type& k) const
+			const T& at(const Key& k) const
 				{
 					iterator map_it;
 
@@ -182,8 +181,8 @@ namespace ft
 				}
 
 			// Check if key_type is already present in the map before insertion
-			mapped_type& operator[](const key_type& k)
-				{ return ((this->insert(ft::make_pair(k, mapped_type())).first)->second); }
+			T& operator[](const Key& k)
+				{ return ((this->insert(ft::make_pair(k, T())).first)->second); }
 
 			ft::pair<iterator, bool> insert(const value_type& val)
 				{
@@ -217,7 +216,7 @@ namespace ft
 			void erase(iterator position)
 				{ this->erase((*position).first); }
 
-			size_type erase(const key_type& k)
+			size_type erase(const Key& k)
 				{
 					iterator it = this->find(k);
 					if (it == this->end())
@@ -252,7 +251,7 @@ namespace ft
 			value_compare value_comp() const
 				{ return (value_compare(key_compare())); }
 			
-			iterator find(const key_type& k)
+			iterator find(const Key& k)
 				{
 					iterator start = this->begin();
 
@@ -265,7 +264,7 @@ namespace ft
 					return (this->end());
 				}
 
-			const_iterator find(const key_type& k) const
+			const_iterator find(const Key& k) const
 				{
 					const_iterator start = this->begin();
 
@@ -278,10 +277,10 @@ namespace ft
 					return (this->end());
 				}
 
-			size_type count(const key_type& k) const
+			size_type count(const Key& k) const
 				{ return ((this->find(k) == this->end()) ? 0 : 1); }
 
-			iterator lower_bound(const key_type& k)
+			iterator lower_bound(const Key& k)
 				{
 					iterator	start = this->begin();
 					
@@ -291,13 +290,13 @@ namespace ft
 							return (start);
 						start++;
 					}
-					return (this->end);
+					return (this->end());
 				}
 			
-			const_iterator lower_bound(const key_type& k) const
+			const_iterator lower_bound(const Key& k) const
 				{ return (const_iterator(lower_bound(k))); }
 
-			iterator upper_bound(const key_type& k)
+			iterator upper_bound(const Key& k)
 				{
 					iterator	start = this->begin();
 					
@@ -310,13 +309,13 @@ namespace ft
 					return (this->end());
 				}
 
-			const_iterator upper_bound(const key_type& k) const
+			const_iterator upper_bound(const Key& k) const
 				{ return (const_iterator(this->upper_bound(k))); }
 
-			ft::pair<iterator, iterator> equal_range(const key_type& k)
+			ft::pair<iterator, iterator> equal_range(const Key& k)
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
 
-			ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
+			ft::pair<const_iterator, const_iterator> equal_range(const Key& k) const
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
 	};
 

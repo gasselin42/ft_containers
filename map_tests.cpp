@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/25 15:59:16 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:40:13 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,11 +164,8 @@ void map_tests(void)
 		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
-		std::map<int, std::string>::key_compare stl_key = stl_map.key_comp();
-		ft::map<int, std::string>::key_compare ft_key = ft_map.key_comp();
-
-		std::map<int, std::string> stl_map2(stl_key);
-		ft::map<int, std::string> ft_map2(ft_key);
+		std::map<int, std::string> stl_map2(stl_map.key_comp());
+		ft::map<int, std::string> ft_map2(ft_map.key_comp());
 
 		if (!compare_maps(stl_map2, ft_map2) || !test_empty_map_iterators(ft_map2))
 			throw ko;
@@ -1365,7 +1362,10 @@ void map_tests(void)
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		if (stl_map.get_allocator() != ft_map.get_allocator())
+		std::map<int, std::string> stl_map_alloc(stl_map.key_comp(), stl_map.get_allocator());
+		ft::map<int, std::string> ft_map_alloc(ft_map.key_comp(), ft_map.get_allocator());
+
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		std::cout << PASSED << "\n";

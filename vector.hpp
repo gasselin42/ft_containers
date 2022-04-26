@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/25 14:32:13 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/26 16:36:18 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ namespace ft
 						while (this->_cont_size > n)
 							this->pop_back();
 					}
-					else
+					else if (n > this->_cont_size)
 					{
 						if (n > this->_cont_capacity)
 							this->reserve(n);
@@ -217,12 +217,15 @@ namespace ft
 					else if (n > this->_cont_capacity)
 					{
 						n = get_next_capacity(n);
+						
 						pointer _old_start = this->_cont_start;
 						pointer _old_start2 = this->_cont_start;
 						pointer _old_end = this->_cont_end;
+						
 						this->_cont_start = _alloc.allocate(n);
 						this->_cont_end = this->_cont_start;
 						this->_cont_capacity = n;
+						
 						while (_old_start != _old_end)
 						{
 							this->_alloc.construct(this->_cont_end, *_old_start);
@@ -288,7 +291,9 @@ namespace ft
 						// Verify if InputIterator is integral
 						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::assign"));
+							
 						size_type diff = get_diff(first, last);
+						
 						if (diff > this->max_size())
 							throw (std::length_error("vector::assign"));
 						else if (first != last)
@@ -336,17 +341,23 @@ namespace ft
 						std::cerr << e.what() << "\n";
 						return (this->_cont_start);
 					}
+					
 					iterator it = begin();
 					size_type i = get_diff(it, position);
+					
 					if (this->_cont_size == this->_cont_capacity)
 						this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
-					for (size_type j = 0; j < this->_cont_size - i; j++) {
+					
+					size_type j = 0;
+					while (j < this->_cont_size - i) {
 						this->_alloc.construct(this->_cont_end - j, *(this->_cont_end - 1 - j));
 						this->_alloc.destroy(this->_cont_end - 1 - j);
 					}
+					
 					this->_cont_end++;
 					this->_cont_size++;
 					this->_alloc.construct(this->_cont_start + i, val);
+					
 					return (this->_cont_start + i);
 				}
 
@@ -354,6 +365,7 @@ namespace ft
 				{
 					if (n == 0)
 						return ;
+						
 					try {	
 						if ((this->_cont_size + n) > this->max_size())
 							throw (std::length_error("vector::insert"));
@@ -361,6 +373,7 @@ namespace ft
 						std::cerr << e.what() << "\n";
 						return ;
 					}
+					
 					while (n--)
 						position = insert(position, val) + 1;
 				}
@@ -392,9 +405,12 @@ namespace ft
 			iterator erase(iterator position)
 				{
 					if (position >= this->end())
-						return (iterator(this->end()));
+						return (this->end());
+	
 					pointer pos = &(*position);
+	
 					this->_alloc.destroy(&(*position));
+					
 					if (position != this->end() - 1)
 					{
 						size_type diff = get_diff(position, this->end() - 1);
@@ -403,21 +419,29 @@ namespace ft
 							this->_alloc.destroy(&(*position) + j + 1);
 						}
 					}
+
 					this->_cont_end--;
 					this->_cont_size--;
+					
 					return (iterator(pos));
 				}
 
 			iterator erase(iterator first, iterator last)
 				{
 					difference_type diff = get_diff(first, last);
-					if (first == last || first >= this->end())
+
+					if (diff == 0)
+						return (last);
+					
+					if (first >= this->end())
 						return (this->end());
+
 					while (diff--) {
 						first = erase(first);
 						if (first >= this->end())
 							break ;
 					}
+					
 					return (first);
 				}
 
@@ -452,30 +476,35 @@ namespace ft
 
 	template <class T, class Alloc>
 		bool operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs == rhs); }
+			{ 
+				if (lhs.size() == rhs.size())
+					if (ft::equal(lhs.begin(), lhs.end(), rhs.begin()))
+						return (true);
+				return (false);
+			}
 
 	template <class T, class Alloc>
 		bool operator!=(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs != rhs); }
+			{ return (!(lhs == rhs)); }
 
 	template <class T, class Alloc>
 		bool operator<(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs < rhs); }
-
-	template <class T, class Alloc>
-		bool operator<=(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs <= rhs); }
+			{ return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
 
 	template <class T, class Alloc>
 		bool operator>(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs > rhs); }
+			{ return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end())); }
+
+	template <class T, class Alloc>
+		bool operator<=(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+			{ return (!(lhs > rhs)); }
 
 	template <class T, class Alloc>
 		bool operator>=(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
-			{ return (lhs >= rhs); }
+			{ return (!(lhs < rhs)); }
 
 	template <class T, class Alloc>
-		void swap(ft::vector<T, Alloc>& x,ft:: vector<T, Alloc>& y)
+		void swap(ft::vector<T, Alloc>& x, ft::vector<T, Alloc>& y)
 			{ x.swap(y); }
 }
 
