@@ -6,17 +6,14 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 17:02:05 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:04:58 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#ifndef MAP_HPP
-#define MAP_HPP
-
-#include "utils.hpp"
 #include "BST.hpp"
+#include "utils.hpp"
 
 #include <memory>
 #include <stdexcept>
@@ -38,8 +35,8 @@ namespace ft
 			typedef typename	allocator_type::const_reference 			const_reference;
 			typedef typename	allocator_type::pointer 					pointer;
 			typedef typename	allocator_type::const_pointer 				const_pointer;
-			typedef	typename	ft::BST<value_type>::iterator				iterator;
-			typedef	typename	ft::BST<value_type>::const_iterator			const_iterator;
+			typedef	typename	ft::BST<value_type, Compare>::iterator				iterator;
+			typedef	typename	ft::BST<value_type, Compare>::const_iterator			const_iterator;
 			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
 			typedef				ptrdiff_t									difference_type;
@@ -118,9 +115,9 @@ namespace ft
 					if (this == &x)
 						return (*this);
 					this->_bst.deleteBinaryTree(_bst._tri_ptr->parent);
-					this->_bst._tri_ptr->left = NULL;
-					this->_bst._tri_ptr->right = NULL;
-					this->_bst._tri_ptr->parent = NULL;
+					this->_bst._tri_ptr->left = this->_bst._exts->right;
+					this->_bst._tri_ptr->right = this->_bst._exts->right;
+					this->_bst._tri_ptr->parent = this->_bst._exts->right;
 					this->_bst.transfer_map(x._bst);
 					return (*this);
 				}
@@ -352,5 +349,3 @@ namespace ft
 		void swap(ft::map<Key,T,Compare,Alloc>& lhs, ft::map<Key,T,Compare,Alloc>& rhs)
 			{ lhs.swap(rhs); }
 }
-
-#endif

@@ -6,33 +6,32 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 16:58:57 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 15:41:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#ifndef BIDIR_ITERATOR_HPP
-#define BIDIR_ITERATOR_HPP
-
 #include "iterators.hpp"
+#include "utils.hpp"
+#include "BST.hpp"
 
 namespace ft
 {
-	template < class T, class Compare >
+	template < class T, class Compare = ft::less<T> >
 		class bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 		{
 			public:
-				typedef typename T::value_type																	value_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
+				typedef typename	T::value_type																	value_type;
+				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
+				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category		iterator_category;
+				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
+				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference				reference;
 
 				T*	_ptr;
 				T*	_tri_ptr;
 				T*	_exts;
-				Compare	_comp;
+				Compare		_comp;
 
 			private:
 				T* find_max(T* ptr)
@@ -161,15 +160,16 @@ namespace ft
 
 				bool operator==(const bidir_iterator& rhs) const { return (this->_ptr == rhs._ptr); }
 				bool operator!=(const bidir_iterator& rhs) const { return (this->_ptr != rhs._ptr); }
+
+				// operator bidir_iterator<const T, Compare> () const
+				// 	{ return (bidir_iterator<const T, Compare>(this->_ptr, this->_tri_ptr, this->_exts)); }
 		};
 
-
-
-	template < class T, class Compare >
+	template < class T, class Compare  = ft::less<T> >
 		class const_bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 		{
 			public:
-				typedef typename T::value_type																	value_type;
+				typedef typename T::value_type																value_type;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
@@ -276,7 +276,7 @@ namespace ft
 				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
 				const_bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
 				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
-				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
+				const_bidir_iterator(const bidir_iterator<T>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs)
 					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
 				virtual ~const_bidir_iterator() {}
@@ -310,5 +310,3 @@ namespace ft
 				bool operator!=(const const_bidir_iterator& rhs) const { return (this->_ptr != rhs._ptr); }
 		};
 }
-
-#endif

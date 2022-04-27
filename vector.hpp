@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 16:36:18 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 09:41:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -472,6 +472,12 @@ namespace ft
 					}
 					this->_cont_size = 0;
 				}
+
+			T* data()
+				{ return (this->_cont_start); }
+
+			const T* data() const
+				{ return (this->_cont_start); }
 	};
 
 	template <class T, class Alloc>

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 17:06:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 15:38:25 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int main()
 {
-	vector_tests();
+	// vector_tests();
 	map_tests();
-	stack_tests();
+	// stack_tests();
 
 	return (0);
 }

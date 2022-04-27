@@ -6,14 +6,11 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 15:56:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 14:31:10 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#ifndef UTILS_HPP
-#define UTILS_HPP
 
 #include "pair.hpp"
 
@@ -80,5 +77,3 @@ namespace ft
 				return true;
 			}
 }
-
-#endif

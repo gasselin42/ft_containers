@@ -6,14 +6,11 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/25 15:20:56 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 14:31:47 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#ifndef ITERATORS_HPP
-#define ITERATORS_HPP
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -213,7 +210,7 @@ namespace ft
 				// https://en.cppreference.com/w/cpp/language/cast_operator
 				// https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421719#4421719
 				operator random_access_iterator<const T> () const
-					{ return (random_access_iterator<const T>(this->_elem)); }
+					{ return (random_access_iterator<const T>(this->_ptr)); }
 		};
 
 	template <class Iterator>
@@ -309,5 +306,3 @@ namespace ft
 			bool operator>(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 				{ return (lhs.base() < rhs.base()); }
 }
-
-#endif

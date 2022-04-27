@@ -6,21 +6,19 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/20 14:33:14 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:14:30 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#ifndef BST_HPP
-#define BST_HPP
-
 #include "bidir_iterator.hpp"
+// #include "iterators.hpp"
 #include "utils.hpp"
 #include <memory>
 
 namespace ft
-{
+{	
 	template <class T>
 		class BST_Node
 		{
@@ -70,7 +68,7 @@ namespace ft
 	// Internally, map containers keep all their elements sorted by their key following the criterion
 	// specified by its comparison object. The elements are always inserted in its respective position following this ordering.
 	
-	template <class T, class Compare = ft::less<T>, class Node = ft::BST_Node<T>, class Node_Alloc = std::allocator<Node> >
+	template <class T, class Compare = ft::less<T>, class Node = BST_Node<T>, class Node_Alloc = std::allocator<Node> >
 		class BST
 		{	
 			public:
@@ -79,8 +77,8 @@ namespace ft
 				typedef Node_Alloc node_alloc;
 				typedef	size_t	size_type;
 				typedef T value_type;
-				typedef ft::bidir_iterator<Node, Compare> iterator;
-				typedef ft::const_bidir_iterator<Node, Compare> const_iterator;
+				typedef bidir_iterator<Node, Compare> iterator;
+				typedef const_bidir_iterator<Node, Compare> const_iterator;
 
 				node_ptr _tri_ptr;
 				node_ptr _exts;
@@ -229,7 +227,7 @@ namespace ft
 				void deleteBinaryTree(node_ptr root)
 					{
 						// Base case: empty tree
-						if (root == NULL)
+						if (root == NULL || root == _exts->right || root == _exts->left)
 							return ;
 					
 						// delete left and right subtree first (Postorder)
@@ -370,5 +368,3 @@ namespace ft
 
 		};
 }
-
-#endif

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 16:40:13 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 16:33:24 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void map_tests(void)
 		std::map<int, std::string> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		if (!compare_maps(stl_map, ft_map) || test_empty_map_iterators(ft_map))
+		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
 
 		std::cout << PASSED << "\n";
@@ -321,8 +321,10 @@ void map_tests(void)
 		std::map<int, std::string>::const_iterator stl_it = stl_map_begin.begin();
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin.begin();
 
+		std::cout << &(*stl_map_begin.find(98)) << "\n";
 		while (stl_it != stl_map.end())
 		{
+			std::cout << &(*stl_it) << "\n";
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
 			stl_it++;

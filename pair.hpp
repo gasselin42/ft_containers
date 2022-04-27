@@ -6,14 +6,11 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:48:25 by gasselin          #+#    #+#             */
-/*   Updated: 2022/03/23 14:56:14 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/27 15:18:44 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#ifndef PAIR_HPP
-#define PAIR_HPP
 
 namespace ft
 {
@@ -70,5 +67,3 @@ namespace ft
 		ft::pair<T1, T2> make_pair(T1 x, T2 y)
 			{ return ( ft::pair<T1, T2>(x, y) ); }
 }
-
-#endif
