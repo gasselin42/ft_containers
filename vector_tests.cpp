@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/26 17:05:18 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 15:21:42 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,6 @@ void vector_tests(void)
 
 		if (!compare_vectors(stl_vec_alloc, ft_vec_alloc) || !test_empty_vector_iterators(ft_vec_alloc))
 			throw ko;
-
-		// if (stl_vec_alloc.get_allocator() != ft_vec_alloc.get_allocator())
-		// 	throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -566,8 +563,8 @@ void vector_tests(void)
 		if (stl_vec_int.max_size() != ft_vec_int.max_size())
 			throw ko;
 
-		std::vector<unsigned char> stl_vec_char;
-		ft::vector<unsigned char> ft_vec_char;
+		std::vector<char> stl_vec_char;
+		ft::vector<char> ft_vec_char;
 
 		if (stl_vec_char.max_size() != ft_vec_char.max_size())
 			throw ko;

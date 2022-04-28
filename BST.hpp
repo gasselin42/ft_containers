@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 16:14:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 12:50:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,7 @@ namespace ft
 					{
 						const value_type val = *it;
 						node_ptr ptr = findNode(val);
+						iterator tmp = it;
 
 						if (ptr->left == NULL && ptr->right == NULL)
 						{
@@ -304,32 +305,50 @@ namespace ft
 								_tri_ptr->left = _exts->right;
 								_tri_ptr->right = _exts->right;
 							}
-							this->_node_alloc.destroy(ptr);
-							this->_node_alloc.deallocate(ptr, 1);
-							ptr = NULL;
-							this->_map_size--;
 						}
 						else if (ptr->left != NULL && ptr->right != NULL)
 						{
 							value_type succ_val = *(++it);
-							deleteNode(it);
-							node_ptr new_node = _node_alloc.allocate(1);
-							_node_alloc.construct(new_node, Node(succ_val, ptr->parent, ptr->left, ptr->right));
-							if (ptr->left)
-								ptr->left->parent = new_node;
-							if (ptr->right)
-								ptr->right->parent = new_node;
-							if (ptr->parent)
-							{
-								if (ptr->parent->left == ptr)
-									ptr->parent->left = new_node;
-								else if (ptr->parent->right == ptr)
-									ptr->parent->right = new_node;
-							}
+							node_ptr succ_ptr = findNode(succ_val);
+							
 							if (ptr == _tri_ptr->parent)
-								_tri_ptr->parent = new_node;
-							this->_node_alloc.destroy(ptr);
-							this->_node_alloc.deallocate(ptr, 1);
+								_tri_ptr->parent = succ_ptr;
+
+							if (succ_ptr->right == NULL && succ_ptr->left == NULL)
+							{
+								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+									succ_ptr->parent->left = NULL;
+								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+									succ_ptr->parent->right = NULL;
+							}
+							else if (succ_ptr->right != NULL)
+							{
+								succ_ptr->right->parent = succ_ptr->parent;
+								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+									succ_ptr->parent->left = succ_ptr->right;
+								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+									succ_ptr->parent->right = succ_ptr->right;
+							}
+							else if (succ_ptr->left != NULL)
+							{
+								succ_ptr->left->parent = succ_ptr->parent;
+								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+									succ_ptr->parent->left = succ_ptr->left;
+								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+									succ_ptr->parent->right = succ_ptr->left;
+							}
+
+							
+							succ_ptr->parent = ptr->parent;
+							succ_ptr->left = ptr->left;
+							succ_ptr->right = ptr->right;
+
+							if (ptr->left != NULL)
+								ptr->left->parent = succ_ptr;
+							if (ptr->right != NULL)
+								ptr->right->parent = succ_ptr;
+
+							_tri_ptr->parent->parent = NULL;
 						}
 						else
 						{
@@ -356,11 +375,12 @@ namespace ft
 									ptr->parent->right = child;
 								child->parent = ptr->parent;
 							}
-
-							this->_node_alloc.destroy(ptr);
-							this->_node_alloc.deallocate(ptr, 1);
-							this->_map_size--;
+							_tri_ptr->parent->parent = NULL;
 						}
+						this->_node_alloc.destroy(ptr);
+						this->_node_alloc.deallocate(ptr, 1);
+						ptr = NULL;
+						this->_map_size--;
 					}
 
 				size_type get_size() const

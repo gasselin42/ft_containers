@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 16:33:24 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 14:55:32 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,10 +321,8 @@ void map_tests(void)
 		std::map<int, std::string>::const_iterator stl_it = stl_map_begin.begin();
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin.begin();
 
-		std::cout << &(*stl_map_begin.find(98)) << "\n";
-		while (stl_it != stl_map.end())
+		while (stl_it != stl_map_begin.end())
 		{
-			std::cout << &(*stl_it) << "\n";
 			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 				throw ko;
 			stl_it++;
@@ -381,7 +379,7 @@ void map_tests(void)
 		std::map<int, std::string>::const_iterator stl_it = stl_map_end.end();
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_end.end();
 
-		while (stl_it != stl_map.begin())
+		while (stl_it != stl_map_end.begin())
 		{
 			--stl_it;
 			--ft_it;
@@ -507,7 +505,7 @@ void map_tests(void)
 		std::map<int, std::string>::const_reverse_iterator stl_it = stl_map_rend.rend();
 		ft::map<int, std::string>::const_reverse_iterator ft_it = ft_map_rend.rend();
 
-		while (stl_it != stl_map.rbegin())
+		while (stl_it != stl_map_rend.rbegin())
 		{
 			--stl_it;
 			--ft_it;
@@ -610,8 +608,8 @@ void map_tests(void)
 		
 	std::cout << BLUE << "Max size " << NC;
 	try {
-		std::map<int, std::string> stl_map1;
-		ft::map<int, std::string> ft_map1;
+		std::map<unsigned char, std::string> stl_map1;
+		ft::map<unsigned char, std::string> ft_map1;
 
 		if (stl_map1.max_size() != ft_map1.max_size())
 			throw ko;
@@ -774,7 +772,7 @@ void map_tests(void)
 			throw ko;
 
 		stl_map_insert.clear();
-		ft_map.clear();
+		ft_map_insert.clear();
 
 		stl_map_insert.insert(stl_map.find(44), stl_map.end());
 		ft_map_insert.insert(ft_map.find(44), ft_map.end());

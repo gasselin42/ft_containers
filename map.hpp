@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 16:04:58 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 12:51:07 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,12 @@ namespace ft
 
 			void erase(iterator first, iterator last)
 				{
+					// int i = 0;
 					while (first != last)
+					{
+						// std::cout << i++ << "\n\n";
 						this->erase((*(first++)).first);
+					}
 				}
 
 			// Both maps must have the same templates
@@ -291,7 +295,17 @@ namespace ft
 				}
 			
 			const_iterator lower_bound(const Key& k) const
-				{ return (const_iterator(lower_bound(k))); }
+				{ 
+					const_iterator	start = this->begin();
+					
+					while (start != this->end())
+					{
+						if (_comp((*start).first, k) == false)
+							return (start);
+						start++;
+					}
+					return (this->end());
+				}
 
 			iterator upper_bound(const Key& k)
 				{
@@ -307,7 +321,17 @@ namespace ft
 				}
 
 			const_iterator upper_bound(const Key& k) const
-				{ return (const_iterator(this->upper_bound(k))); }
+				{
+					const_iterator	start = this->begin();
+					
+					while (start != this->end())
+					{
+						if (_comp(k, (*start).first) == true)
+							return (start);
+						start++;
+					}
+					return (this->end());
+				}
 
 			ft::pair<iterator, iterator> equal_range(const Key& k)
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }

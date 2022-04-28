@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 09:41:52 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 15:09:10 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ namespace ft
 					_cont_size(n),
 					_cont_capacity(0)
 				{
-					this->_cont_capacity = get_next_capacity(n);
+					if (n <= 0)
+						return ;
+					this->_cont_capacity = n;
 					_cont_start = _alloc.allocate(this->_cont_capacity);
 					_cont_end = _cont_start + n;
 					this->assign(n, val);
@@ -126,15 +128,28 @@ namespace ft
 						// Verify if InputIterator is integral
 						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::constructor"));
+						
 						difference_type diff = this->get_diff(first, last);
-						size_type n = get_next_capacity(diff);
-						_cont_start = _alloc.allocate(n);
-						_cont_end = _cont_start + n;
-						assign(first, last);
+						if (diff == 0)
+							return ;
+							
+						this->_cont_capacity = diff;
+						_cont_start = _alloc.allocate(this->_cont_capacity);
+						_cont_end = _cont_start;
+						
+						while (first != last)
+							this->push_back(*(first++));
 					}
 
 			vector(const vector& x)
-				{ *this = x; }
+				: 	_alloc(),
+					_cont_start(NULL),
+					_cont_end(NULL),
+					_cont_size(0),
+					_cont_capacity(0)
+					{
+						*this = x;
+					}
 
 			~vector()
 				{
@@ -150,6 +165,16 @@ namespace ft
 				{
 					if (*this == x)
 						return (*this);
+					if (this->_cont_start == NULL)
+					{
+						this->_cont_start = this->_alloc.allocate(x._cont_size);
+						this->_cont_capacity = x._cont_size;	
+					}
+					else if (this->_cont_size < x._cont_size)
+					{
+						this->reserve(x._cont_size);
+						this->_cont_capacity = x._cont_size;
+					}
 					this->clear();
 					this->_cont_end = this->_cont_start;
 					this->insert(this->begin(), x.begin(), x.end());
@@ -216,7 +241,7 @@ namespace ft
 						throw (std::length_error("vector::reserve"));
 					else if (n > this->_cont_capacity)
 					{
-						n = get_next_capacity(n);
+						// n = get_next_capacity(n);
 						
 						pointer _old_start = this->_cont_start;
 						pointer _old_start2 = this->_cont_start;
