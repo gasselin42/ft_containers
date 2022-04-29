@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 15:21:42 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 23:29:17 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1163,6 +1163,10 @@ void vector_tests(void)
 		stl_vec.insert(stl_vec.begin(), myints, myints+3);
 		ft_vec.insert(ft_vec.begin(), myints, myints+3);
 
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		// std::cout << stl_vec.capacity() << "\n";
 		for (int i = 0; i < 10; i++)
 		{
 			stl_vec.insert(stl_vec.begin()+i, myints, myints+3);
@@ -1189,8 +1193,8 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		stl_it = stl_vec.erase(stl_vec.end());
-		ft_it = ft_vec.erase(ft_vec.end());
+		stl_it = stl_vec.erase(stl_vec.end()-1);
+		ft_it = ft_vec.erase(ft_vec.end()-1);
 
 		if (ft_it != ft_vec.end())
 			throw ko;

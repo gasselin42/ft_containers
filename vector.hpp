@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 15:09:10 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/04/28 23:28:45 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,12 @@ namespace ft
 				{ return (this->_cont_size); }
 
 			size_type max_size() const
-				{ return (this->_alloc.max_size()); }
+				{
+					const size_type num = std::numeric_limits<difference_type>::max();
+					const size_type alc = _alloc.max_size();
+
+					return (std::min(num, alc));
+				}
 
 			void resize(size_type n, T val = T())
 				{
@@ -223,7 +228,7 @@ namespace ft
 					else if (n > this->_cont_size)
 					{
 						if (n > this->_cont_capacity)
-							this->reserve(n);
+							this->reserve(this->_cont_capacity*2);
 						while (this->_cont_size < n)
 							this->push_back(val);
 					}
@@ -240,9 +245,7 @@ namespace ft
 					if (this->_cont_size == this->max_size())
 						throw (std::length_error("vector::reserve"));
 					else if (n > this->_cont_capacity)
-					{
-						// n = get_next_capacity(n);
-						
+					{						
 						pointer _old_start = this->_cont_start;
 						pointer _old_start2 = this->_cont_start;
 						pointer _old_end = this->_cont_end;
@@ -368,8 +371,13 @@ namespace ft
 					}
 					
 					iterator it = begin();
-					size_type i = get_diff(it, position);
+					size_type i;
 					
+					if (it == end())
+						i = 0;
+					else
+						i = get_diff(it, position);
+						
 					if (this->_cont_size == this->_cont_capacity)
 						this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
 					
@@ -377,6 +385,7 @@ namespace ft
 					while (j < this->_cont_size - i) {
 						this->_alloc.construct(this->_cont_end - j, *(this->_cont_end - 1 - j));
 						this->_alloc.destroy(this->_cont_end - 1 - j);
+						j++;
 					}
 					
 					this->_cont_end++;
@@ -410,8 +419,10 @@ namespace ft
 						// Verify if InputIterator is integral
 						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
 							throw (std::length_error("vector::insert"));
+							
 						if (first == last)
 							return ;
+							
 						size_type diff_insert = get_diff(first, last);
 						try {	
 							if ((this->_cont_size + diff_insert) > this->max_size())
@@ -420,6 +431,10 @@ namespace ft
 							std::cerr << e.what() << "\n";
 							return ;
 						}
+
+						if (this->_cont_capacity == 0)
+							this->reserve(diff_insert);
+						
 						while (first != last)
 						{
 							position = insert(position, *first) + 1;
@@ -476,16 +491,19 @@ namespace ft
 					pointer			tmp_cont_start = this->_cont_start;
 					pointer			tmp_cont_end = this->_cont_end;
 					size_t			tmp_cont_size = this->_cont_size;
+					size_t			tmp_cont_capacity = this->_cont_capacity;
 
 					this->_alloc = x._alloc;
 					this->_cont_start = x._cont_start;
 					this->_cont_end = x._cont_end;
 					this->_cont_size = x._cont_size;
+					this->_cont_capacity = x._cont_capacity;
 
 					x._alloc = tmp_alloc;
 					x._cont_start = tmp_cont_start;
 					x._cont_end = tmp_cont_end;
 					x._cont_size = tmp_cont_size;
+					x._cont_capacity = tmp_cont_capacity;
 				}
 
 			void clear()
