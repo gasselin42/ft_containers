@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 15:02:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 11:45:33 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,8 +192,8 @@ namespace ft
 					return (tmp);
 				}
 
-				random_access_iterator operator+(int n) { return (random_access_iterator(_ptr + n)); }
-				random_access_iterator operator-(int n) { return (random_access_iterator(_ptr - n)); }
+				random_access_iterator operator+(int n) { return (_ptr + n); }
+				random_access_iterator operator-(int n) { return (_ptr - n); }
 
 				random_access_iterator operator+=(int n) { _ptr += n; return (*this); }
 				random_access_iterator operator-=(int n) { _ptr -= n; return (*this); }

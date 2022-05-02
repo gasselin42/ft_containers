@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 23:29:17 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 12:33:13 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1141,6 +1141,18 @@ void vector_tests(void)
 				throw ko;
 		}
 
+		stl_vec.insert(stl_vec.end(), 200, 111);
+		ft_vec.insert(ft_vec.end(), 200, 111);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		stl_vec.insert(stl_vec.end(), 444, 444);
+		ft_vec.insert(ft_vec.end(), 444, 444);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
 		{ std::cout << e.what() << "\n"; }
@@ -1175,6 +1187,18 @@ void vector_tests(void)
 			if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 				throw ko;
 		}
+
+		stl_vec.insert(stl_vec.end(), 50, 77);
+		ft_vec.insert(ft_vec.end(), 50, 77);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
+
+		stl_vec.insert(stl_vec.end(), 200, 111);
+		ft_vec.insert(ft_vec.end(), 200, 111);
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1228,17 +1252,22 @@ void vector_tests(void)
 		std::vector<int>::iterator stl_it;
 		ft::vector<int>::iterator ft_it;
 
+		stl_vec.insert(stl_vec.begin(), 10, 42);
 		ft_vec.insert(ft_vec.begin(), 10, 42);
+		
+		stl_it = stl_vec.erase(stl_vec.begin()+5, stl_vec.end());
 		ft_it = ft_vec.erase(ft_vec.begin()+5, ft_vec.end());
 
 		if (ft_it != ft_vec.end())
 			throw ko;
 
+		stl_it = stl_vec.erase(stl_vec.begin(), stl_vec.begin());
 		ft_it = ft_vec.erase(ft_vec.begin(), ft_vec.begin());
 
 		if (ft_it != ft_vec.begin())
 			throw ko;
 
+		stl_vec.clear();
 		ft_vec.clear();
 
 		for (int i = 0; i < 100; i++)
@@ -1246,6 +1275,9 @@ void vector_tests(void)
 			stl_vec.push_back(i);
 			ft_vec.push_back(i);
 		}
+
+		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
+			throw ko;
 
 		size_t i = 5;
 		while (stl_vec.size() > 60)

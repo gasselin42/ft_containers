@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 23:28:45 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 12:24:27 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,7 +376,7 @@ namespace ft
 					if (it == end())
 						i = 0;
 					else
-						i = get_diff(it, position);
+						i = get_diff(begin(), position);
 						
 					if (this->_cont_size == this->_cont_capacity)
 						this->reserve(((this->_cont_capacity == 0) ? 1 : this->_cont_capacity * 2));
@@ -407,6 +407,13 @@ namespace ft
 						std::cerr << e.what() << "\n";
 						return ;
 					}
+
+					if (size() + n > capacity())
+					{
+						difference_type diff = get_diff(begin(), position);
+						this->reserve(std::max(size() + n, capacity() * 2));
+						position = begin() + diff;
+					}
 					
 					while (n--)
 						position = insert(position, val) + 1;
@@ -432,8 +439,12 @@ namespace ft
 							return ;
 						}
 
-						if (this->_cont_capacity == 0)
-							this->reserve(diff_insert);
+						if (size() + diff_insert > capacity())
+						{
+							difference_type diff = get_diff(begin(), position);
+							this->reserve(std::max(size() + diff_insert, capacity() * 2));
+							position = begin() + diff;
+						}
 						
 						while (first != last)
 						{
