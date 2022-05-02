@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:48:25 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 15:18:44 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 13:31:01 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,27 @@ namespace ft
 		};
 
 	template <class T1, class T2>
-		bool operator== (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return lhs.first == rhs.first && lhs.second == rhs.second; }
 
 	template <class T1, class T2>
-		bool operator!= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator!=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return !(lhs == rhs); }
 
 	template <class T1, class T2>
-		bool operator<  (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator<(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second); }
 
 	template <class T1, class T2>
-		bool operator<= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator<=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return !(rhs < lhs); }
 
 	template <class T1, class T2>
-		bool operator>  (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator>(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return rhs < lhs; }
 
 	template <class T1, class T2>
-		bool operator>= (const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+		bool operator>=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
 			{ return !(lhs < rhs); }
 
 	template <class T1, class T2>
