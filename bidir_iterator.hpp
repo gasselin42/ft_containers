@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 15:41:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 13:28:58 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,18 +158,22 @@ namespace ft
 					return (tmp);
 				}
 
-				bool operator==(const bidir_iterator& rhs) const { return (this->_ptr == rhs._ptr); }
-				bool operator!=(const bidir_iterator& rhs) const { return (this->_ptr != rhs._ptr); }
-
-				// operator bidir_iterator<const T, Compare> () const
-				// 	{ return (bidir_iterator<const T, Compare>(this->_ptr, this->_tri_ptr, this->_exts)); }
+				T* base() const { return (_ptr); }
 		};
+
+		template < class T, class Compare  = ft::less<T> >
+			bool operator==(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() == rhs.base()); }
+			
+		template < class T, class Compare  = ft::less<T> >
+			bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() != rhs.base()); }
 
 	template < class T, class Compare  = ft::less<T> >
 		class const_bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
 		{
 			public:
-				typedef typename T::value_type																value_type;
+				typedef typename T::value_type																	value_type;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
@@ -306,7 +310,14 @@ namespace ft
 					return (tmp);
 				}
 
-				bool operator==(const const_bidir_iterator& rhs) const { return (this->_ptr == rhs._ptr); }
-				bool operator!=(const const_bidir_iterator& rhs) const { return (this->_ptr != rhs._ptr); }
+				T* base() const { return (_ptr); }
 		};
+		
+		template < class T, class Compare  = ft::less<T> >
+			bool operator==(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() == rhs.base()); }
+			
+		template < class T, class Compare  = ft::less<T> >
+			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() != rhs.base()); }
 }
