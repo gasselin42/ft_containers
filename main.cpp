@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 09:48:14 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/03 13:28:59 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int main()
 {
-	// vector_tests();
+	vector_tests();
 	// map_tests();
-	stack_tests();
+	// stack_tests();
 	// operator_tests(); // (iterators, pairs)
 
 	return (0);

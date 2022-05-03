@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/02 13:50:35 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/03 13:39:17 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ namespace ft
 			
 		template < class T, class Compare>
 			bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
-				{ return (lhs.base() != rhs.base()); }
+				{ return (!(lhs.base() == rhs.base())); }
 
 	template < class T, class Compare>
 		class const_bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
@@ -319,5 +319,5 @@ namespace ft
 			
 		template < class T, class Compare>
 			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
-				{ return (lhs.base() != rhs.base()); }
+				{ return (!(lhs.base() == rhs.base())); }
 }
