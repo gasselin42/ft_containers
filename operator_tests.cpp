@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   operator_tests.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 12:53:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 09:48:14 by gasselin         ###   ########.fr       */
+/*   Created: 2022/05/03 10:24:51 by gasselin          #+#    #+#             */
+/*   Updated: 2022/05/03 11:02:51 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "testers.hpp"
+#include "vector.hpp"
+#include "map.hpp"
 
-int main()
-{
-	// vector_tests();
-	// map_tests();
-	stack_tests();
-	// operator_tests(); // (iterators, pairs)
+// random_access_iterator
 
-	return (0);
-}
+#include <exception>

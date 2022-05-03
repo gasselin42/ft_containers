@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/02 13:19:44 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/03 10:23:03 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ namespace ft
 
 		template <class T>
 			bool operator!=(const const_random_access_iterator<T>& rhs, const const_random_access_iterator<T>& lhs)
-				{ return (rhs.base() == lhs.base()); }
+				{ return (!(rhs.base() == lhs.base())); }
 		
 		template <class T>
 			bool operator>=(const const_random_access_iterator<T>& rhs, const const_random_access_iterator<T>& lhs)

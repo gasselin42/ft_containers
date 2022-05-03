@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/02 12:33:13 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/03 12:00:43 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1178,7 +1178,6 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		// std::cout << stl_vec.capacity() << "\n";
 		for (int i = 0; i < 10; i++)
 		{
 			stl_vec.insert(stl_vec.begin()+i, myints, myints+3);
@@ -1573,6 +1572,758 @@ void vector_tests(void)
 
 		if (!compare_vectors(stl_vec2, ft_vec2) || !iterate_vectors(stl_vec2, ft_vec2))
 			throw ko;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	
+
+	std::cout << "\n";
+
+	std::cout << BRED << "-------------------------" << NC << "\n";
+	std::cout << BRED << "|  ITERATOR OPERATIONS  |" << NC << "\n";
+	std::cout << BRED << "-------------------------" << NC << "\n\n";
+
+
+
+	std::cout << BLUE << "Iterator - Operator + " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator + " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator + " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator + " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator - " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator - " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator - " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator - " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator += " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator += " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator += " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator += " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator -= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator -= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator -= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator -= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator [] " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator [] " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator [] " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator [] " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Base " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Base " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Base " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Base " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator == " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator == " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator == " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+		
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator == " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator != " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator != " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator != " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator != " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator < " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator < " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator < " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator < " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator > " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator > " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator > " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator > " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator <= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator <= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator <= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator <= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+
+
+	std::cout << BLUE << "Iterator - Operator >= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Iterator - Operator >= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::iterator stl_it;
+		ft::vector<int>::iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Reverse Iterator - Operator >= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
+
+		std::cout << PASSED << "\n";
+	} catch(std::exception& e)
+		{ std::cout << e.what() << "\n"; }
+
+	std::cout << BLUE << "Const Reverse Iterator - Operator >= " << NC;
+	try {
+		std::vector<int> stl_vec;
+		ft::vector<int> ft_vec;
+
+		fill_std_vector(stl_vec);
+		fill_ft_vector(ft_vec);
+
+		std::vector<int>::reverse_iterator stl_it;
+		ft::vector<int>::reverse_iterator ft_it;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)

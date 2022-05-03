@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 12:51:07 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/02 13:46:53 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace ft
 			typedef	typename	ft::BST<value_type, Compare>::iterator				iterator;
 			typedef	typename	ft::BST<value_type, Compare>::const_iterator			const_iterator;
 			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
-			typedef				ft::reverse_iterator<const_iterator> 		const_reverse_iterator;
+			typedef				ft::const_reverse_iterator<const_iterator> 		const_reverse_iterator;
 			typedef				ptrdiff_t									difference_type;
 			typedef				size_t										size_type;
 
