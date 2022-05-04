@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 15:57:29 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/03 21:59:11 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ struct Testing {
 
 void fill_ft_vector(ft::vector<int>& vec)
 {
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 500; i++)
 		vec.push_back(i + 1);
 }
 
 void fill_std_vector(std::vector<int>& vec)
 {
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 500; i++)
 		vec.push_back(i + 1);
 }
 
@@ -1761,8 +1761,29 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.end();
+		ft::vector<int>::iterator ft_it = ft_vec.end();
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		if (ft_vec.end() - ft_vec.begin() != ft_vec.size())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1779,8 +1800,29 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.end();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.end();
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		if (ft_vec_op.end() - ft_vec_op.begin() != ft_vec_op.size())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1794,8 +1836,29 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rend();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rend();
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		if (ft_vec.rend() - ft_vec.rbegin() != ft_vec.size())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1812,8 +1875,29 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rend();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rend();
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		stl_it = stl_it - 7;
+		ft_it = ft_it - 7;
+
+		if (*stl_it != *ft_it)
+			throw ko;
+
+		if (ft_vec_op.rend() - ft_vec_op.rbegin() != ft_vec_op.size())
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1829,8 +1913,26 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it += 2;
+			ft_it += 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec.begin();
+		ft_it = ft_vec.begin();
+
+		stl_it += (stl_vec.end() - (stl_vec.begin() + 5));
+		ft_it += (ft_vec.end() - (ft_vec.begin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1847,8 +1949,26 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it += 2;
+			ft_it += 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec_op.begin();
+		ft_it = ft_vec_op.begin();
+
+		stl_it += (stl_vec_op.end() - (stl_vec_op.begin() + 5));
+		ft_it += (ft_vec_op.end() - (ft_vec_op.begin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1862,8 +1982,26 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it += 2;
+			ft_it += 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec.rbegin();
+		ft_it = ft_vec.rbegin();
+
+		stl_it += (stl_vec.rend() - (stl_vec.rbegin() + 5));
+		ft_it += (ft_vec.rend() - (ft_vec.rbegin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1880,8 +2018,26 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it += 2;
+			ft_it += 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec_op.rbegin();
+		ft_it = ft_vec_op.rbegin();
+
+		stl_it += (stl_vec_op.rend() - (stl_vec_op.rbegin() + 5));
+		ft_it += (ft_vec_op.rend() - (ft_vec_op.rbegin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1897,8 +2053,26 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.end();
+		ft::vector<int>::iterator ft_it = ft_vec.end();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it -= 2;
+			ft_it -= 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec.end();
+		ft_it = ft_vec.end();
+
+		stl_it -= (stl_vec.end() - (stl_vec.begin() + 5));
+		ft_it -= (ft_vec.end() - (ft_vec.begin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1915,8 +2089,26 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.end();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.end();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it -= 2;
+			ft_it -= 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec_op.end();
+		ft_it = ft_vec_op.end();
+
+		stl_it -= (stl_vec_op.end() - (stl_vec_op.begin() + 5));
+		ft_it -= (ft_vec_op.end() - (ft_vec_op.begin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1930,8 +2122,26 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rend();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rend();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it -= 2;
+			ft_it -= 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec.rend();
+		ft_it = ft_vec.rend();
+
+		stl_it -= (stl_vec.rend() - (stl_vec.rbegin() + 5));
+		ft_it -= (ft_vec.rend() - (ft_vec.rbegin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1948,8 +2158,26 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rend();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rend();
+
+		for (int i = 0; i < 25; i += 2)
+		{
+			stl_it -= 2;
+			ft_it -= 2;
+
+			if (*stl_it != *ft_it)
+				throw ko;
+		}
+
+		stl_it = stl_vec_op.rend();
+		ft_it = ft_vec_op.rend();
+
+		stl_it -= (stl_vec_op.rend() - (stl_vec_op.rbegin() + 5));
+		ft_it -= (ft_vec_op.rend() - (ft_vec_op.rbegin() + 5));
+
+		if (*stl_it != *ft_it)
+			throw ko;
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1965,8 +2193,14 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
+
+		for (int i = 0; i < 500; i++)
+		{
+			if (stl_it[i] != ft_it[i])
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1983,8 +2217,14 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin();
+
+		for (int i = 0; i < 500; i++)
+		{
+			if (stl_it[i] != ft_it[i])
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -1998,8 +2238,14 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+
+		for (int i = 0; i < 500; i++)
+		{
+			if (stl_it[i] != ft_it[i])
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2016,8 +2262,14 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin();
+
+		for (int i = 0; i < 500; i++)
+		{
+			if (stl_it[i] != ft_it[i])
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2033,11 +2285,14 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		const std::vector<int> stl_vec_op(stl_vec);
-		const ft::vector<int> ft_vec_op(ft_vec);
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		for (; stl_it != stl_vec.end(); stl_it++, ft_it++)
+		{
+			if (*stl_it.base() != *ft_it.base())
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2054,8 +2309,14 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin();
+
+		for (; stl_it != stl_vec_op.end(); stl_it++, ft_it++)
+		{
+			if (*stl_it.base() != *ft_it.base())
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2069,8 +2330,14 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+
+		for (; stl_it != stl_vec.rend(); stl_it++, ft_it++)
+		{
+			if (*stl_it.base() != *ft_it.base())
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2087,8 +2354,14 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin();
+
+		for (; stl_it != stl_vec_op.rend(); stl_it++, ft_it++)
+		{
+			if (*stl_it.base() != *ft_it.base())
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2104,8 +2377,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it != stl_vec.end(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it == stl_it2) != (ft_it == ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2122,8 +2403,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin();
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it != stl_vec_op.end(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it == stl_it2) != (ft_it == ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2137,8 +2426,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it != stl_vec.rend(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it == stl_it2) != (ft_it == ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2155,8 +2452,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin();
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it != stl_vec.rend(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it == stl_it2) != (ft_it == ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2172,8 +2477,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin();
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin();
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it != stl_vec.end(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it != stl_it2) != (ft_it != ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2190,8 +2503,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin();
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it != stl_vec_op.end(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it != stl_it2) != (ft_it != ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2205,8 +2526,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin();
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it != stl_vec.rend(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it != stl_it2) != (ft_it != ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2223,8 +2552,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin();
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it != stl_vec_op.rend(); stl_it++, stl_it2++, ft_it++, ft_it2++)
+		{
+			if ((stl_it != stl_it2) != (ft_it != ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2240,8 +2577,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin() + 125;
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin() + 125;
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it2 != stl_vec.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it < stl_it2) != (ft_it < ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2258,8 +2603,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin() + 125;
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin() + 125;
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it2 != stl_vec_op.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it < stl_it2) != (ft_it < ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2273,8 +2626,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin() + 125;
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin() + 125;
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it < stl_it2) != (ft_it < ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2291,8 +2652,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin() + 125;
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin() + 125;
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it < stl_it2) != (ft_it < ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2308,8 +2677,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin() + 125;
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin() + 125;
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it2 != stl_vec.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it > stl_it2) != (ft_it > ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2326,8 +2703,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin() + 125;
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin() + 125;
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it2 != stl_vec_op.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it > stl_it2) != (ft_it > ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2341,8 +2726,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin() + 125;
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin() + 125;
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it > stl_it2) != (ft_it > ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2359,8 +2752,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin() + 125;
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin() + 125;
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it > stl_it2) != (ft_it > ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2376,8 +2777,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin() + 125;
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin() + 125;
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it2 != stl_vec.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it <= stl_it2) != (ft_it <= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2394,8 +2803,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin() + 125;
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin() + 125;
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it2 != stl_vec_op.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it <= stl_it2) != (ft_it <= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2409,8 +2826,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin() + 125;
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin() + 125;
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it <= stl_it2) != (ft_it <= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2427,8 +2852,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin() + 125;
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin() + 125;
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it <= stl_it2) != (ft_it <= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2444,8 +2877,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::iterator stl_it;
-		ft::vector<int>::iterator ft_it;
+		std::vector<int>::iterator stl_it = stl_vec.begin() + 125;
+		std::vector<int>::iterator stl_it2 = stl_vec.begin();
+		ft::vector<int>::iterator ft_it = ft_vec.begin() + 125;
+		ft::vector<int>::iterator ft_it2 = ft_vec.begin();
+
+		for (; stl_it2 != stl_vec.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it >= stl_it2) != (ft_it >= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2462,8 +2903,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_iterator stl_it;
-		ft::vector<int>::const_iterator ft_it;
+		std::vector<int>::const_iterator stl_it = stl_vec_op.begin() + 125;
+		std::vector<int>::const_iterator stl_it2 = stl_vec_op.begin();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.begin() + 125;
+		ft::vector<int>::const_iterator ft_it2 = ft_vec_op.begin();
+
+		for (; stl_it2 != stl_vec_op.end(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it >= stl_it2) != (ft_it >= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2477,8 +2926,16 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		std::vector<int>::reverse_iterator stl_it;
-		ft::vector<int>::reverse_iterator ft_it;
+		std::vector<int>::reverse_iterator stl_it = stl_vec.rbegin() + 125;
+		std::vector<int>::reverse_iterator stl_it2 = stl_vec.rbegin();
+		ft::vector<int>::reverse_iterator ft_it = ft_vec.rbegin() + 125;
+		ft::vector<int>::reverse_iterator ft_it2 = ft_vec.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it >= stl_it2) != (ft_it >= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
@@ -2495,8 +2952,16 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		std::vector<int>::const_reverse_iterator stl_it;
-		ft::vector<int>::const_reverse_iterator ft_it;
+		std::vector<int>::const_reverse_iterator stl_it = stl_vec_op.rbegin() + 125;
+		std::vector<int>::const_reverse_iterator stl_it2 = stl_vec_op.rbegin();
+		ft::vector<int>::const_reverse_iterator ft_it = ft_vec_op.rbegin() + 125;
+		ft::vector<int>::const_reverse_iterator ft_it2 = ft_vec_op.rbegin();
+
+		for (; stl_it2 != stl_vec.rend(); stl_it++, stl_it2 += 2, ft_it++, ft_it2 += 2)
+		{
+			if ((stl_it >= stl_it2) != (ft_it >= ft_it2))
+				throw ko;	
+		}
 
 		std::cout << PASSED << "\n";
 	} catch(std::exception& e)
