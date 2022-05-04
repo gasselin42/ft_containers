@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/02 13:46:53 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:57:13 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ namespace ft
 					}
 
 		public:
+			void print_map() { _bst.print_tree(_bst._tri_ptr->parent); }
+		
 			map()
 				: 	_alloc(),
 					_comp(),
@@ -219,12 +221,6 @@ namespace ft
 					if (it == this->end())
 						return (0);
 					_bst.deleteNode(it);
-
-					if (_bst.get_size())
-					{
-						_bst._tri_ptr->left = _bst.find_min();
-						_bst._tri_ptr->right = _bst.find_max();
-					}
 
 					return (1);
 				}

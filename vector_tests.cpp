@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 21:59:11 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/04 09:50:49 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,8 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !test_empty_vector_iterators(ft_vec))
 			throw ko;
 
-		std::vector<int> stl_vec2(10, 50);
-		ft::vector<int> ft_vec2(10, 50);
+		std::vector<int> stl_vec2(250, 50);
+		ft::vector<int> ft_vec2(250, 50);
 
 		if (!compare_vectors(stl_vec2, ft_vec2) || !iterate_vectors(stl_vec2, ft_vec2))
 			throw ko;
@@ -191,8 +191,8 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec_range, ft_vec_range) || !iterate_vectors(stl_vec_range, ft_vec_range))
 			throw ko;
 
-		std::vector<int> stl_vec_range2(stl_vec.begin()+5, stl_vec.begin()+20);
-		ft::vector<int> ft_vec_range2(ft_vec.begin()+5, ft_vec.begin()+20);
+		std::vector<int> stl_vec_range2(stl_vec.begin()+5, stl_vec.begin()+490);
+		ft::vector<int> ft_vec_range2(ft_vec.begin()+5, ft_vec.begin()+490);
 
 		if (!compare_vectors(stl_vec_range2, ft_vec_range2) || !iterate_vectors(stl_vec_range2, ft_vec_range2))
 			throw ko;
@@ -601,14 +601,14 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		stl_vec.resize(20);
-		ft_vec.resize(20);
+		stl_vec.resize(250);
+		ft_vec.resize(250);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		stl_vec.resize(50, 42);
-		ft_vec.resize(50, 42);
+		stl_vec.resize(500, 42);
+		ft_vec.resize(500, 42);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
@@ -723,20 +723,20 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		stl_vec.reserve(100);
-		ft_vec.reserve(100);
+		stl_vec.reserve(1000);
+		ft_vec.reserve(1000);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		stl_vec.reserve(20);
-		ft_vec.reserve(20);
+		stl_vec.reserve(200);
+		ft_vec.reserve(200);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		stl_vec.reserve(50);
-		ft_vec.reserve(50);
+		stl_vec.reserve(500);
+		ft_vec.reserve(500);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
@@ -763,13 +763,13 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 500; i++)
 		{
 			if (stl_vec[i] != ft_vec[i])
 				throw ko;
 		}
 
-		for (size_t i = 0; i < 10; i++)
+		for (size_t i = 0; i < 50; i++)
 		{
 			stl_vec[i] = 42;
 			ft_vec[i] = 42;
@@ -795,7 +795,7 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_op(stl_vec);
 		const ft::vector<int> ft_vec_op(ft_vec);
 
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 500; i++)
 		{
 			if (stl_vec_op[i] != ft_vec_op[i])
 				throw ko;
@@ -815,13 +815,13 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 500; i++)
 		{
 			if (stl_vec.at(i) != ft_vec.at(i))
 				throw ko;
 		}
 
-		for (size_t i = 0; i < 10; i++)
+		for (size_t i = 0; i < 50; i++)
 		{
 			stl_vec.at(i) = 42;
 			ft_vec.at(i) = 42;
@@ -847,7 +847,7 @@ void vector_tests(void)
 		const std::vector<int> stl_vec_at(stl_vec);
 		const ft::vector<int> ft_vec_at(ft_vec);
 
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 500; i++)
 		{
 			if (stl_vec_at.at(i) != ft_vec_at.at(i))
 				throw ko;
@@ -1025,8 +1025,8 @@ void vector_tests(void)
 		fill_std_vector(stl_vec);
 		fill_ft_vector(ft_vec);
 
-		stl_vec.assign(stl_vec.begin()+5, stl_vec.begin()+20);
-		ft_vec.assign(ft_vec.begin()+5, ft_vec.begin()+20);
+		stl_vec.assign(stl_vec.begin()+5, stl_vec.begin()+450);
+		ft_vec.assign(ft_vec.begin()+5, ft_vec.begin()+450);
 
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
@@ -1042,7 +1042,7 @@ void vector_tests(void)
 		std::vector<int> stl_vec;
 		ft::vector<int> ft_vec;
 
-		for (int i = 1; i <= 50; i++)
+		for (int i = 1; i <= 500; i++)
 		{
 			stl_vec.push_back(i);
 			ft_vec.push_back(i);
@@ -1100,7 +1100,7 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			stl_it = stl_vec.insert(stl_vec.begin()+i, 50+i);
 			ft_it = ft_vec.insert(ft_vec.begin()+i, 50+i);
@@ -1138,7 +1138,7 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !test_empty_vector_iterators(ft_vec))
 			throw ko;
 
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 300; i++)
 		{
 			stl_vec.insert(stl_vec.begin()+i, 2, i);
 			ft_vec.insert(ft_vec.begin()+i, 2, i);
@@ -1184,7 +1184,7 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 50; i++)
 		{
 			stl_vec.insert(stl_vec.begin()+i, myints, myints+3);
 			ft_vec.insert(ft_vec.begin()+i, myints, myints+3);
@@ -1231,7 +1231,7 @@ void vector_tests(void)
 		if (!compare_vectors(stl_vec, ft_vec) || !iterate_vectors(stl_vec, ft_vec))
 			throw ko;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 300; i++)
 		{
 			stl_it = stl_vec.erase(stl_vec.begin());
 			ft_it = ft_vec.erase(ft_vec.begin());
@@ -1275,7 +1275,7 @@ void vector_tests(void)
 		stl_vec.clear();
 		ft_vec.clear();
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 300; i++)
 		{
 			stl_vec.push_back(i);
 			ft_vec.push_back(i);
@@ -1433,8 +1433,8 @@ void vector_tests(void)
 		fill_ft_vector(ft_vec1);
 		fill_ft_vector(ft_vec2);
 
-		stl_vec2.erase(stl_vec2.begin()+5, stl_vec2.begin()+20);
-		ft_vec2.erase(ft_vec2.begin()+5, ft_vec2.begin()+20);
+		stl_vec2.erase(stl_vec2.begin()+5, stl_vec2.begin()+450);
+		ft_vec2.erase(ft_vec2.begin()+5, ft_vec2.begin()+450);
 
 		if ((stl_vec1 != stl_vec2) != (ft_vec1 != ft_vec2))
 			throw ko;
@@ -1801,7 +1801,7 @@ void vector_tests(void)
 		const ft::vector<int> ft_vec_op(ft_vec);
 
 		std::vector<int>::const_iterator stl_it = stl_vec_op.end();
-		ft::vector<int>::const_iterator ft_it = ft_vec_op.end();
+		ft::vector<int>::const_iterator ft_it = ft_vec.end();
 
 		stl_it = stl_it - 7;
 		ft_it = ft_it - 7;

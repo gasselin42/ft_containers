@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/28 12:50:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:58:06 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 // #include "iterators.hpp"
 #include "utils.hpp"
 #include <memory>
+#include <cstring>
+
+enum Color {RED, BLACK};
 
 namespace ft
 {	
@@ -26,19 +29,22 @@ namespace ft
 				typedef T value_type;
 
 				value_type value;
+				bool color;
 				BST_Node* parent;
 				BST_Node* left;
 				BST_Node* right;
 
-				BST_Node (BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
+				BST_Node (bool _color = RED, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
 		            :	value(),
+						color(_color),
 		                parent(_parent),
 		                left(_left),
 		                right(_right)
 		            {}
 				
-				BST_Node(const value_type& val, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
+				BST_Node(const value_type& val, bool _color = RED, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
 					:	value(val),
+						color(_color),
 						parent(_parent),
 						left(_left),
 						right(_right)
@@ -46,6 +52,7 @@ namespace ft
 
 				BST_Node(const BST_Node& rhs)
 					:	value(rhs.value),
+						color(rhs.color),
 						parent(rhs.parent),
 						left(rhs.left),
 						right(rhs.right)
@@ -56,6 +63,7 @@ namespace ft
 				BST_Node& operator=(const BST_Node& rhs)
 					{
 						this->value = rhs.value;
+						this->color = rhs.color;
 						this->parent = rhs.parent;
 						this->left = rhs.left;
 						this->right = rhs.right;
@@ -86,7 +94,8 @@ namespace ft
 				size_type _map_size;
 				Compare	_comp;
 
-			public:
+
+			private:
 				node_ptr find_max()
 					{
 						node_ptr current;
@@ -106,6 +115,160 @@ namespace ft
 							current = current->left;
 						return (current);
 					}
+
+				void rotateLeft(node_ptr& root, node_ptr& new_node)
+				{
+					node_ptr right_ptr = new_node->right;
+					
+					new_node->right = right_ptr->left;
+					
+					if (new_node->right != NULL)
+						new_node->right->parent = new_node;
+
+					right_ptr->parent = new_node->parent;
+
+					if (new_node->parent == NULL)
+						root = right_ptr;
+					else if (new_node == new_node->parent->left)
+						new_node->parent->left = right_ptr;
+					else
+						new_node->parent->right = right_ptr;
+						
+					right_ptr->left = new_node;
+					new_node->parent = right_ptr;
+				}
+
+				void rotateRight(node_ptr& root, node_ptr&new_node)
+				{
+					node_ptr left_ptr = new_node->left;
+					
+					new_node->left = left_ptr->right;
+					
+					if (new_node->left != NULL)
+						new_node->left->parent = new_node;
+
+					left_ptr->parent = new_node->parent;
+
+					if (new_node->parent == NULL)
+						root = left_ptr;
+					else if (new_node == new_node->parent->left)
+						new_node->parent->left = left_ptr;
+					else
+						new_node->parent->right = left_ptr;
+						
+					left_ptr->right = new_node;
+					new_node->parent = left_ptr;
+				}
+
+				void fix_RBTree(node_ptr& root, node_ptr& new_node)
+				{
+					node_ptr parent_ptr = NULL;
+					node_ptr uncle_ptr = NULL;
+					node_ptr gr_parent_ptr = NULL;
+
+					while (new_node != root && new_node->color != BLACK && new_node->parent->color == RED)
+					{
+						parent_ptr = new_node->parent;
+						gr_parent_ptr = new_node->parent->parent;
+						
+						// Case A : Parent of new_node is left child of grand-parent of new_node
+						if (parent_ptr == gr_parent_ptr->left)
+						{
+							uncle_ptr = gr_parent_ptr->right;
+							
+							// Case 1 : The uncle of new_node is also red, only recoloring required
+							if (uncle_ptr != NULL && uncle_ptr->color == RED)
+							{
+								gr_parent_ptr->color = RED;
+								parent_ptr->color = BLACK;
+								uncle_ptr->color = BLACK;
+								new_node = gr_parent_ptr;
+							}
+							else
+							{
+								// Case 2 : new_node is right child of its parent, left-rotation required
+								if (new_node == parent_ptr->right)
+								{
+									rotateLeft(root, parent_ptr);
+									new_node = parent_ptr;
+									parent_ptr = new_node->parent;
+								}
+
+								// Case 3 : new_node is left child of its parent, right-rotation required
+								rotateRight(root, gr_parent_ptr);
+								std::swap(parent_ptr->color, gr_parent_ptr->color);
+								new_node = parent_ptr;
+							}
+						}
+						else
+						{ // Case B : Parent of new_node is right child of grand-parent of new_node
+							uncle_ptr = gr_parent_ptr->left;
+
+							// Case 1 : The uncle of new_node is also red, only recoloring required
+							if (uncle_ptr != NULL && uncle_ptr->color == RED)
+							{
+								gr_parent_ptr->color = RED;
+								parent_ptr->color = BLACK;
+								uncle_ptr->color = BLACK;
+								new_node = gr_parent_ptr;
+							}
+							else
+							{
+								// Case 2 : new_node is left child of its parent, left-rotation required
+								if (new_node == parent_ptr->left)
+								{
+									rotateRight(root, parent_ptr);
+									new_node = parent_ptr;
+									parent_ptr = new_node->parent;
+								}
+
+								// Case 3 : new_node is right child of its parent, right-rotation required
+								rotateLeft(root, gr_parent_ptr);
+								std::swap(parent_ptr->color, gr_parent_ptr->color);
+								new_node = parent_ptr;
+							}
+						}
+					}
+
+					_tri_ptr->parent->color = BLACK;
+				}
+			public:
+				void print_tree(node_ptr node)
+				{
+					std::cout << node->value.first << "\n";
+					// std::cout << "Color : " << (node->color == RED ? "Red" : "Black") << "\n";
+					// std::cout << "Parent : ";
+					
+					// if (node->parent == NULL)
+					// 	std::cout << "NULL\n";
+					// else
+					// 	std::cout << node->parent->value.first << "\n";
+
+					// std::cout << "Left : ";
+					
+					// if (node->left == NULL)
+					// 	std::cout << "NULL\n";
+					// else
+					// 	std::cout << node->left->value.first << "\n";
+
+					// std::cout << "Right : ";
+					
+					// if (node->right == NULL)
+					// 	std::cout << "NULL\n";
+					// else
+					// 	std::cout << node->right->value.first << "\n";
+					
+					// std::cout << "\n";
+						
+					if(node->left != NULL)
+						print_tree(node->left);
+						
+					if(node->right != NULL)
+						print_tree(node->right);
+						
+					if(node->left == NULL && node->right == NULL)
+						return ;
+				}
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
@@ -179,7 +342,7 @@ namespace ft
 						if (_tri_ptr->parent == _exts->right)
 						{
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, NULL, NULL, NULL));
+							_node_alloc.construct(new_node, Node(node_to_add, BLACK, NULL, NULL, NULL));
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
@@ -204,7 +367,7 @@ namespace ft
 							}
 
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, tmp, NULL, NULL));
+							_node_alloc.construct(new_node, Node(node_to_add, RED, tmp, NULL, NULL));
 
 							if (side)
 								tmp->right = new_node;
@@ -215,6 +378,7 @@ namespace ft
 							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
 								_tri_ptr->right = new_node;
 
+							fix_RBTree(_tri_ptr->parent, new_node);
 							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
 						}
 						else
@@ -381,6 +545,12 @@ namespace ft
 						this->_node_alloc.deallocate(ptr, 1);
 						ptr = NULL;
 						this->_map_size--;
+
+						if (_map_size)
+						{
+							_tri_ptr->left = find_min();
+							_tri_ptr->right = find_max();
+						}
 					}
 
 				size_type get_size() const

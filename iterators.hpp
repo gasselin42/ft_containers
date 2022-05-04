@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 21:31:06 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/04 10:05:49 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,11 @@ namespace ft
 				random_access_iterator(pointer ptr) : _ptr(ptr) {}
 				random_access_iterator(const random_access_iterator& rhs) : _ptr(rhs._ptr) {}
 				random_access_iterator& operator=(const random_access_iterator& rhs) { _ptr = rhs._ptr; return (*this); }
+				
+				// template <typename Iter>
+				// 	random_access_iterator(const random_access_iterator<Iter>& rhs) : _ptr(rhs.base()) {}
+				/*, typename enable_if<are_same<Iter, typename Container::pointer>::_value, Container>::_type>*/
+				
 				virtual ~random_access_iterator() {}
 
 				reference operator*(void) const { return (*_ptr); }
@@ -411,19 +416,19 @@ namespace ft
 
 		template <class Iterator>
 			bool operator<(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
-				{ return (lhs.base() < rhs.base()); }
-
-		template <class Iterator>
-			bool operator>(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 				{ return (lhs.base() > rhs.base()); }
 
 		template <class Iterator>
+			bool operator>(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+				{ return (lhs.base() < rhs.base()); }
+
+		template <class Iterator>
 			bool operator>=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
-				{ return (!(lhs.base() < rhs.base())); }
+				{ return (lhs.base() <= rhs.base()); }
 
 		template <class Iterator>
 			bool operator<=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
-				{ return (!(lhs.base() > rhs.base())); }
+				{ return (lhs.base() >= rhs.base()); }
 
 	//'const ft::reverse_iterator<ft::random_access_iterator<int> >::iterator_type' (aka 'const ft::random_access_iterator<int>')
 	//'ft::reverse_iterator<ft::random_access_iterator<int> >::difference_type' (aka 'long')
