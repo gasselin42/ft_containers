@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/04 15:58:06 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:42:29 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,42 +233,19 @@ namespace ft
 					_tri_ptr->parent->color = BLACK;
 				}
 			public:
-				void print_tree(node_ptr node)
-				{
-					std::cout << node->value.first << "\n";
-					// std::cout << "Color : " << (node->color == RED ? "Red" : "Black") << "\n";
-					// std::cout << "Parent : ";
-					
-					// if (node->parent == NULL)
-					// 	std::cout << "NULL\n";
-					// else
-					// 	std::cout << node->parent->value.first << "\n";
-
-					// std::cout << "Left : ";
-					
-					// if (node->left == NULL)
-					// 	std::cout << "NULL\n";
-					// else
-					// 	std::cout << node->left->value.first << "\n";
-
-					// std::cout << "Right : ";
-					
-					// if (node->right == NULL)
-					// 	std::cout << "NULL\n";
-					// else
-					// 	std::cout << node->right->value.first << "\n";
-					
-					// std::cout << "\n";
+				// void print_tree(node_ptr node)
+				// {
+				// 	std::cout << node->value.first << "\n";
 						
-					if(node->left != NULL)
-						print_tree(node->left);
+				// 	if(node->left != NULL)
+				// 		print_tree(node->left);
 						
-					if(node->right != NULL)
-						print_tree(node->right);
+				// 	if(node->right != NULL)
+				// 		print_tree(node->right);
 						
-					if(node->left == NULL && node->right == NULL)
-						return ;
-				}
+				// 	if(node->left == NULL && node->right == NULL)
+				// 		return ;
+				// }
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
@@ -455,24 +432,46 @@ namespace ft
 						const value_type val = *it;
 						node_ptr ptr = findNode(val);
 						iterator tmp = it;
+						bool double_black = true;
+						node_ptr DB_sibling = NULL;
+
+						// while (double_black)
+						// {
+							
+						// }
 
 						if (ptr->left == NULL && ptr->right == NULL)
 						{
 							if (ptr->parent != NULL && ptr->parent->right == ptr)
+							{
 								ptr->parent->right = NULL;
+								if (ptr->parent->left != NULL)
+									DB_sibling = ptr->parent->left;
+							}
 							else if (ptr->parent != NULL && ptr->parent->left == ptr)
+							{
 								ptr->parent->left = NULL;
+								if (ptr->parent->right != NULL)
+									DB_sibling = ptr->parent->right;
+							}
+
+							if (ptr->color == RED)
+							{
+								double_black = false;
+								DB_sibling = NULL;	
+							}
 							
 							if (ptr == _tri_ptr->parent)
 							{
 								_tri_ptr->parent = _exts->right;
 								_tri_ptr->left = _exts->right;
 								_tri_ptr->right = _exts->right;
+								double_black = false;
 							}
 						}
 						else if (ptr->left != NULL && ptr->right != NULL)
 						{
-							value_type succ_val = *(++it);
+							value_type succ_val = *(--it);
 							node_ptr succ_ptr = findNode(succ_val);
 							
 							if (ptr == _tri_ptr->parent)

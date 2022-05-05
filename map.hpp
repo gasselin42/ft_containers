@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/04 15:57:13 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/05 09:58:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ namespace ft
 					}
 
 		public:
-			void print_map() { _bst.print_tree(_bst._tri_ptr->parent); }
+			// void print_map() { _bst.print_tree(_bst._tri_ptr->parent); }
 		
 			map()
 				: 	_alloc(),
