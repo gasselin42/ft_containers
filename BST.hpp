@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/05 15:42:29 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/06 14:21:29 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace ft
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
-
+				node_ptr TNULL;
 
 			private:
 				node_ptr find_max()
@@ -265,6 +265,9 @@ namespace ft
 						_exts->left = _node_alloc.allocate(1);
 						_node_alloc.construct(_exts->left, Node());
 
+						TNULL = _node_alloc.allocate(1);
+						_node_alloc.construct(TNULL, Node());
+
 						_tri_ptr->parent = _exts->right;
 						_tri_ptr->left = _exts->right;
 						_tri_ptr->right = _exts->right;
@@ -319,7 +322,7 @@ namespace ft
 						if (_tri_ptr->parent == _exts->right)
 						{
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, BLACK, NULL, NULL, NULL));
+							_node_alloc.construct(new_node, Node(node_to_add, BLACK, nullptr, TNULL, TNULL));
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
@@ -344,7 +347,7 @@ namespace ft
 							}
 
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, RED, tmp, NULL, NULL));
+							_node_alloc.construct(new_node, Node(node_to_add, RED, tmp, TNULL, TNULL));
 
 							if (side)
 								tmp->right = new_node;
@@ -427,129 +430,182 @@ namespace ft
 							visitNode(x._tri_ptr->parent);
 					}
 
+				void fixDeletion(node_ptr ptr, node_ptr node)
+					{
+						if (ptr->parent == NULL)
+							_tri_ptr->parent = node;
+						else if (ptr == ptr->parent->left)
+							ptr->parent->left = node;
+						else
+							ptr->parent->right = node;
+						if (node != NULL)
+							node->parent = ptr->parent;
+					}
+
+				void fixRBTree_deletion(node_ptr node)
+					{
+						// while (node != _tri_ptr->parent && node->color == BLACK)
+						// {
+							
+						// }
+					}
+
 				void deleteNode(iterator it)
 					{
 						const value_type val = *it;
 						node_ptr ptr = findNode(val);
+						node_ptr child;
 						iterator tmp = it;
-						bool double_black = true;
-						node_ptr DB_sibling = NULL;
+						// bool double_black = true;
+						bool ptr_original_color = ptr->color;
 
-						// while (double_black)
-						// {
-							
-						// }
-
-						if (ptr->left == NULL && ptr->right == NULL)
-						{
-							if (ptr->parent != NULL && ptr->parent->right == ptr)
-							{
-								ptr->parent->right = NULL;
-								if (ptr->parent->left != NULL)
-									DB_sibling = ptr->parent->left;
-							}
-							else if (ptr->parent != NULL && ptr->parent->left == ptr)
-							{
-								ptr->parent->left = NULL;
-								if (ptr->parent->right != NULL)
-									DB_sibling = ptr->parent->right;
-							}
-
-							if (ptr->color == RED)
-							{
-								double_black = false;
-								DB_sibling = NULL;	
-							}
-							
-							if (ptr == _tri_ptr->parent)
-							{
-								_tri_ptr->parent = _exts->right;
-								_tri_ptr->left = _exts->right;
-								_tri_ptr->right = _exts->right;
-								double_black = false;
-							}
+						if (ptr->left == NULL && ptr->right == NULL) {
+							fixDeletion(ptr, NULL);
 						}
-						else if (ptr->left != NULL && ptr->right != NULL)
-						{
-							value_type succ_val = *(--it);
+						else if (ptr->left == NULL) {
+							child = ptr->right;
+							fixDeletion(ptr, child);
+						}
+						else if (ptr->right == NULL) {
+							child = ptr->left;
+							fixDeletion(ptr, child);
+						}
+						else {
+							value_type succ_val = *(++tmp);
 							node_ptr succ_ptr = findNode(succ_val);
 							
-							if (ptr == _tri_ptr->parent)
-								_tri_ptr->parent = succ_ptr;
-
-							if (succ_ptr->right == NULL && succ_ptr->left == NULL)
-							{
-								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-									succ_ptr->parent->left = NULL;
-								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-									succ_ptr->parent->right = NULL;
-							}
-							else if (succ_ptr->right != NULL)
-							{
-								succ_ptr->right->parent = succ_ptr->parent;
-								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-									succ_ptr->parent->left = succ_ptr->right;
-								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-									succ_ptr->parent->right = succ_ptr->right;
-							}
-							else if (succ_ptr->left != NULL)
-							{
-								succ_ptr->left->parent = succ_ptr->parent;
-								if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-									succ_ptr->parent->left = succ_ptr->left;
-								else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-									succ_ptr->parent->right = succ_ptr->left;
+							child = succ_ptr->right;
+							if (succ_ptr->parent == ptr)
+								child->parent = succ_ptr;
+							else {
+								fixDeletion(succ_ptr, succ_ptr->right);
+								succ_ptr->right = ptr->right;
+								succ_ptr->right->parent = succ_ptr;
 							}
 
-							
-							succ_ptr->parent = ptr->parent;
+							fixDeletion(ptr, succ_ptr);
 							succ_ptr->left = ptr->left;
-							succ_ptr->right = ptr->right;
-
-							if (ptr->left != NULL)
-								ptr->left->parent = succ_ptr;
-							if (ptr->right != NULL)
-								ptr->right->parent = succ_ptr;
-
-							_tri_ptr->parent->parent = NULL;
+							succ_ptr->left->parent = succ_ptr;
+							succ_ptr->color = ptr_original_color;
 						}
-						else
-						{
-							node_ptr child;
-							bool side;
 
-							if (ptr->left != NULL)
-								child = ptr->left;
-							else if (ptr->right != NULL)
-								child = ptr->right;
-
-							if (ptr->parent != NULL && ptr->parent->left == ptr)
-								side = true;
-							else if (ptr->parent != NULL && ptr->parent->right == ptr)
-								side = false;
-
-							if (ptr == _tri_ptr->parent)
-								_tri_ptr->parent = child;
-							else 
-							{
-								if (side)
-									ptr->parent->left = child;
-								else
-									ptr->parent->right = child;
-								child->parent = ptr->parent;
-							}
-							_tri_ptr->parent->parent = NULL;
-						}
 						this->_node_alloc.destroy(ptr);
 						this->_node_alloc.deallocate(ptr, 1);
 						ptr = NULL;
 						this->_map_size--;
+						
+						if (ptr_original_color)
+							fixRBTree_deletion(child);
 
-						if (_map_size)
-						{
-							_tri_ptr->left = find_min();
-							_tri_ptr->right = find_max();
-						}
+						// if (ptr->left == NULL && ptr->right == NULL)
+						// {
+						// 	if (ptr->parent != NULL && ptr->parent->right == ptr)
+						// 	{
+						// 		ptr->parent->right = NULL;
+						// 		if (ptr->parent->left != NULL)
+						// 			DB_sibling = ptr->parent->left;
+						// 	}
+						// 	else if (ptr->parent != NULL && ptr->parent->left == ptr)
+						// 	{
+						// 		ptr->parent->left = NULL;
+						// 		if (ptr->parent->right != NULL)
+						// 			DB_sibling = ptr->parent->right;
+						// 	}
+
+						// 	if (ptr->color == RED)
+						// 	{
+						// 		double_black = false;
+						// 		DB_sibling = NULL;	
+						// 	}
+							
+						// 	if (ptr == _tri_ptr->parent)
+						// 	{
+						// 		_tri_ptr->parent = _exts->right;
+						// 		_tri_ptr->left = _exts->right;
+						// 		_tri_ptr->right = _exts->right;
+						// 		double_black = false;
+						// 	}
+						// }
+						// else if (ptr->left != NULL && ptr->right != NULL)
+						// {
+						// 	value_type succ_val = *(--it);
+						// 	node_ptr succ_ptr = findNode(succ_val);
+							
+						// 	if (ptr == _tri_ptr->parent)
+						// 		_tri_ptr->parent = succ_ptr;
+
+						// 	if (succ_ptr->right == NULL && succ_ptr->left == NULL)
+						// 	{
+						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+						// 			succ_ptr->parent->left = NULL;
+						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+						// 			succ_ptr->parent->right = NULL;
+						// 	}
+						// 	else if (succ_ptr->right != NULL)
+						// 	{
+						// 		succ_ptr->right->parent = succ_ptr->parent;
+						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+						// 			succ_ptr->parent->left = succ_ptr->right;
+						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+						// 			succ_ptr->parent->right = succ_ptr->right;
+						// 	}
+						// 	else if (succ_ptr->left != NULL)
+						// 	{
+						// 		succ_ptr->left->parent = succ_ptr->parent;
+						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
+						// 			succ_ptr->parent->left = succ_ptr->left;
+						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
+						// 			succ_ptr->parent->right = succ_ptr->left;
+						// 	}
+
+							
+						// 	succ_ptr->parent = ptr->parent;
+						// 	succ_ptr->left = ptr->left;
+						// 	succ_ptr->right = ptr->right;
+
+						// 	if (ptr->left != NULL)
+						// 		ptr->left->parent = succ_ptr;
+						// 	if (ptr->right != NULL)
+						// 		ptr->right->parent = succ_ptr;
+
+						// 	_tri_ptr->parent->parent = NULL;
+						// }
+						// else
+						// {
+						// 	bool side;
+
+						// 	if (ptr->left != NULL)
+						// 		child = ptr->left;
+						// 	else if (ptr->right != NULL)
+						// 		child = ptr->right;
+
+						// 	if (ptr->parent != NULL && ptr->parent->left == ptr)
+						// 		side = true;
+						// 	else if (ptr->parent != NULL && ptr->parent->right == ptr)
+						// 		side = false;
+
+						// 	if (ptr == _tri_ptr->parent)
+						// 		_tri_ptr->parent = child;
+						// 	else 
+						// 	{
+						// 		if (side)
+						// 			ptr->parent->left = child;
+						// 		else
+						// 			ptr->parent->right = child;
+						// 		child->parent = ptr->parent;
+						// 	}
+						// 	_tri_ptr->parent->parent = NULL;
+						// }
+						// this->_node_alloc.destroy(ptr);
+						// this->_node_alloc.deallocate(ptr, 1);
+						// ptr = NULL;
+						// this->_map_size--;
+
+						// if (_map_size)
+						// {
+						// 	_tri_ptr->left = find_min();
+						// 	_tri_ptr->right = find_max();
+						// }
 					}
 
 				size_type get_size() const
