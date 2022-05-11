@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/06 14:21:29 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/11 17:09:07 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ namespace ft
 						right(rhs.right)
 					{}
 
-				virtual ~BST_Node() {}
+				~BST_Node() {}
 
 				BST_Node& operator=(const BST_Node& rhs)
 					{
@@ -85,6 +85,7 @@ namespace ft
 				typedef Node_Alloc node_alloc;
 				typedef	size_t	size_type;
 				typedef T value_type;
+				typedef typename T::first_type Key;
 				typedef bidir_iterator<Node, Compare> iterator;
 				typedef const_bidir_iterator<Node, Compare> const_iterator;
 
@@ -93,71 +94,64 @@ namespace ft
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
-				node_ptr TNULL;
 
 			private:
-				node_ptr find_max()
+				node_ptr find_max(node_ptr ptr)
 					{
-						node_ptr current;
-
-						current = _tri_ptr->parent;
-						while (current->right != NULL)
-							current = current->right;
-						return (current);
+						while (ptr->right != NULL)
+							ptr = ptr->right;
+						return (ptr);
 					}
 
-				node_ptr find_min()
+				node_ptr find_min(node_ptr ptr)
 					{
-						node_ptr current;
-
-						current = _tri_ptr->parent;
-						while (current->left != NULL)
-							current = current->left;
-						return (current);
+						while (ptr->left != NULL)
+							ptr = ptr->left;
+						return (ptr);
 					}
 
-				void rotateLeft(node_ptr& root, node_ptr& new_node)
+				void rotateLeft(node_ptr node)
 				{
-					node_ptr right_ptr = new_node->right;
+					node_ptr right_ptr = node->right;
 					
-					new_node->right = right_ptr->left;
+					node->right = right_ptr->left;
 					
-					if (new_node->right != NULL)
-						new_node->right->parent = new_node;
+					if (node->right != NULL)
+						node->right->parent = node;
 
-					right_ptr->parent = new_node->parent;
+					right_ptr->parent = node->parent;
 
-					if (new_node->parent == NULL)
-						root = right_ptr;
-					else if (new_node == new_node->parent->left)
-						new_node->parent->left = right_ptr;
+					if (node->parent == NULL)
+						_tri_ptr->parent = right_ptr;
+					else if (node == node->parent->left)
+						node->parent->left = right_ptr;
 					else
-						new_node->parent->right = right_ptr;
+						node->parent->right = right_ptr;
 						
-					right_ptr->left = new_node;
-					new_node->parent = right_ptr;
+					right_ptr->left = node;
+					node->parent = right_ptr;
 				}
 
-				void rotateRight(node_ptr& root, node_ptr&new_node)
+				void rotateRight(node_ptr node)
 				{
-					node_ptr left_ptr = new_node->left;
+					node_ptr left_ptr = node->left;
 					
-					new_node->left = left_ptr->right;
+					node->left = left_ptr->right;
 					
-					if (new_node->left != NULL)
-						new_node->left->parent = new_node;
+					if (node->left != NULL)
+						node->left->parent = node;
 
-					left_ptr->parent = new_node->parent;
+					left_ptr->parent = node->parent;
 
-					if (new_node->parent == NULL)
-						root = left_ptr;
-					else if (new_node == new_node->parent->left)
-						new_node->parent->left = left_ptr;
+					if (node->parent == NULL)
+						_tri_ptr->parent = left_ptr;
+					else if (node == node->parent->left)
+						node->parent->left = left_ptr;
 					else
-						new_node->parent->right = left_ptr;
+						node->parent->right = left_ptr;
 						
-					left_ptr->right = new_node;
-					new_node->parent = left_ptr;
+					left_ptr->right = node;
+					node->parent = left_ptr;
 				}
 
 				void fix_RBTree(node_ptr& root, node_ptr& new_node)
@@ -189,13 +183,13 @@ namespace ft
 								// Case 2 : new_node is right child of its parent, left-rotation required
 								if (new_node == parent_ptr->right)
 								{
-									rotateLeft(root, parent_ptr);
+									rotateLeft(parent_ptr);
 									new_node = parent_ptr;
 									parent_ptr = new_node->parent;
 								}
 
 								// Case 3 : new_node is left child of its parent, right-rotation required
-								rotateRight(root, gr_parent_ptr);
+								rotateRight(gr_parent_ptr);
 								std::swap(parent_ptr->color, gr_parent_ptr->color);
 								new_node = parent_ptr;
 							}
@@ -217,13 +211,13 @@ namespace ft
 								// Case 2 : new_node is left child of its parent, left-rotation required
 								if (new_node == parent_ptr->left)
 								{
-									rotateRight(root, parent_ptr);
+									rotateRight(parent_ptr);
 									new_node = parent_ptr;
 									parent_ptr = new_node->parent;
 								}
 
 								// Case 3 : new_node is right child of its parent, right-rotation required
-								rotateLeft(root, gr_parent_ptr);
+								rotateLeft(gr_parent_ptr);
 								std::swap(parent_ptr->color, gr_parent_ptr->color);
 								new_node = parent_ptr;
 							}
@@ -233,19 +227,30 @@ namespace ft
 					_tri_ptr->parent->color = BLACK;
 				}
 			public:
-				// void print_tree(node_ptr node)
-				// {
-				// 	std::cout << node->value.first << "\n";
+				void print_tree(node_ptr node, std::string indent, bool last)
+				{
+					std::cout << indent;
+					
+					if (last) {
+						std::cout << "R----";
+						indent += "   ";
+					} else {
+						std::cout << "L----";
+						indent += "|  ";
+					}
+
+					std::cout << node->value.first << " ";
+					std::cout << "(" << (node->color ? "BLACK)" : "RED)") << "\n";
 						
-				// 	if(node->left != NULL)
-				// 		print_tree(node->left);
-						
-				// 	if(node->right != NULL)
-				// 		print_tree(node->right);
-						
-				// 	if(node->left == NULL && node->right == NULL)
-				// 		return ;
-				// }
+					if (node->left == NULL && node->right == NULL)
+						return ;
+					
+					if (node->left != NULL)
+						print_tree(node->left, indent, false);
+
+					if (node->right != NULL)
+						print_tree(node->right, indent, true);
+				}
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
@@ -264,9 +269,6 @@ namespace ft
 
 						_exts->left = _node_alloc.allocate(1);
 						_node_alloc.construct(_exts->left, Node());
-
-						TNULL = _node_alloc.allocate(1);
-						_node_alloc.construct(TNULL, Node());
 
 						_tri_ptr->parent = _exts->right;
 						_tri_ptr->left = _exts->right;
@@ -291,6 +293,26 @@ namespace ft
 						_node_alloc.destroy(_exts);
 						_node_alloc.deallocate(_exts, 1);
 						_exts = NULL;
+					}
+
+				iterator findNode_it(const Key& key)
+					{
+						node_ptr current = _tri_ptr->parent;
+
+						while (true)
+						{
+							if (current == NULL)
+								break ;
+							if (_comp(key, current->value.first) == false &&
+								_comp(current->value.first, key) == false)
+								return (iterator(current, _tri_ptr, _exts));
+							if (_comp(key, current->value.first) == true)
+								current = current->left;
+							else if (_comp(current->value.first, key) == true)
+								current = current->right;
+						}
+
+						return (iterator(_exts->right, _tri_ptr, _exts));
 					}
 
 				node_ptr findNode(const value_type node_to_find)
@@ -322,7 +344,7 @@ namespace ft
 						if (_tri_ptr->parent == _exts->right)
 						{
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, BLACK, nullptr, TNULL, TNULL));
+							_node_alloc.construct(new_node, Node(node_to_add, BLACK, NULL, NULL, NULL));
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
@@ -347,7 +369,7 @@ namespace ft
 							}
 
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, RED, tmp, TNULL, TNULL));
+							_node_alloc.construct(new_node, Node(node_to_add, RED, tmp, NULL, NULL));
 
 							if (side)
 								tmp->right = new_node;
@@ -438,174 +460,173 @@ namespace ft
 							ptr->parent->left = node;
 						else
 							ptr->parent->right = node;
-						if (node != NULL)
-							node->parent = ptr->parent;
+						node->parent = ptr->parent;
 					}
 
 				void fixRBTree_deletion(node_ptr node)
 					{
-						// while (node != _tri_ptr->parent && node->color == BLACK)
-						// {
-							
-						// }
+						node_ptr sibling;
+
+						while (node != _tri_ptr->parent && node->color == BLACK)
+						{
+							if (node == node->parent->left)
+							{
+								sibling = node->parent->right;
+								if (sibling->color == RED)
+								{
+									sibling->color = BLACK;
+									node->parent->color = RED;
+									rotateLeft(node->parent);
+									sibling = node->parent->right;
+								}
+
+								if ((sibling->left == NULL || sibling->left->color == BLACK) &&
+									(sibling->right == NULL || sibling->right->color == BLACK))
+								{
+									sibling->color = RED;
+									node = node->parent;
+								}
+								else
+								{
+									if (sibling->right == NULL || sibling->right->color == BLACK)
+									{
+										if (sibling->left != NULL)
+											sibling->left->color = BLACK;
+										sibling->color = RED;
+										rotateRight(sibling);
+										sibling = node->parent->right;
+									}
+									
+									sibling->color = node->parent->color;
+									node->parent->color = BLACK;
+									if (sibling->right != NULL)
+										sibling->right->color = BLACK;
+									rotateLeft(node->parent);
+									node = _tri_ptr->parent;
+								}
+							}
+							else // node == node->parent->right
+							{
+								sibling = node->parent->left;
+								if (sibling->color == RED)
+								{
+									sibling->color = BLACK;
+									node->parent->color = RED;
+									rotateRight(node->parent);
+									sibling = node->parent->left;
+								}
+
+								if ((sibling->left == NULL || sibling->left->color == BLACK) &&
+									(sibling->right == NULL || sibling->right->color == BLACK))
+								{
+									sibling->color = RED;
+									node = node->parent;
+								}
+								else
+								{
+									if (sibling->left == NULL || sibling->left->color == BLACK)
+									{
+										if (sibling->right != NULL)
+											sibling->right->color = BLACK;
+										sibling->color = RED;
+										rotateLeft(sibling);
+										sibling = node->parent->left;
+									}
+									
+									sibling->color = node->parent->color;
+									node->parent->color = BLACK;
+									if (sibling->left != NULL)
+										sibling->left->color = BLACK;
+									rotateRight(node->parent);
+									node = _tri_ptr->parent;
+								}
+							}
+						}
+						node->color = BLACK;
 					}
 
 				void deleteNode(iterator it)
 					{
 						const value_type val = *it;
 						node_ptr ptr = findNode(val);
-						node_ptr child;
-						iterator tmp = it;
-						// bool double_black = true;
+						node_ptr child, x;
 						bool ptr_original_color = ptr->color;
 
-						if (ptr->left == NULL && ptr->right == NULL) {
-							fixDeletion(ptr, NULL);
-						}
-						else if (ptr->left == NULL) {
-							child = ptr->right;
-							fixDeletion(ptr, child);
-						}
-						else if (ptr->right == NULL) {
-							child = ptr->left;
-							fixDeletion(ptr, child);
-						}
-						else {
-							value_type succ_val = *(++tmp);
-							node_ptr succ_ptr = findNode(succ_val);
-							
-							child = succ_ptr->right;
-							if (succ_ptr->parent == ptr)
-								child->parent = succ_ptr;
+						child = _node_alloc.allocate(1);
+						_node_alloc.construct(child, Node());
+						child->color = BLACK;
+
+						if (ptr->left == NULL) {
+							if (ptr->right != NULL) {
+								x = ptr->right;
+								fixDeletion(ptr, ptr->right);
+							} else {
+								x = child;
+								fixDeletion(ptr, child);
+							}
+						} else if (ptr->right == NULL) {
+							if (ptr->left != NULL) {
+								x = ptr->left;
+								fixDeletion(ptr, ptr->left);
+							}
 							else {
-								fixDeletion(succ_ptr, succ_ptr->right);
-								succ_ptr->right = ptr->right;
-								succ_ptr->right->parent = succ_ptr;
+								x = child;
+								fixDeletion(ptr, child);
+							}
+						} else {
+							node_ptr succ_ptr = find_min(ptr->right);
+							ptr_original_color = succ_ptr->color;
+							
+							if (succ_ptr->right != NULL) {
+								x = succ_ptr->right;
+								if (succ_ptr->parent == ptr)
+									x->parent = ptr;
+								else {
+									fixDeletion(succ_ptr, succ_ptr->right);
+									succ_ptr->right = ptr->right;
+									succ_ptr->right->parent = succ_ptr;
+								}
+							} else {
+								x = child;
+								if (succ_ptr->parent == ptr)
+									child->parent = ptr;
+								else {
+									fixDeletion(succ_ptr, child);
+									succ_ptr->right = ptr->right;
+									succ_ptr->right->parent = succ_ptr;
+								}
 							}
 
 							fixDeletion(ptr, succ_ptr);
 							succ_ptr->left = ptr->left;
 							succ_ptr->left->parent = succ_ptr;
-							succ_ptr->color = ptr_original_color;
+							succ_ptr->color = ptr->color;
 						}
 
 						this->_node_alloc.destroy(ptr);
 						this->_node_alloc.deallocate(ptr, 1);
 						ptr = NULL;
 						this->_map_size--;
-						
-						if (ptr_original_color)
-							fixRBTree_deletion(child);
 
-						// if (ptr->left == NULL && ptr->right == NULL)
-						// {
-						// 	if (ptr->parent != NULL && ptr->parent->right == ptr)
-						// 	{
-						// 		ptr->parent->right = NULL;
-						// 		if (ptr->parent->left != NULL)
-						// 			DB_sibling = ptr->parent->left;
-						// 	}
-						// 	else if (ptr->parent != NULL && ptr->parent->left == ptr)
-						// 	{
-						// 		ptr->parent->left = NULL;
-						// 		if (ptr->parent->right != NULL)
-						// 			DB_sibling = ptr->parent->right;
-						// 	}
+						if (this->_map_size == 0)
+						{
+							_tri_ptr->parent = _exts->right;
+							_tri_ptr->left = _exts->right;
+							_tri_ptr->right = _exts->right;
+						}
+						else if (ptr_original_color == BLACK)
+							fixRBTree_deletion(x);
 
-						// 	if (ptr->color == RED)
-						// 	{
-						// 		double_black = false;
-						// 		DB_sibling = NULL;	
-						// 	}
-							
-						// 	if (ptr == _tri_ptr->parent)
-						// 	{
-						// 		_tri_ptr->parent = _exts->right;
-						// 		_tri_ptr->left = _exts->right;
-						// 		_tri_ptr->right = _exts->right;
-						// 		double_black = false;
-						// 	}
-						// }
-						// else if (ptr->left != NULL && ptr->right != NULL)
-						// {
-						// 	value_type succ_val = *(--it);
-						// 	node_ptr succ_ptr = findNode(succ_val);
-							
-						// 	if (ptr == _tri_ptr->parent)
-						// 		_tri_ptr->parent = succ_ptr;
+						if (child->parent != NULL) {
+							if (child->parent->left == child)
+								child->parent->left = NULL;
+							else
+								child->parent->right = NULL;
+						}
 
-						// 	if (succ_ptr->right == NULL && succ_ptr->left == NULL)
-						// 	{
-						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-						// 			succ_ptr->parent->left = NULL;
-						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-						// 			succ_ptr->parent->right = NULL;
-						// 	}
-						// 	else if (succ_ptr->right != NULL)
-						// 	{
-						// 		succ_ptr->right->parent = succ_ptr->parent;
-						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-						// 			succ_ptr->parent->left = succ_ptr->right;
-						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-						// 			succ_ptr->parent->right = succ_ptr->right;
-						// 	}
-						// 	else if (succ_ptr->left != NULL)
-						// 	{
-						// 		succ_ptr->left->parent = succ_ptr->parent;
-						// 		if (succ_ptr->parent != NULL && succ_ptr->parent->left == succ_ptr)
-						// 			succ_ptr->parent->left = succ_ptr->left;
-						// 		else if (succ_ptr->parent != NULL && succ_ptr->parent->right == succ_ptr)
-						// 			succ_ptr->parent->right = succ_ptr->left;
-						// 	}
-
-							
-						// 	succ_ptr->parent = ptr->parent;
-						// 	succ_ptr->left = ptr->left;
-						// 	succ_ptr->right = ptr->right;
-
-						// 	if (ptr->left != NULL)
-						// 		ptr->left->parent = succ_ptr;
-						// 	if (ptr->right != NULL)
-						// 		ptr->right->parent = succ_ptr;
-
-						// 	_tri_ptr->parent->parent = NULL;
-						// }
-						// else
-						// {
-						// 	bool side;
-
-						// 	if (ptr->left != NULL)
-						// 		child = ptr->left;
-						// 	else if (ptr->right != NULL)
-						// 		child = ptr->right;
-
-						// 	if (ptr->parent != NULL && ptr->parent->left == ptr)
-						// 		side = true;
-						// 	else if (ptr->parent != NULL && ptr->parent->right == ptr)
-						// 		side = false;
-
-						// 	if (ptr == _tri_ptr->parent)
-						// 		_tri_ptr->parent = child;
-						// 	else 
-						// 	{
-						// 		if (side)
-						// 			ptr->parent->left = child;
-						// 		else
-						// 			ptr->parent->right = child;
-						// 		child->parent = ptr->parent;
-						// 	}
-						// 	_tri_ptr->parent->parent = NULL;
-						// }
-						// this->_node_alloc.destroy(ptr);
-						// this->_node_alloc.deallocate(ptr, 1);
-						// ptr = NULL;
-						// this->_map_size--;
-
-						// if (_map_size)
-						// {
-						// 	_tri_ptr->left = find_min();
-						// 	_tri_ptr->right = find_max();
-						// }
+						_node_alloc.destroy(child);
+						_node_alloc.deallocate(child, 1);
+						child = NULL;
 					}
 
 				size_type get_size() const

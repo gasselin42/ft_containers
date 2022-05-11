@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/05 09:58:41 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/11 17:06:00 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,25 @@ namespace ft
 	class map
 	{
 		public:
-			typedef				Key 										key_type;
-			typedef				T 											mapped_type;
-			typedef				ft::pair<const key_type, mapped_type> 		value_type;
-			typedef				Compare 									key_compare;
-			typedef				Alloc 										allocator_type;
-			typedef typename	allocator_type::reference 					reference;
-			typedef typename	allocator_type::const_reference 			const_reference;
-			typedef typename	allocator_type::pointer 					pointer;
-			typedef typename	allocator_type::const_pointer 				const_pointer;
-			typedef	typename	ft::BST<value_type, Compare>::iterator				iterator;
-			typedef	typename	ft::BST<value_type, Compare>::const_iterator			const_iterator;
-			typedef				ft::reverse_iterator<iterator> 				reverse_iterator;
+			typedef				Key 											key_type;
+			typedef				T 												mapped_type;
+			typedef				ft::pair<const key_type, mapped_type> 			value_type;
+			typedef				Compare 										key_compare;
+			typedef				Alloc 											allocator_type;
+			typedef typename	Alloc::reference 								reference;
+			typedef typename	Alloc::const_reference 							const_reference;
+			typedef typename	Alloc::pointer 									pointer;
+			typedef typename	Alloc::const_pointer 							const_pointer;
+			typedef	typename	ft::BST<value_type, Compare>::iterator			iterator;
+			typedef	typename	ft::BST<value_type, Compare>::const_iterator	const_iterator;
+			typedef				ft::reverse_iterator<iterator> 					reverse_iterator;
 			typedef				ft::const_reverse_iterator<const_iterator> 		const_reverse_iterator;
-			typedef				ptrdiff_t									difference_type;
-			typedef				size_t										size_type;
+			typedef				ptrdiff_t										difference_type;
+			typedef				size_t											size_type;
 
 			class value_compare : ft::binary_function<value_type, value_type, bool>
 			{
-				friend class map<key_type, mapped_type, key_compare, allocator_type>;
+				friend class map<Key, T, Compare, Alloc>;
 				protected:
 					Compare comp;
 					value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
@@ -74,7 +74,11 @@ namespace ft
 					}
 
 		public:
-			// void print_map() { _bst.print_tree(_bst._tri_ptr->parent); }
+			void print_map() 
+				{
+					if (_bst._tri_ptr->parent != _bst._exts->right)
+						_bst.print_tree(_bst._tri_ptr->parent, "", true);
+				}
 		
 			map()
 				: 	_alloc(),
@@ -155,7 +159,12 @@ namespace ft
 				{ return (this->_bst.get_size()); }
 
 			size_type max_size() const
-				{ return (this->_bst.max_size()); }
+				{
+					const size_type num = std::numeric_limits<difference_type>::max();
+					const size_type alc = this->_bst.max_size();
+
+					return (std::min(num, alc));
+				}
 
 			T& at(const Key& k)
 				{
@@ -227,10 +236,9 @@ namespace ft
 
 			void erase(iterator first, iterator last)
 				{
-					// int i = 0;
 					while (first != last)
 					{
-						// std::cout << i++ << "\n\n";
+						print_map();
 						this->erase((*(first++)).first);
 					}
 				}
@@ -250,15 +258,16 @@ namespace ft
 			
 			iterator find(const Key& k)
 				{
-					iterator start = this->begin();
+					return (_bst.findNode_it(k));
+					// iterator start = this->begin();
 
-					while (start != this->end())
-					{
-						if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
+					// while (start != this->end())
+					// {
+					// 	if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
+					// 		return (start);
+					// 	start++;
+					// }
+					// return (this->end());
 				}
 
 			const_iterator find(const Key& k) const
