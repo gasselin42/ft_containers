@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/13 11:37:34 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/13 12:10:11 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@
 namespace ft
 {
 	template < class T, class Compare = ft::less<T> >
-		class bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
+		class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, typename T::value_type>
 		{
 			public:
-				typedef typename	T::value_type																	value_type;
-				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
-				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category		iterator_category;
-				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
-				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference				reference;
+				typedef				ft::bidir_iterator<T, Compare>						Iterator;
+				typedef typename 	ft::iterator_traits<Iterator>::iterator_category	iterator_category;
+				typedef typename 	ft::iterator_traits<Iterator>::value_type			value_type;
+				typedef typename 	ft::iterator_traits<Iterator>::difference_type		difference_type;
+				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
+				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
 
 				T*	_ptr;
 				T*	_tri_ptr;
@@ -170,14 +171,15 @@ namespace ft
 				{ return (!(lhs.base() == rhs.base())); }
 
 	template < class T, class Compare>
-		class const_bidir_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
+		class const_bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, typename T::value_type>
 		{
 			public:
-				typedef typename T::value_type																	value_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type		difference_type;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer				pointer;
-				typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
+				typedef				ft::const_bidir_iterator<T, Compare>				Iterator;
+				typedef typename 	ft::iterator_traits<Iterator>::iterator_category	iterator_category;
+				typedef typename 	ft::iterator_traits<Iterator>::value_type			value_type;
+				typedef typename 	ft::iterator_traits<Iterator>::difference_type		difference_type;
+				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
+				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
 
 				T*	_ptr;
 				T*	_tri_ptr;
