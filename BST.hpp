@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/11 17:09:07 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:32:49 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,31 +226,31 @@ namespace ft
 
 					_tri_ptr->parent->color = BLACK;
 				}
-			public:
-				void print_tree(node_ptr node, std::string indent, bool last)
-				{
-					std::cout << indent;
+			// public:
+				// void print_tree(node_ptr node, std::string indent, bool last)
+				// {
+				// 	std::cout << indent;
 					
-					if (last) {
-						std::cout << "R----";
-						indent += "   ";
-					} else {
-						std::cout << "L----";
-						indent += "|  ";
-					}
+				// 	if (last) {
+				// 		std::cout << "R----";
+				// 		indent += "   ";
+				// 	} else {
+				// 		std::cout << "L----";
+				// 		indent += "|  ";
+				// 	}
 
-					std::cout << node->value.first << " ";
-					std::cout << "(" << (node->color ? "BLACK)" : "RED)") << "\n";
+				// 	std::cout << node->value.first << " ";
+				// 	std::cout << "(" << (node->color ? "BLACK)" : "RED)") << "\n";
 						
-					if (node->left == NULL && node->right == NULL)
-						return ;
+				// 	if (node->left == NULL && node->right == NULL)
+				// 		return ;
 					
-					if (node->left != NULL)
-						print_tree(node->left, indent, false);
+				// 	if (node->left != NULL)
+				// 		print_tree(node->left, indent, false);
 
-					if (node->right != NULL)
-						print_tree(node->right, indent, true);
-				}
+				// 	if (node->right != NULL)
+				// 		print_tree(node->right, indent, true);
+				// }
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
@@ -313,6 +313,26 @@ namespace ft
 						}
 
 						return (iterator(_exts->right, _tri_ptr, _exts));
+					}
+
+				const_iterator findNode_it_cst(const Key& key) const
+					{
+						node_ptr current = _tri_ptr->parent;
+
+						while (true)
+						{
+							if (current == NULL)
+								break ;
+							if (_comp(key, current->value.first) == false &&
+								_comp(current->value.first, key) == false)
+								return (const_iterator(current, _tri_ptr, _exts));
+							if (_comp(key, current->value.first) == true)
+								current = current->left;
+							else if (_comp(current->value.first, key) == true)
+								current = current->right;
+						}
+
+						return (const_iterator(_exts->right, _tri_ptr, _exts));
 					}
 
 				node_ptr findNode(const value_type node_to_find)
@@ -580,7 +600,7 @@ namespace ft
 							if (succ_ptr->right != NULL) {
 								x = succ_ptr->right;
 								if (succ_ptr->parent == ptr)
-									x->parent = ptr;
+									x->parent = succ_ptr;
 								else {
 									fixDeletion(succ_ptr, succ_ptr->right);
 									succ_ptr->right = ptr->right;
@@ -589,7 +609,7 @@ namespace ft
 							} else {
 								x = child;
 								if (succ_ptr->parent == ptr)
-									child->parent = ptr;
+									child->parent = succ_ptr;
 								else {
 									fixDeletion(succ_ptr, child);
 									succ_ptr->right = ptr->right;
@@ -608,13 +628,7 @@ namespace ft
 						ptr = NULL;
 						this->_map_size--;
 
-						if (this->_map_size == 0)
-						{
-							_tri_ptr->parent = _exts->right;
-							_tri_ptr->left = _exts->right;
-							_tri_ptr->right = _exts->right;
-						}
-						else if (ptr_original_color == BLACK)
+						if (this->_map_size != 0 && ptr_original_color == BLACK)
 							fixRBTree_deletion(x);
 
 						if (child->parent != NULL) {
@@ -627,6 +641,18 @@ namespace ft
 						_node_alloc.destroy(child);
 						_node_alloc.deallocate(child, 1);
 						child = NULL;
+
+						if (this->_map_size == 0)
+						{
+							_tri_ptr->parent = _exts->right;
+							_tri_ptr->left = _exts->right;
+							_tri_ptr->right = _exts->right;
+						}
+						else
+						{
+							_tri_ptr->left = find_min(_tri_ptr->parent);
+							_tri_ptr->right = find_max(_tri_ptr->parent);
+						}
 					}
 
 				size_type get_size() const

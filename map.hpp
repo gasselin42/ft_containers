@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/11 17:06:00 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/13 10:15:53 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,10 +237,7 @@ namespace ft
 			void erase(iterator first, iterator last)
 				{
 					while (first != last)
-					{
-						print_map();
 						this->erase((*(first++)).first);
-					}
 				}
 
 			// Both maps must have the same templates
@@ -257,31 +254,10 @@ namespace ft
 				{ return (value_compare(key_compare())); }
 			
 			iterator find(const Key& k)
-				{
-					return (_bst.findNode_it(k));
-					// iterator start = this->begin();
-
-					// while (start != this->end())
-					// {
-					// 	if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
-					// 		return (start);
-					// 	start++;
-					// }
-					// return (this->end());
-				}
+				{ return (_bst.findNode_it(k)); }
 
 			const_iterator find(const Key& k) const
-				{
-					const_iterator start = this->begin();
-
-					while (start != this->end())
-					{
-						if (_comp((*start).first, k) == false && _comp(k, (*start).first) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.findNode_it_cst(k)); }
 
 			size_type count(const Key& k) const
 				{ return ((this->find(k) == this->end()) ? 0 : 1); }

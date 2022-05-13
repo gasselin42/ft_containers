@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 13:39:17 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/13 11:37:34 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ namespace ft
 					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
 				virtual ~bidir_iterator() {}
 
-				reference operator*(void) const { return (this->_ptr->value); }
-				pointer operator->(void) const { return (&this->_ptr->value); }
+				reference operator*(void) const { return (_ptr->value); }
+				pointer operator->(void) const { return (&_ptr->value); }
 
 				bidir_iterator& operator++(void) {
 					_ptr = get_next_ptr();
@@ -280,7 +280,7 @@ namespace ft
 				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
 				const_bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
 				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
-				const_bidir_iterator(const bidir_iterator<T>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
+				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs)
 					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
 				virtual ~const_bidir_iterator() {}
