@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/13 12:02:07 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:23:29 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -438,6 +438,7 @@ namespace ft
 						node_ptr tmp;
 						node_ptr tmp2;
 						size_type tmp_size;
+						Compare tmp_comp;
 						
 						tmp = this->_tri_ptr;
 						this->_tri_ptr = x._tri_ptr;
@@ -450,6 +451,10 @@ namespace ft
 						tmp_size = this->_map_size;
 						this->_map_size = x._map_size;
 						x._map_size = tmp_size;
+
+						tmp_comp = this->_comp;
+						this->_comp = x._comp;
+						x._comp = tmp_comp;
 					}
 
 				void visitNode(node_ptr node)

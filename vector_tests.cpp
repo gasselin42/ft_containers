@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/04 09:50:49 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:25:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #define KO		"\033[1;31mKO\033[0m"
 #define PASSED	"\033[1;32mPASSED!\033[0m"
 
-class myexception: public std::exception
+static class myexception: public std::exception
 {
   virtual const char* what() const throw()
   {
@@ -1801,7 +1801,7 @@ void vector_tests(void)
 		const ft::vector<int> ft_vec_op(ft_vec);
 
 		std::vector<int>::const_iterator stl_it = stl_vec_op.end();
-		ft::vector<int>::const_iterator ft_it = ft_vec.end();
+		ft::vector<int>::const_iterator ft_it = ft_vec_op.end();
 
 		stl_it = stl_it - 7;
 		ft_it = ft_it - 7;

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:38:27 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 10:50:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:25:51 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define KO		"\033[1;31mKO\033[0m"
 #define PASSED	"\033[1;32mPASSED!\033[0m"
 
-class myexception: public std::exception
+static class myexception: public std::exception
 {
   virtual const char* what() const throw()
   {
