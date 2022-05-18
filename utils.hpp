@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/04/27 14:31:10 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:01:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,29 @@ namespace ft
 			bool operator() (const T& x, const T& y) const
 				{ return x < y; }
 		};
+
+	template<class T, T v>
+		struct integral_constant {
+			static const T value = v;
+			
+			typedef T value_type;
+			typedef integral_constant type;
+			
+			operator value_type() const { return value; }
+			const value_type operator()() const { return value; }
+		};
+
+	/// The type used as a compile-time boolean with true value.
+	typedef ft::integral_constant<bool, true>     true_type;
+	
+	/// The type used as a compile-time boolean with false value.
+	typedef ft::integral_constant<bool, false>    false_type;
+
+	template<typename, typename>
+		struct is_same : public false_type { };
+
+	template<typename _Tp>
+		struct is_same<_Tp, _Tp> : public true_type { };
 
 	template <class InputIt1, class InputIt2>
 		bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
