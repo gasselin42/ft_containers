@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 11:55:18 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/20 13:17:21 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ namespace ft
 				BST_Node* left;
 				BST_Node* right;
 
-				BST_Node (bool _color = RED, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)
+				BST_Node ()
 		            :	value(),
-						color(_color),
-		                parent(_parent),
-		                left(_left),
-		                right(_right)
+						color(BLACK),
+		                parent(NULL),
+		                left(NULL),
+		                right(NULL)
 		            {}
 				
 				BST_Node(const value_type& val, bool _color = RED, BST_Node* _parent = NULL, BST_Node* _left = NULL, BST_Node* _right = NULL)

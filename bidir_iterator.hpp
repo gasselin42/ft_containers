@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/13 12:10:11 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:52:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ namespace ft
 				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
 				bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
 				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
+				
 				bidir_iterator& operator=(const bidir_iterator& rhs)
 					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
 				virtual ~bidir_iterator() {}
@@ -165,10 +166,18 @@ namespace ft
 		template < class T, class Compare>
 			bool operator==(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator==(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (lhs.base() == rhs.base()); }
 			
 		template < class T, class Compare>
 			bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (!(lhs.base() == rhs.base())); }
 
 	template < class T, class Compare>
 		class const_bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, typename T::value_type>
@@ -318,8 +327,48 @@ namespace ft
 		template < class T, class Compare>
 			bool operator==(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator==(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (lhs.base() == rhs.base()); }
 			
 		template < class T, class Compare>
 			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (!(lhs.base() == rhs.base())); }
+
+		template < class T, class Compare>
+			bool operator==(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() == rhs.base()); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator==(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (lhs.base() == rhs.base()); }
+			
+		template < class T, class Compare>
+			bool operator!=(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
+				{ return (!(lhs.base() == rhs.base())); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator!=(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (!(lhs.base() == rhs.base())); }
+
+		template < class T, class Compare>
+			bool operator==(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
+				{ return (lhs.base() == rhs.base()); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator==(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (lhs.base() == rhs.base()); }
+			
+		template < class T, class Compare>
+			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
+				{ return (!(lhs.base() == rhs.base())); }
+
+		// template < class T, class T2, class Compare>
+		// 	bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
+		// 		{ return (!(lhs.base() == rhs.base())); }
 }

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 11:37:32 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:30:20 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,11 +223,6 @@ namespace ft
 				reference operator[](difference_type n) { return (*(operator+(n))); }
 
 				iterator_type base() const { return (_i); }
-
-				// https://en.cppreference.com/w/cpp/language/cast_operator
-				// https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421719#4421719
-				// operator random_access_iterator<typename Container::const_pointer, Container> () const
-				// 	{ return (random_access_iterator<Iter, Container>(this->_i)); }
 		};
 
 		template <class _Iter, class _Container>
