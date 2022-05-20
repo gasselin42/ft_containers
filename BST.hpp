@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/17 11:23:29 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:55:18 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,13 +154,13 @@ namespace ft
 					node->parent = left_ptr;
 				}
 
-				void fix_RBTree(node_ptr& root, node_ptr& new_node)
+				void fix_RBTree(node_ptr new_node)
 				{
 					node_ptr parent_ptr = NULL;
 					node_ptr uncle_ptr = NULL;
 					node_ptr gr_parent_ptr = NULL;
 
-					while (new_node != root && new_node->color != BLACK && new_node->parent->color == RED)
+					while (new_node != _tri_ptr->parent && new_node->color != BLACK && new_node->parent->color == RED)
 					{
 						parent_ptr = new_node->parent;
 						gr_parent_ptr = new_node->parent->parent;
@@ -400,7 +400,7 @@ namespace ft
 							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
 								_tri_ptr->right = new_node;
 
-							fix_RBTree(_tri_ptr->parent, new_node);
+							fix_RBTree(new_node);
 							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
 						}
 						else

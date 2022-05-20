@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/18 15:01:52 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:26:56 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ namespace ft
 			static const T value = v;
 			
 			typedef T value_type;
-			typedef integral_constant type;
+			typedef integral_constant<T, v> type;
 			
 			operator value_type() const { return value; }
 			const value_type operator()() const { return value; }
@@ -49,7 +49,7 @@ namespace ft
 	/// The type used as a compile-time boolean with false value.
 	typedef ft::integral_constant<bool, false>    false_type;
 
-	template<typename, typename>
+	template<typename _T1, typename _T2>
 		struct is_same : public false_type { };
 
 	template<typename _Tp>

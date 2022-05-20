@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/16 09:28:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/05/19 15:03:17 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ namespace ft
 			typedef typename	Alloc::const_pointer 							const_pointer;
 			typedef	typename	ft::BST<value_type, Compare>::iterator			iterator;
 			typedef	typename	ft::BST<value_type, Compare>::const_iterator	const_iterator;
-			typedef				ft::reverse_iterator<iterator> 					reverse_iterator;
-			typedef				ft::const_reverse_iterator<const_iterator> 		const_reverse_iterator;
+			typedef				ft::reverse_iterator<iterator, map<Key, T, Compare, Alloc> > 				reverse_iterator;
+			typedef				ft::reverse_iterator<const_iterator, map<Key, T, Compare, Alloc> > 	const_reverse_iterator;
 			typedef				ptrdiff_t										difference_type;
 			typedef				size_t											size_type;
 
