@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 12:52:54 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:37:42 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ namespace ft
 
 				T*	_ptr;
 				T*	_tri_ptr;
-				T*	_exts;
 				Compare		_comp;
 
 			private:
@@ -50,7 +49,7 @@ namespace ft
 						T* current;
 
 						current = ptr;
-						while (current->left != NULL)
+						while (current->left != NULL && current->left != _tri_ptr->left->left)
 							current = current->left;
 						return (current);
 					}
@@ -59,16 +58,16 @@ namespace ft
 					{
 						T* current;
 
-						if (_ptr == _exts->right)
-							return (NULL);
+						// if (_ptr == _exts->right)
+						// 	return (NULL);
 
-						if (_ptr == _exts->left)
+						if (_ptr == _tri_ptr->left->left)
 							return (_tri_ptr->left);
 
 						if (_ptr == find_max(_tri_ptr->parent))
-							return (_exts->right);
+							return (_tri_ptr->parent->parent);
 
-						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left) == _ptr)
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left) == _ptr)
 							return (_tri_ptr->parent);
 						
 						if (_ptr->right != NULL)
@@ -94,16 +93,16 @@ namespace ft
 					{
 						T* current;
 						
-						if (_ptr == _exts->left)
-							return (NULL);
+						// if (_ptr == _exts->left)
+						// 	return (NULL);
 
-						if (_ptr == _exts->right)
+						if (_ptr == _tri_ptr->parent->parent)
 							return (_tri_ptr->right);
 
 						if (_ptr == find_min(_tri_ptr->parent))
-							return (_exts->left);
+							return (_ptr->left);
 
-						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right) == _ptr)
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right) == _ptr)
 							return (_tri_ptr->parent);
 						
 						if (_ptr->left != NULL)
@@ -127,12 +126,12 @@ namespace ft
 
 			public:
 
-				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
-				bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
-				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
+				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
+				bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
+				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				
 				bidir_iterator& operator=(const bidir_iterator& rhs)
-					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
+					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~bidir_iterator() {}
 
 				reference operator*(void) const { return (_ptr->value); }
@@ -192,7 +191,6 @@ namespace ft
 
 				T*	_ptr;
 				T*	_tri_ptr;
-				T*	_exts;
 				Compare	_comp;
 
 			private:
@@ -211,7 +209,7 @@ namespace ft
 						T* current;
 
 						current = ptr;
-						while (current->left != NULL)
+						while (current->left != NULL && current->left != _tri_ptr->left->left)
 							current = current->left;
 						return (current);
 					}
@@ -220,16 +218,16 @@ namespace ft
 					{
 						T* current;
 
-						if (_ptr == _exts->right)
-							return (NULL);
+						// if (_ptr == _exts->right)
+						// 	return (NULL);
 
-						if (_ptr == _exts->left)
+						if (_ptr == _tri_ptr->left->left)
 							return (_tri_ptr->left);
 
 						if (_ptr == find_max(_tri_ptr->parent))
-							return (_exts->right);
+							return (_tri_ptr->parent->parent);
 
-						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left) == _ptr)
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->left != NULL && find_max(_tri_ptr->parent->left) == _ptr)
 							return (_tri_ptr->parent);
 						
 						if (_ptr->right != NULL)
@@ -255,16 +253,16 @@ namespace ft
 					{
 						T* current;
 						
-						if (_ptr == _exts->left)
-							return (NULL);
+						// if (_ptr == _exts->left)
+						// 	return (NULL);
 
-						if (_ptr == _exts->right)
+						if (_ptr == _tri_ptr->parent->parent)
 							return (_tri_ptr->right);
 
 						if (_ptr == find_min(_tri_ptr->parent))
-							return (_exts->left);
+							return (_ptr->left);
 
-						if (_tri_ptr->parent != _exts->right &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right) == _ptr)
+						if (_tri_ptr->parent != NULL &&  _tri_ptr->parent->right != NULL && find_min(_tri_ptr->parent->right) == _ptr)
 							return (_tri_ptr->parent);
 						
 						if (_ptr->left != NULL)
@@ -287,13 +285,12 @@ namespace ft
 					}
 
 			public:
-
-				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL), _exts(NULL) {}
-				const_bidir_iterator(T* ptr, T* tri_ptr, T* exts) : _ptr(ptr), _tri_ptr(tri_ptr), _exts(exts) {}
-				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr), _exts(rhs._exts) {}
+				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
+				const_bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
+				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs)
-					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; _exts = rhs._exts; return (*this); }
+					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~const_bidir_iterator() {}
 
 				reference operator*(void) const { return (this->_ptr->value); }

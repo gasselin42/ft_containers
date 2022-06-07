@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 13:17:21 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:08:20 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ namespace ft
 				typedef const_bidir_iterator<Node, Compare> const_iterator;
 
 				node_ptr _tri_ptr;
-				node_ptr _exts;
+				node_ptr _begin;
+				node_ptr _end;
+				// node_ptr _exts;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
@@ -105,7 +107,7 @@ namespace ft
 
 				node_ptr find_min(node_ptr ptr)
 					{
-						while (ptr->left != NULL)
+						while (ptr->left != NULL && ptr->left != _begin)
 							ptr = ptr->left;
 						return (ptr);
 					}
@@ -121,7 +123,7 @@ namespace ft
 
 					right_ptr->parent = node->parent;
 
-					if (node->parent == NULL)
+					if (node->parent == _end)
 						_tri_ptr->parent = right_ptr;
 					else if (node == node->parent->left)
 						node->parent->left = right_ptr;
@@ -143,7 +145,7 @@ namespace ft
 
 					left_ptr->parent = node->parent;
 
-					if (node->parent == NULL)
+					if (node->parent == _end)
 						_tri_ptr->parent = left_ptr;
 					else if (node == node->parent->left)
 						node->parent->left = left_ptr;
@@ -261,18 +263,21 @@ namespace ft
 						_tri_ptr = _node_alloc.allocate(1);
 						_node_alloc.construct(_tri_ptr, Node());
 
-						_exts = _node_alloc.allocate(1);
-						_node_alloc.construct(_exts, Node());
+						_begin = _node_alloc.allocate(1);
+						_node_alloc.construct(_begin, Node());
+						
+						_end = _node_alloc.allocate(1);
+						_node_alloc.construct(_end, Node());
 
-						_exts->right = _node_alloc.allocate(1);
-						_node_alloc.construct(_exts->right, Node());
+						// _exts->right = _node_alloc.allocate(1);
+						// _node_alloc.construct(_exts->right, Node());
 
-						_exts->left = _node_alloc.allocate(1);
-						_node_alloc.construct(_exts->left, Node());
+						// _exts->left = _node_alloc.allocate(1);
+						// _node_alloc.construct(_exts->left, Node());
 
-						_tri_ptr->parent = _exts->right;
-						_tri_ptr->left = _exts->right;
-						_tri_ptr->right = _exts->right;
+						// _tri_ptr->parent = _exts->right;
+						// _tri_ptr->left = _exts->right;
+						// _tri_ptr->right = _exts->right;
 					}
 				
 				~BST() 
@@ -282,17 +287,17 @@ namespace ft
 						_node_alloc.deallocate(_tri_ptr, 1);
 						_tri_ptr = NULL;
 
-						_node_alloc.destroy(_exts->right);
-						_node_alloc.deallocate(_exts->right, 1);
-						_exts->right = NULL;
+						_node_alloc.destroy(_begin);
+						_node_alloc.deallocate(_begin, 1);
+						_begin = NULL;
 
-						_node_alloc.destroy(_exts->left);
-						_node_alloc.deallocate(_exts->left, 1);
-						_exts->left = NULL;
+						_node_alloc.destroy(_end);
+						_node_alloc.deallocate(_end, 1);
+						_end = NULL;
 						
-						_node_alloc.destroy(_exts);
-						_node_alloc.deallocate(_exts, 1);
-						_exts = NULL;
+						// _node_alloc.destroy(_exts);
+						// _node_alloc.deallocate(_exts, 1);
+						// _exts = NULL;
 					}
 
 				iterator findNode_it(const Key& key)
@@ -305,14 +310,14 @@ namespace ft
 								break ;
 							if (_comp(key, current->value.first) == false &&
 								_comp(current->value.first, key) == false)
-								return (iterator(current, _tri_ptr, _exts));
+								return (iterator(current, _tri_ptr));
 							if (_comp(key, current->value.first) == true)
 								current = current->left;
 							else if (_comp(current->value.first, key) == true)
 								current = current->right;
 						}
 
-						return (iterator(_exts->right, _tri_ptr, _exts));
+						return (iterator(_end, _tri_ptr));
 					}
 
 				const_iterator findNode_it_cst(const Key& key) const
@@ -325,14 +330,14 @@ namespace ft
 								break ;
 							if (_comp(key, current->value.first) == false &&
 								_comp(current->value.first, key) == false)
-								return (const_iterator(current, _tri_ptr, _exts));
+								return (const_iterator(current, _tri_ptr));
 							if (_comp(key, current->value.first) == true)
 								current = current->left;
 							else if (_comp(current->value.first, key) == true)
 								current = current->right;
 						}
 
-						return (const_iterator(_exts->right, _tri_ptr, _exts));
+						return (const_iterator(_end, _tri_ptr));
 					}
 
 				node_ptr findNode(const value_type node_to_find)
@@ -361,19 +366,21 @@ namespace ft
 						node_ptr current = _tri_ptr->parent;
 						bool side = false;
 						
-						if (_tri_ptr->parent == _exts->right)
+						if (_tri_ptr->parent == NULL)
 						{
 							_map_size++;
-							_node_alloc.construct(new_node, Node(node_to_add, BLACK, NULL, NULL, NULL));
+							_node_alloc.construct(new_node, Node(node_to_add, BLACK, _end, _begin, NULL));
+							_begin->parent = new_node;
+							_end->right = new_node;
 							_tri_ptr->parent = new_node;
 							_tri_ptr->left = new_node;
 							_tri_ptr->right = new_node;
-							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
+							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
 						else if (findNode(node_to_add) == NULL)
 						{
 							node_ptr tmp;
-							while (current != NULL)
+							while (current != NULL && current != _begin)
 							{
 								tmp = current;
 								if (_comp(node_to_add.first, current->value.first))
@@ -401,19 +408,19 @@ namespace ft
 								_tri_ptr->right = new_node;
 
 							fix_RBTree(new_node);
-							return (ft::make_pair(iterator(new_node, _tri_ptr, _exts), true));
+							return (ft::make_pair(iterator(new_node, _tri_ptr), true));
 						}
 						else
 						{
 							_node_alloc.deallocate(new_node, 1);
-							return (ft::make_pair(iterator(findNode(node_to_add), _tri_ptr, _exts), false));
+							return (ft::make_pair(iterator(findNode(node_to_add), _tri_ptr), false));
 						}
 					}
 
 				void deleteBinaryTree(node_ptr root)
 					{
 						// Base case: empty tree
-						if (root == NULL || root == _exts->right || root == _exts->left)
+						if (root == NULL || root == _begin)
 							return ;
 					
 						// delete left and right subtree first (Postorder)
@@ -437,6 +444,7 @@ namespace ft
 					{
 						node_ptr tmp;
 						node_ptr tmp2;
+						node_ptr tmp3;
 						size_type tmp_size;
 						Compare tmp_comp;
 						
@@ -444,9 +452,13 @@ namespace ft
 						this->_tri_ptr = x._tri_ptr;
 						x._tri_ptr = tmp;
 
-						tmp2 = this->_exts;
-						this->_exts = x._exts;
-						x._exts = tmp2;
+						tmp2 = this->_begin;
+						this->_begin = x._begin;
+						x._begin = tmp2;
+
+						tmp3 = this->_end;
+						this->_end = x._end;
+						x._end = tmp3;
 
 						tmp_size = this->_map_size;
 						this->_map_size = x._map_size;
@@ -457,15 +469,15 @@ namespace ft
 						x._comp = tmp_comp;
 					}
 
-				void visitNode(node_ptr node)
+				void visitNode(node_ptr node, node_ptr x_begin)
 					{
 						this->insertPair(node->value);
 						
-						if(node->left != NULL)
-							visitNode(node->left);
+						if(node->left != NULL && node->left != x_begin)
+							visitNode(node->left, x_begin);
 							
 						if(node->right != NULL)
-							visitNode(node->right);
+							visitNode(node->right, x_begin);
 							
 						if(node->left == NULL && node->right == NULL)
 							return ;
@@ -474,7 +486,7 @@ namespace ft
 				void transfer_map(const self& x)
 					{
 						if (x._map_size)
-							visitNode(x._tri_ptr->parent);
+							visitNode(x._tri_ptr->parent, x._begin);
 					}
 
 				void fixDeletion(node_ptr ptr, node_ptr node)
@@ -649,9 +661,9 @@ namespace ft
 
 						if (this->_map_size == 0)
 						{
-							_tri_ptr->parent = _exts->right;
-							_tri_ptr->left = _exts->right;
-							_tri_ptr->right = _exts->right;
+							_tri_ptr->parent = NULL;
+							_tri_ptr->left = NULL;
+							_tri_ptr->right = NULL;
 						}
 						else
 						{

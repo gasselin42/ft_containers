@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 12:37:44 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:29:19 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ namespace ft
 			typedef typename	Alloc::const_pointer 							const_pointer;
 			typedef	typename	ft::BST<value_type, Compare>::iterator			iterator;
 			typedef	typename	ft::BST<value_type, Compare>::const_iterator	const_iterator;
-			typedef				ft::reverse_iterator<iterator, map<Key, T, Compare, Alloc> > 				reverse_iterator;
+			typedef				ft::reverse_iterator<iterator, map<Key, T, Compare, Alloc> > 		reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator, map<Key, T, Compare, Alloc> > 	const_reverse_iterator;
 			typedef				ptrdiff_t										difference_type;
 			typedef				size_t											size_type;
@@ -121,24 +121,32 @@ namespace ft
 					if (this == &x)
 						return (*this);
 					this->_bst.deleteBinaryTree(_bst._tri_ptr->parent);
-					this->_bst._tri_ptr->left = this->_bst._exts->right;
-					this->_bst._tri_ptr->right = this->_bst._exts->right;
-					this->_bst._tri_ptr->parent = this->_bst._exts->right;
+					this->_bst._tri_ptr->left = NULL;
+					this->_bst._tri_ptr->right = NULL;
+					this->_bst._tri_ptr->parent = NULL;
 					this->_bst.transfer_map(x._bst);
 					return (*this);
 				}
 
 			iterator begin()
-				{ return (iterator(_bst._tri_ptr->left, _bst._tri_ptr, _bst._exts)); }
+				{
+					if (empty())
+						return (this->end());
+					return (iterator(_bst._tri_ptr->left, _bst._tri_ptr));
+				}
 
 			const_iterator begin() const
-				{ return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr, _bst._exts)); }
+				{
+					if (empty())
+						return (this->end());
+					return (const_iterator(_bst._tri_ptr->left, _bst._tri_ptr));
+				}
 
 			iterator end()
-				{ return (iterator(_bst._exts->right, _bst._tri_ptr, _bst._exts)); }
+				{ return (iterator(_bst._end, _bst._tri_ptr)); }
 
 			const_iterator end() const
-				{ return (const_iterator(_bst._exts->right, _bst._tri_ptr, _bst._exts)); }
+				{ return (const_iterator(_bst._end, _bst._tri_ptr)); }
 
 			reverse_iterator rbegin()
 				{ return (reverse_iterator(this->end())); }
@@ -230,7 +238,7 @@ namespace ft
 					if (it == this->end())
 						return (0);
 					_bst.deleteNode(it);
-
+					std::cout << "Destructor\n";
 					return (1);
 				}
 

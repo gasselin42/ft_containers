@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/20 12:30:20 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:22:57 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,12 @@ namespace ft
 
 
 	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-		class iterator {
-			public:
-				typedef T         value_type;
-				typedef Distance  difference_type;
-				typedef Pointer   pointer;
-				typedef Reference reference;
-				typedef Category  iterator_category;
+		struct iterator {
+			typedef T         value_type;
+			typedef Distance  difference_type;
+			typedef Pointer   pointer;
+			typedef Reference reference;
+			typedef Category  iterator_category;
 		};
 
 	template <class Iterator>
@@ -375,7 +374,7 @@ namespace ft
 	// 			{ return (!(rhs.base() > lhs.base())); }
 
 	template <class Iter, class Container>
-		class reverse_iterator
+		class reverse_iterator : public ft::iterator<typename Iter::iterator_category, typename Iter::value_type>
 		{
 			public:
 				typedef 			Iter 											iterator_type;
