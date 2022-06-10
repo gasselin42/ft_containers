@@ -6,14 +6,13 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/07 16:08:20 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:22:54 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "bidir_iterator.hpp"
-// #include "iterators.hpp"
 #include "utils.hpp"
 #include <memory>
 #include <cstring>
@@ -92,7 +91,6 @@ namespace ft
 				node_ptr _tri_ptr;
 				node_ptr _begin;
 				node_ptr _end;
-				// node_ptr _exts;
 				node_alloc _node_alloc;
 				size_type _map_size;
 				Compare	_comp;
@@ -228,31 +226,6 @@ namespace ft
 
 					_tri_ptr->parent->color = BLACK;
 				}
-			// public:
-				// void print_tree(node_ptr node, std::string indent, bool last)
-				// {
-				// 	std::cout << indent;
-					
-				// 	if (last) {
-				// 		std::cout << "R----";
-				// 		indent += "   ";
-				// 	} else {
-				// 		std::cout << "L----";
-				// 		indent += "|  ";
-				// 	}
-
-				// 	std::cout << node->value.first << " ";
-				// 	std::cout << "(" << (node->color ? "BLACK)" : "RED)") << "\n";
-						
-				// 	if (node->left == NULL && node->right == NULL)
-				// 		return ;
-					
-				// 	if (node->left != NULL)
-				// 		print_tree(node->left, indent, false);
-
-				// 	if (node->right != NULL)
-				// 		print_tree(node->right, indent, true);
-				// }
 
 			public:
 				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
@@ -268,16 +241,6 @@ namespace ft
 						
 						_end = _node_alloc.allocate(1);
 						_node_alloc.construct(_end, Node());
-
-						// _exts->right = _node_alloc.allocate(1);
-						// _node_alloc.construct(_exts->right, Node());
-
-						// _exts->left = _node_alloc.allocate(1);
-						// _node_alloc.construct(_exts->left, Node());
-
-						// _tri_ptr->parent = _exts->right;
-						// _tri_ptr->left = _exts->right;
-						// _tri_ptr->right = _exts->right;
 					}
 				
 				~BST() 
@@ -294,10 +257,6 @@ namespace ft
 						_node_alloc.destroy(_end);
 						_node_alloc.deallocate(_end, 1);
 						_end = NULL;
-						
-						// _node_alloc.destroy(_exts);
-						// _node_alloc.deallocate(_exts, 1);
-						// _exts = NULL;
 					}
 
 				iterator findNode_it(const Key& key)
@@ -306,7 +265,7 @@ namespace ft
 
 						while (true)
 						{
-							if (current == NULL)
+							if (current == NULL || current == _begin)
 								break ;
 							if (_comp(key, current->value.first) == false &&
 								_comp(current->value.first, key) == false)
@@ -326,7 +285,7 @@ namespace ft
 
 						while (true)
 						{
-							if (current == NULL)
+							if (current == NULL || current == _begin)
 								break ;
 							if (_comp(key, current->value.first) == false &&
 								_comp(current->value.first, key) == false)
@@ -346,7 +305,7 @@ namespace ft
 
 						while (true)
 						{
-							if (current == NULL)
+							if (current == NULL || current == _begin)
 								break ;
 							if (_comp(node_to_find.first, current->value.first) == false &&
 								_comp(current->value.first, node_to_find.first) == false)
@@ -491,7 +450,7 @@ namespace ft
 
 				void fixDeletion(node_ptr ptr, node_ptr node)
 					{
-						if (ptr->parent == NULL)
+						if (ptr->parent == _end)
 							_tri_ptr->parent = node;
 						else if (ptr == ptr->parent->left)
 							ptr->parent->left = node;
@@ -593,7 +552,7 @@ namespace ft
 						_node_alloc.construct(child, Node());
 						child->color = BLACK;
 
-						if (ptr->left == NULL) {
+						if (ptr->left == NULL || ptr->left == _begin) {
 							if (ptr->right != NULL) {
 								x = ptr->right;
 								fixDeletion(ptr, ptr->right);
@@ -602,7 +561,7 @@ namespace ft
 								fixDeletion(ptr, child);
 							}
 						} else if (ptr->right == NULL) {
-							if (ptr->left != NULL) {
+							if (ptr->left != NULL && ptr->left != _begin) {
 								x = ptr->left;
 								fixDeletion(ptr, ptr->left);
 							}

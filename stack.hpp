@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:30:27 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/03 13:40:26 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/10 13:27:12 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define STACK_HPP
 
 #include <deque>
+#include "vector.hpp"
 
 namespace ft
 {
@@ -35,8 +36,9 @@ namespace ft
 		public:
 			explicit stack(const Container& cont = Container()) : c(cont) {}
 
-			stack(const stack& x)
-				{ *this = x; }
+			stack(const stack& x) : c(x.c)
+				{ if (x.size() > 0)
+					*this = x; }
 
 			~stack() {}
 

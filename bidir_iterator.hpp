@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/07 15:37:42 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:23:50 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 namespace ft
 {
 	template < class T, class Compare = ft::less<T> >
-		class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, typename T::value_type>
+		class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, typename T::value_type>
 		{
 			public:
 				typedef				ft::bidir_iterator<T, Compare>						Iterator;
@@ -28,6 +28,12 @@ namespace ft
 				typedef typename 	ft::iterator_traits<Iterator>::difference_type		difference_type;
 				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
 				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
+
+				// typedef typename T::value_type    value_type;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category iterator_category;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type   difference_type;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer   pointer;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference reference;
 
 				T*	_ptr;
 				T*	_tri_ptr;
@@ -125,13 +131,12 @@ namespace ft
 					}
 
 			public:
-
+				
 				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
 				bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
-				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
-				
+				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
 				bidir_iterator& operator=(const bidir_iterator& rhs)
-					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
+					{ _ptr = rhs.base(); _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~bidir_iterator() {}
 
 				reference operator*(void) const { return (_ptr->value); }
@@ -160,26 +165,19 @@ namespace ft
 				}
 
 				T* base() const { return (_ptr); }
+				// const T* base() const { return (_ptr); }
 		};
 
 		template < class T, class Compare>
 			bool operator==(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
-
-		// template < class T, class T2, class Compare>
-		// 	bool operator==(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (lhs.base() == rhs.base()); }
 			
 		template < class T, class Compare>
 			bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
 
-		// template < class T, class T2, class Compare>
-		// 	bool operator!=(const bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (!(lhs.base() == rhs.base())); }
-
 	template < class T, class Compare>
-		class const_bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, typename T::value_type>
+		class const_bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, typename T::value_type>
 		{
 			public:
 				typedef				ft::const_bidir_iterator<T, Compare>				Iterator;
@@ -189,12 +187,19 @@ namespace ft
 				typedef typename 	ft::iterator_traits<Iterator>::pointer				pointer;
 				typedef typename 	ft::iterator_traits<Iterator>::reference 			reference;
 
+				// typedef typename T::value_type    value_type;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category iterator_category;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::difference_type   difference_type;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer   pointer;
+				// typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference reference;
+
+
 				T*	_ptr;
 				T*	_tri_ptr;
 				Compare	_comp;
 
 			private:
-				T* find_max(T* ptr)
+				T* find_max(T* ptr) const
 					{
 						T* current;
 
@@ -204,7 +209,7 @@ namespace ft
 						return (current);
 					}
 
-				T* find_min(T* ptr)
+				T* find_min(T* ptr) const
 					{
 						T* current;
 
@@ -214,12 +219,9 @@ namespace ft
 						return (current);
 					}
 				
-				T* get_next_ptr()
+				T* get_next_ptr() const
 					{
 						T* current;
-
-						// if (_ptr == _exts->right)
-						// 	return (NULL);
 
 						if (_ptr == _tri_ptr->left->left)
 							return (_tri_ptr->left);
@@ -249,12 +251,9 @@ namespace ft
 						return (_ptr);
 					}
 
-				T* get_prev_ptr()
+				T* get_prev_ptr() const
 					{
 						T* current;
-						
-						// if (_ptr == _exts->left)
-						// 	return (NULL);
 
 						if (_ptr == _tri_ptr->parent->parent)
 							return (_tri_ptr->right);
@@ -287,10 +286,14 @@ namespace ft
 			public:
 				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
 				const_bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
-				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
-				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
+				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}				
+				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
+
+				// template <class _T>
+				// 	const_bidir_iterator(const bidir_iterator<typename enable_if<is_same<_T, T>::value, Compare>::type*, Compare>& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
+				
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs)
-					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
+					{ _ptr = rhs.base(); _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~const_bidir_iterator() {}
 
 				reference operator*(void) const { return (this->_ptr->value); }
@@ -319,53 +322,31 @@ namespace ft
 				}
 
 				T* base() const { return (_ptr); }
+				// const T* base() const { return (_ptr); }
 		};
 		
 		template < class T, class Compare>
 			bool operator==(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
-
-		// template < class T, class T2, class Compare>
-		// 	bool operator==(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (lhs.base() == rhs.base()); }
 			
 		template < class T, class Compare>
 			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
 
-		// template < class T, class T2, class Compare>
-		// 	bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (!(lhs.base() == rhs.base())); }
-
 		template < class T, class Compare>
 			bool operator==(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
-
-		// template < class T, class T2, class Compare>
-		// 	bool operator==(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (lhs.base() == rhs.base()); }
 			
 		template < class T, class Compare>
 			bool operator!=(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
 
-		// template < class T, class T2, class Compare>
-		// 	bool operator!=(const bidir_iterator<T, Compare>& rhs, const const_bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (!(lhs.base() == rhs.base())); }
-
 		template < class T, class Compare>
 			bool operator==(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (lhs.base() == rhs.base()); }
 
-		// template < class T, class T2, class Compare>
-		// 	bool operator==(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (lhs.base() == rhs.base()); }
-			
 		template < class T, class Compare>
 			bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T, Compare>& lhs)
 				{ return (!(lhs.base() == rhs.base())); }
 
-		// template < class T, class T2, class Compare>
-		// 	bool operator!=(const const_bidir_iterator<T, Compare>& rhs, const bidir_iterator<T2, Compare>& lhs)
-		// 		{ return (!(lhs.base() == rhs.base())); }
 }

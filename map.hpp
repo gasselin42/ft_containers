@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/07 16:29:19 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:24:28 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,6 @@ namespace ft
 					}
 
 		public:
-			void print_map() 
-				{
-					if (_bst._tri_ptr->parent != _bst._exts->right)
-						_bst.print_tree(_bst._tri_ptr->parent, "", true);
-				}
-		
 			map()
 				: 	_alloc(),
 					_comp(),
@@ -95,14 +89,11 @@ namespace ft
 			template <class InputIterator>
 				map(InputIterator first, InputIterator last,
 					const Compare& comp = Compare(),
-					const Alloc& alloc = Alloc(),
-					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+					const Alloc& alloc = Alloc())
 					: 	_alloc(alloc),
 						_comp(comp),
 						_bst()
 					{
-						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
-							throw (std::length_error("map::constructor"));
 						this->insert(first, last);
 					}
 			
@@ -187,7 +178,7 @@ namespace ft
 
 			const T& at(const Key& k) const
 				{
-					iterator map_it;
+					const_iterator map_it;
 
 					map_it = this->find(k);
 					if (map_it != this->end())
@@ -219,11 +210,8 @@ namespace ft
 				}
 			
 			template <class InputIterator>
-				void insert(InputIterator first, InputIterator last,
-						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+				void insert(InputIterator first, InputIterator last)
 					{
-						if (!(ft::is_iterator<typename ft::iterator_traits<InputIterator>::iterator_category>::value))
-							throw (std::length_error("map::insert"));
 						difference_type diff = get_diff(first, last);
 						while (diff--)
 							this->insert(*(first++));
@@ -238,7 +226,6 @@ namespace ft
 					if (it == this->end())
 						return (0);
 					_bst.deleteNode(it);
-					std::cout << "Destructor\n";
 					return (1);
 				}
 
