@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/10 16:23:50 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:31:27 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,9 @@ namespace ft
 				
 				bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
 				bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
-				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
+				bidir_iterator(const bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 				bidir_iterator& operator=(const bidir_iterator& rhs)
-					{ _ptr = rhs.base(); _tri_ptr = rhs._tri_ptr; return (*this); }
+					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~bidir_iterator() {}
 
 				reference operator*(void) const { return (_ptr->value); }
@@ -164,8 +164,8 @@ namespace ft
 					return (tmp);
 				}
 
-				T* base() const { return (_ptr); }
-				// const T* base() const { return (_ptr); }
+				T* base() { return (_ptr); }
+				const T* base() const { return (_ptr); }
 		};
 
 		template < class T, class Compare>
@@ -286,14 +286,14 @@ namespace ft
 			public:
 				const_bidir_iterator() : _ptr(NULL), _tri_ptr(NULL) {}
 				const_bidir_iterator(T* ptr, T* tri_ptr) : _ptr(ptr), _tri_ptr(tri_ptr) {}
-				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}				
-				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
+				const_bidir_iterator(const const_bidir_iterator& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}				
+				const_bidir_iterator(const bidir_iterator<T, Compare>& rhs) : _ptr(rhs._ptr), _tri_ptr(rhs._tri_ptr) {}
 
 				// template <class _T>
 				// 	const_bidir_iterator(const bidir_iterator<typename enable_if<is_same<_T, T>::value, Compare>::type*, Compare>& rhs) : _ptr(rhs.base()), _tri_ptr(rhs._tri_ptr) {}
 				
 				const_bidir_iterator& operator=(const const_bidir_iterator& rhs)
-					{ _ptr = rhs.base(); _tri_ptr = rhs._tri_ptr; return (*this); }
+					{ _ptr = rhs._ptr; _tri_ptr = rhs._tri_ptr; return (*this); }
 				virtual ~const_bidir_iterator() {}
 
 				reference operator*(void) const { return (this->_ptr->value); }
@@ -321,8 +321,8 @@ namespace ft
 					return (tmp);
 				}
 
-				T* base() const { return (_ptr); }
-				// const T* base() const { return (_ptr); }
+				T* base() { return (_ptr); }
+				const T* base() const { return (_ptr); }
 		};
 		
 		template < class T, class Compare>
