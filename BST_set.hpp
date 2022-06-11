@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BST.hpp                                            :+:      :+:    :+:   */
+/*   BST_set.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:55:30 by gasselin         ###   ########.fr       */
+/*   Created: 2022/06/11 15:44:31 by gasselin          #+#    #+#             */
+/*   Updated: 2022/06/11 18:18:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "bidir_iterator.hpp"
+#include "set_iterator.hpp"
 #include "BST_Node.hpp"
 #include "utils.hpp"
 #include <memory>
@@ -21,17 +21,16 @@
 namespace ft
 {	
 	template <class T, class Compare = ft::less<T>, class Node = ft::BST_Node<T>, class Node_Alloc = std::allocator<Node> >
-		class BST
+		class BST_set
 		{	
 			public:
-				typedef BST self;
+				typedef BST_set self;
 				typedef Node * node_ptr;
 				typedef Node_Alloc node_alloc;
 				typedef	size_t	size_type;
 				typedef T value_type;
-				typedef typename T::first_type Key;
-				typedef bidir_iterator<Node, T> iterator;
-				typedef const_bidir_iterator<Node, T> const_iterator;
+				typedef set_iterator<Node, T> iterator;
+				typedef const_set_iterator<Node, T> const_iterator;
 
 				node_ptr _tri_ptr;
 				node_ptr _begin;
@@ -177,7 +176,7 @@ namespace ft
 				}
 
 			public:
-				BST(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
+				BST_set(const node_alloc& alloc = node_alloc(), const Compare& comp = Compare())
 					: 	_node_alloc(alloc),
 						_map_size(0),
 						_comp(comp)
@@ -192,7 +191,7 @@ namespace ft
 						_node_alloc.construct(_end, Node());
 					}
 				
-				~BST() 
+				~BST_set() 
 					{
 						
 						_node_alloc.destroy(_tri_ptr);
@@ -208,7 +207,7 @@ namespace ft
 						_end = NULL;
 					}
 
-				iterator findNode_it(const Key& key)
+				iterator findNode_it(const T& key)
 					{
 						node_ptr current = _tri_ptr->parent;
 
@@ -216,19 +215,19 @@ namespace ft
 						{
 							if (current == NULL || current == _begin)
 								break ;
-							if (_comp(key, current->value.first) == false &&
-								_comp(current->value.first, key) == false)
+							if (_comp(key, current->value) == false &&
+								_comp(current->value, key) == false)
 								return (iterator(current, _tri_ptr));
-							if (_comp(key, current->value.first) == true)
+							if (_comp(key, current->value) == true)
 								current = current->left;
-							else if (_comp(current->value.first, key) == true)
+							else if (_comp(current->value, key) == true)
 								current = current->right;
 						}
 
 						return (iterator(_end, _tri_ptr));
 					}
 
-				const_iterator findNode_it_cst(const Key& key) const
+				const_iterator findNode_it_cst(const T& key) const
 					{
 						node_ptr current = _tri_ptr->parent;
 
@@ -236,12 +235,12 @@ namespace ft
 						{
 							if (current == NULL || current == _begin)
 								break ;
-							if (_comp(key, current->value.first) == false &&
-								_comp(current->value.first, key) == false)
+							if (_comp(key, current->value) == false &&
+								_comp(current->value, key) == false)
 								return (const_iterator(current, _tri_ptr));
-							if (_comp(key, current->value.first) == true)
+							if (_comp(key, current->value) == true)
 								current = current->left;
-							else if (_comp(current->value.first, key) == true)
+							else if (_comp(current->value, key) == true)
 								current = current->right;
 						}
 
@@ -256,12 +255,12 @@ namespace ft
 						{
 							if (current == NULL || current == _begin)
 								break ;
-							if (_comp(node_to_find.first, current->value.first) == false &&
-								_comp(current->value.first, node_to_find.first) == false)
+							if (_comp(node_to_find, current->value) == false &&
+								_comp(current->value, node_to_find) == false)
 								return (current);
-							if (_comp(node_to_find.first, current->value.first) == true)
+							if (_comp(node_to_find, current->value) == true)
 								current = current->left;
-							else if (_comp(current->value.first, node_to_find.first) == true)
+							else if (_comp(current->value, node_to_find) == true)
 								current = current->right;
 						}
 
@@ -291,7 +290,7 @@ namespace ft
 							while (current != NULL && current != _begin)
 							{
 								tmp = current;
-								if (_comp(node_to_add.first, current->value.first))
+								if (_comp(node_to_add, current->value))
 								{
 									current = current->left;
 									side = false;
@@ -310,9 +309,9 @@ namespace ft
 								tmp->right = new_node;
 							else
 								tmp->left = new_node;
-							if (_comp(node_to_add.first, _tri_ptr->left->value.first) == true)
+							if (_comp(node_to_add, _tri_ptr->left->value) == true)
 								_tri_ptr->left = new_node;
-							else if (_comp(node_to_add.first, _tri_ptr->right->value.first) == false)
+							else if (_comp(node_to_add, _tri_ptr->right->value) == false)
 								_tri_ptr->right = new_node;
 
 							fix_RBTree(new_node);

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/10 16:22:01 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/11 17:55:40 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 namespace ft
 {
-	// enum Color {RED, BLACK};
 
 	template <bool B, class T = void> struct enable_if {};
 	template <class T> struct enable_if<true, T> { typedef T _type; };
