@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:37:32 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:44:43 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ namespace ft
 						} 
 						else 
 						{
+							if (new_size > capacity())
+								reserve(new_size);
 							ForwardIterator it = first;
 							std::advance(it, size());
 							std::copy(first, it, begin());
@@ -116,8 +118,6 @@ namespace ft
 								this->reserve(std::max(size() + diff_insert, capacity() * 2));
 								position = begin() + diff;
 							}
-							
-							// _cont_size += diff_insert;
 
 							while (first != last)
 							{
@@ -133,7 +133,7 @@ namespace ft
 						difference_type _n = std::distance(first, last);
 						difference_type _dist = std::distance(position.base(), _cont_end);
 						if (size() + _n > capacity())
-							reserve(capacity() + _n);
+							reserve(((this->_cont_capacity == 0) ? _n : std::max(capacity() * 2, size() + _n)));
 
 						pointer _ptr = _cont_end - _dist;
 						pointer _old_end = _cont_end;
@@ -230,6 +230,7 @@ namespace ft
 				{
 					if (*this == x || x.size() == 0)
 						return (*this);
+					this->reserve(x.size());
 					this->assign(x.begin(), x.end());
 					return (*this);
 				}
@@ -357,12 +358,10 @@ namespace ft
 			
 			void assign(size_type n, const T& val)
 				{
+					if (n > capacity())
+						reserve(n);
 					this->clear();
-					if (_cont_start != NULL)
-						_alloc.deallocate(_cont_start, capacity());
-					_cont_start = _alloc.allocate(n);
 					_cont_end = _cont_start;
-					_cont_capacity = n;
 					_cont_size = n;
 					for (size_type i = 0; i != n; i++)
 					{

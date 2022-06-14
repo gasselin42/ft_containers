@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:55:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:15:12 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,7 @@ namespace ft
 						_end = NULL;
 					}
 
+				template < typename Key >
 				iterator findNode_it(const Key& key)
 					{
 						node_ptr current = _tri_ptr->parent;
@@ -228,7 +229,8 @@ namespace ft
 						return (iterator(_end, _tri_ptr));
 					}
 
-				const_iterator findNode_it_cst(const Key& key) const
+				template < typename Key >
+				const_iterator findNode_it(const Key& key) const
 					{
 						node_ptr current = _tri_ptr->parent;
 

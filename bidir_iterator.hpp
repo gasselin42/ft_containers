@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:16:38 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:59:42 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:15:14 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 namespace ft
 {
 	template < class T, class V >
+		class const_bidir_iterator;
+
+	template < class T, class V >
 		class bidir_iterator
 		{
 			public:
@@ -26,6 +29,8 @@ namespace ft
 				typedef 			ptrdiff_t							difference_type;
 				typedef 			value_type*							pointer;
 				typedef				value_type&							reference;
+				typedef 			bidir_iterator<T, V>				iterator;
+				typedef 			const_bidir_iterator<T, V>			const_iterator;
 
 				T*	_ptr;
 				T*	_tri_ptr;
@@ -150,6 +155,8 @@ namespace ft
 				typedef 			ptrdiff_t							difference_type;
 				typedef const		value_type*							pointer;
 				typedef const		value_type&							reference;
+				typedef 			bidir_iterator<T, V>				iterator;
+				typedef 			const_bidir_iterator<T, V>			const_iterator;
 
 				T*	_ptr;
 				T*	_tri_ptr;

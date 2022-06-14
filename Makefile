@@ -6,7 +6,7 @@
 #    By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/17 10:06:20 by gasselin          #+#    #+#              #
-#    Updated: 2022/05/17 10:08:36 by gasselin         ###   ########.fr        #
+#    Updated: 2022/06/13 13:24:33 by gasselin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJ_DIR		= objs
 OBJS_PATH	= $(addprefix $(OBJ_DIR)/, $(OBJS))
 
 CC			= c++
-CFLAGS		= -Wall -Wextra -Werror -std=c++98
+CFLAGS		= -Wall -Wextra -Werror -std=c++98 -g
 
 $(NAME): $(OBJ_DIR) $(OBJS_PATH)
 	$(CC) $(OBJS_PATH) -o $(NAME)

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:36:27 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:15:47 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ namespace ft
 				{ return (_bst.findNode_it(k)); }
 
 			const_iterator find(const Key& k) const
-				{ return (_bst.findNode_it_cst(k)); }
+				{ return (_bst.findNode_it(k)); }
 
 			size_type count(const Key& k) const
 				{ return ((this->find(k) == this->end()) ? 0 : 1); }
