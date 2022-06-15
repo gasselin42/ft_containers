@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/14 17:10:24 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:59:25 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 #include <iostream>
 #include <exception>
 #include <cstring>
-
-#define BRED	"\033[1;31m"
-#define BGRN	"\033[1;32m"
-#define BLUE	"\033[1;34m"
-#define NC		"\033[0m"
-
-#define KO		"\033[1;31mKO\033[0m"
-#define PASSED	"\033[1;32mPASSED!\033[0m"
 
 #define T1 int
 
@@ -87,9 +79,9 @@ void reverse_iterate_vector(NAMESPACE::vector<T>& vec)
 }
 
 template <class T>
-void iterate_vector(const NAMESPACE::vector<T>& vec)
+void iterate_vector(NAMESPACE::vector<T>& vec)
 {
-	typename NAMESPACE::vector<T>::const_iterator it;
+	typename NAMESPACE::vector<T>::iterator it;
 
 	it = vec.begin();
 
@@ -105,9 +97,9 @@ void iterate_vector(const NAMESPACE::vector<T>& vec)
 }
 
 template <class T>
-void iterate_vector(NAMESPACE::vector<T>& vec)
+void iterate_vector(const NAMESPACE::vector<T>& vec)
 {
-	typename NAMESPACE::vector<T>::iterator it;
+	typename NAMESPACE::vector<T>::const_iterator it;
 
 	it = vec.begin();
 
@@ -255,16 +247,14 @@ int main(void)
 	{
 		NAMESPACE::vector<T1> vec;
 
-		if (vec.begin() == vec.end())
-			std::cout << "Begin == End\n";
-		else
-			std::cout << "Begin != End\n";
+		if (vec.begin() != vec.end())
+			std::cout << "KO\n";
 
 		fill_vector(vec);
 
 		NAMESPACE::vector<T1>::iterator it = vec.begin();
 
-		std::cout << "Begin = \n" << *it << "\n";
+		std::cout << "Begin = " << *it << "\n";
 
 		iterate_vector(vec);
 	}
@@ -275,10 +265,8 @@ int main(void)
 	{
 		const NAMESPACE::vector<T1> vec_empty;
 
-		if (vec_empty.begin() == vec_empty.end())
-			std::cout << "Begin == End\n";
-		else
-			std::cout << "Begin != End\n";
+		if (vec_empty.begin() != vec_empty.end())
+			std::cout << "KO\n";
 		
 		NAMESPACE::vector<T1> vec;
 
@@ -288,7 +276,7 @@ int main(void)
 
 		NAMESPACE::vector<T1>::const_iterator it = vec_begin.begin();
 
-		std::cout << "Begin = \n" << *it << "\n";
+		std::cout << "Begin = " << *it << "\n";
 
 		iterate_vector(vec_begin);
 	}
@@ -331,16 +319,14 @@ int main(void)
 	{
 		NAMESPACE::vector<T1> vec;
 
-		if (vec.rbegin() == vec.rend())
-			std::cout << "Rbegin == Rend\n";
-		else
-			std::cout << "Rbegin != Rend\n";
+		if (vec.rbegin() != vec.rend())
+			std::cout << "KO\n";
 
 		fill_vector(vec);
 
 		NAMESPACE::vector<T1>::reverse_iterator it = vec.rbegin();
 
-		std::cout << "Begin = " << *it << "\n";
+		std::cout << "Rbegin = " << *it << "\n";
 
 		reverse_iterate_vector(vec);
 	}
@@ -351,10 +337,8 @@ int main(void)
 	{
 		const NAMESPACE::vector<T1> vec_empty;
 
-		if (vec_empty.rbegin() == vec_empty.rend())
-			std::cout << "Rbegin == Rend\n";
-		else
-			std::cout << "Rbegin != Rend\n";
+		if (vec_empty.rbegin() != vec_empty.rend())
+			std::cout << "KO\n";
 
 		NAMESPACE::vector<T1> vec;
 
@@ -364,7 +348,7 @@ int main(void)
 
 		NAMESPACE::vector<T1>::const_reverse_iterator it = vec_rbegin.rbegin();
 
-		std::cout << "Begin = " << *it << "\n";
+		std::cout << "Rbegin = " << *it << "\n";
 
 		reverse_iterate_vector(vec_rbegin);
 	}
@@ -396,8 +380,8 @@ int main(void)
 
 		NAMESPACE::vector<T1>::const_reverse_iterator it = vec_rend.rend();
 
-		for (size_t i = 0; it != vec_rend.rbegin(); i++)
-			std::cout << "[" << i << "] = " << *(--it) << "; ";
+		for (size_t i = 0; it != vec_rend.rbegin(); it--, i++)
+			std::cout << "[" << i << "] = " << *(it) << "; ";
 		std::cout << "\n";
 	}
 

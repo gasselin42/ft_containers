@@ -6,1066 +6,813 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/05/17 11:25:04 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/15 13:23:02 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "map.hpp"
+#include "../map.hpp"
 
 #include <map>
 #include <utility>
 #include <iostream>
 #include <exception>
 
-#define BRED	"\033[1;31m"
-#define BGRN	"\033[1;32m"
-#define BLUE	"\033[1;34m"
-#define NC		"\033[0m"
+#define T1 int
+#define T2 std::string
 
-#define KO		"\033[1;31mKO\033[0m"
-#define PASSED	"\033[1;32mPASSED!\033[0m"
+#ifndef NAMESPACE
+#define NAMESPACE ft
+#endif
 
-static class myexception: public std::exception
+std::string s_string[100] = {                                                                   \
+        "QExoqp0nICr0sXsHqty2", "naax9QcpJhvaL7DezsNQ", "25ZTtB6wbptfbxM8AvHB",                    \
+        "tShYNtc0MkdjqLrOatgz", "7Z3kf1Qec0NnsLSEpbOt", "WhkSNrKJC966fvjZ2Or1",                    \
+        "8vlxlFRRgW7yYj4GO7dt", "5sq1aoT8zP0HaHj3nFOK", "61Dv31GYZhkgjKCErpng",                    \
+        "l0IIcWWHhOcPzoxEamQM", "bE1RYclskwXlhCm46YFs", "kXeoi5qz94JYPqSDTs79",                    \
+        "TFsQP1dz8VVos9KzUpY0", "b3wYQR7An193gjgYuRj3", "xSmyNsnSJ47jLqrvbpyr",                    \
+        "guAIP2Wq43Gf8VhHsyu5", "yT6c2loPebHovnq9BQog", "3qvU1xcVm2g1DKFDlqh4",                    \
+        "L0q8RR9P41VD4sVjdnWl", "YdjESsIZM4b1oGQPjpBe", "l1ZVQbWKw7brHUSimJgq",                    \
+        "xdn0cf4vqRzpfXWtl10G", "lYnZvpqaV0s8DowMZwzV", "8P1cyKrwJNLoJyvLjYqO",                    \
+        "4MhOXNbAX23CEijO5cRT", "tHe3miAwCOVQbuoLaEP2", "l6uNLsc8fiLl3eWoG6j6",                    \
+        "477xt6l0lph9ALQdr4HX", "D9UJNe4s8YF02LhrwOdl", "dLCisBNOdE8yugntu6cj",                    \
+        "uvg6KqtcgduR31n3ajsv", "wbiAcjgojb9JOagZwyMn", "ATZKCzaPOqgkhPjwuGlf",                    \
+        "MOhaJs56yjOw8f6nLPRA", "0gyB2Tr42v6awMw2nK7J", "e6GsiLFUuoDpVFEhJKZ1",                    \
+        "z0jXAhiV9keBsaLOY0Xf", "P68p2ZAosHJdmoZh1C7N", "Pu3EuZVeY0TCO3ojdK0t",                    \
+        "z7jCHMooHCS73M8GygKB", "uT4KoK83JrZxZjkul7ty", "g8gfrZoY5XwfzRusvHvv",                    \
+        "7PGmkM0OSRnYREt9mFIP", "q1od7mBIpPEsCtpF9kdw", "XQo0LWId5TdZnLnpUNOb",                    \
+        "U0m1R0kFFhAFyS6hmHHw", "K0lPKfxJxIOnE8QB90xn", "cZ5xyQifMJhrKxqBK9A7",                    \
+        "cFBiwjfYw7Js6qEGy5Kt", "1tW0KWfXxeFO69tByqcE", "3Fvq9NxBrhPXHe0IlIVx",                    \
+        "MSRDjdFRvHAhFGhiMtDe", "zGm2joMh71jQkYzg5L4V", "Mq4RRaeLvSAO0z2ibp8Q",                    \
+        "WnLFYnQKP8TNJkqVVbUg", "E98UphbbVSzrW5Mzurmg", "F8HRxeEcaTZDkFPkioij",                    \
+        "jmUVl4Q8X5BwVNzXN219", "n7Xp4w4FwzGKit7AI4SO", "4MxXYr6rKOcXLt9UkVd2",                    \
+        "4RVTDsADtRyboaai9d29", "XaSqsrrtdhAfFoJIc5KK", "9Z9jdVCrTT09bg348ceb",                    \
+        "I6uqLG9dO5mfNdSMwOYm", "UwMTzJPlbnhgwbHpDi6w", "DebjMP9afncYE6GhhO00",                    \
+        "YGPuscYDiGfAjY1UWST0", "K6gbvgGjVZgEFUDlkdSk", "8xCBPI0w6TpC0RA62c2W",                    \
+        "fYMxkNwmKg3moP8KvD9v", "QpPdhwhEYjIugg3OPcPH", "qQBXjSn43I3EMP54SyxZ",                    \
+        "7qvdKwoW1CQEZTWPvuSC", "rCT212rdYO0zTGHXesKg", "dBHvlHsBwcR9MkkenYYG",                    \
+        "NQiSlergqR8fVbOeivLj", "xYVqsV147UIe7jVBVwXo", "tcxayO4DdEJ885TbqUMy",                    \
+        "9TGSMTD8U8ksRpHqq0cL", "TIJ16jCv9BSUiWvhbF9T", "BM9GL2ig1hePkA6lM6Ck",                    \
+        "TfJTYB9JQMU6CGcYg20Q", "Fg6e5YT2FQbpTZNTDqdo", "LI5q6ml40MeE9H1dPb93",                    \
+        "OaxJUSm3nYN9Y8Ela7sS", "BgBeODAwXz7xJo50Rwqd", "xdkgKj1dEoJ6zuVhkvvo",                    \
+        "olIewtUEvXJgs1lB9bCn", "dTsPDS0x2uXtcgOIJHb8", "DYvJ2phLppGNZKboTBrd",                    \
+        "DjNFMtt9PxkzqvWBHI6j", "1Z3YkeTFlPniKnzFhzgu", "76XqQg6hqMf5IXxKPOEs",                    \
+        "gzaapTWW7i9EZjjzLeK6", "YvY4aQFHgAuagn4dFLO1", "eGR6Dtv7LW75qlV5Fkik",                    \
+        "oiahfuhiowIEQTHGUIOO", "oOIFoinfniAIOhhinIo9", "038egfjnfpIOPejh9o0n",                    \
+        "uoh89fUBkOfoiabjk22l"                                                                     \
+    };
+
+template < class Key, class T >
+void fill_map(NAMESPACE::map<Key, T>& m)
 {
-  virtual const char* what() const throw()
-  {
-    return "\033[1;31mKO\033[0m";
-  }
-} ko;
-
-void fill_ft_map(ft::map<int, std::string>& myMap)
-{
-	myMap.insert(ft::make_pair<int, std::string>(44, "root"));
-
-	myMap.insert(ft::make_pair<int, std::string>(17, "left"));
-	myMap.insert(ft::make_pair<int, std::string>(28, "left"));
-	myMap.insert(ft::make_pair<int, std::string>(29, "left"));
-
-	myMap.insert(ft::make_pair<int, std::string>(88, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(97, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(65, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(54, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(82, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(76, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(80, "right"));
-	myMap.insert(ft::make_pair<int, std::string>(78, "right"));
+	for (int i = 0; i < 100; i++)
+		m.insert(NAMESPACE::make_pair<Key, T>(i, s_string[i]));
 }
 
-void fill_std_map(std::map<int, std::string>& myMap)
+template < class Key, class T >
+void test_deep_copy(NAMESPACE::map<Key, T>& m)
 {
-	myMap.insert(std::make_pair<int, std::string>(44, "root"));
-
-	myMap.insert(std::make_pair<int, std::string>(17, "left"));
-	myMap.insert(std::make_pair<int, std::string>(28, "left"));
-	myMap.insert(std::make_pair<int, std::string>(29, "left"));
-
-	myMap.insert(std::make_pair<int, std::string>(88, "right"));
-	myMap.insert(std::make_pair<int, std::string>(97, "right"));
-	myMap.insert(std::make_pair<int, std::string>(65, "right"));
-	myMap.insert(std::make_pair<int, std::string>(54, "right"));
-	myMap.insert(std::make_pair<int, std::string>(82, "right"));
-	myMap.insert(std::make_pair<int, std::string>(76, "right"));
-	myMap.insert(std::make_pair<int, std::string>(80, "right"));
-	myMap.insert(std::make_pair<int, std::string>(78, "right"));
+	(*(m.find(29))).second = "BST";
+	(*(m.find(44))).second = "BST";
+	(*(m.find(54))).second = "BST";
+	(*(m.find(65))).second = "BST";
+	(*(m.find(97))).second = "BST";
 }
 
-void test_deep_copy_ft(ft::map<int, std::string>& myMap)
+template <class Key, class T>
+void iterate_maps(NAMESPACE::map<Key, T>& m)
 {
-	(*(myMap.find(29))).second = "unleft";
-	(*(myMap.find(44))).second = "unroot";
-	(*(myMap.find(54))).second = "unright";
-	(*(myMap.find(65))).second = "unright";
-	(*(myMap.find(97))).second = "unright";
-}
+	typename NAMESPACE::map<Key, T>::iterator it;
 
-void test_deep_copy_stl(std::map<int, std::string>& myMap)
-{
-	(*(myMap.find(29))).second = "unleft";
-	(*(myMap.find(44))).second = "unroot";
-	(*(myMap.find(54))).second = "unright";
-	(*(myMap.find(65))).second = "unright";
-	(*(myMap.find(97))).second = "unright";
-}
+	it = m.begin();
 
-template <class Ta, class Tb>
-bool iterate_maps(std::map<Ta, Tb>& stl_map, ft::map<Ta, Tb>& ft_map)
-{
-	typename std::map<Ta, Tb>::iterator stl_it;
-	typename ft::map<Ta, Tb>::iterator ft_it;
-
-	stl_it = stl_map.begin();
-	ft_it = ft_map.begin();
-
-	while (stl_it != stl_map.end())
+	if (it != m.end())
 	{
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			return (false);
-		stl_it++;
-		ft_it++;
+		std::cout << "Iteration : ";
+		for (; it != m.end(); it++)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
 	}
-	if (ft_it != ft_map.end())
-		return (false);
-	return (true);
+	else
+		std::cout << "Empty map";
+	std::cout << "\n";
 }
 
-template <class Ta, class Tb>
-bool compare_maps(std::map<Ta, Tb>& stl_map, ft::map<Ta, Tb>& ft_map)
+template <class Key, class T>
+void iterate_maps(const NAMESPACE::map<Key, T>& m)
 {
-	if ((stl_map.empty() != ft_map.empty()) ||
-		(stl_map.size() != ft_map.size()) ||
-		(stl_map.max_size() != ft_map.max_size()))
-		return (false);
+	typename NAMESPACE::map<Key, T>::const_iterator it;
 
-	return (true);
+	it = m.begin();
+
+	if (it != m.end())
+	{
+		std::cout << "Iteration : ";
+		for (; it != m.end(); it++)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+	}
+	else
+		std::cout << "Empty map";
+	std::cout << "\n";
 }
 
-template <class Ta, class Tb>
-bool test_empty_map_iterators(ft::map<Ta, Tb>& ft_map)
+template <class Key, class T>
+void reverse_iterate_maps(NAMESPACE::map<Key, T>& m)
 {
-	typename ft::map<Ta, Tb>::iterator ft_it1;
-	typename ft::map<Ta, Tb>::iterator ft_it2;
+	typename NAMESPACE::map<Key, T>::reverse_iterator it;
 
-	ft_it1 = ft_map.begin();
-	ft_it2 = ft_map.end();
+	it = m.rbegin();
 
-	if (&(*ft_it1) != &(*ft_it2))
-		return (false);	
+	if (it != m.rend())
+	{
+		std::cout << "Iteration : ";
+		for (; it != m.rend(); it++)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+	}
+	else
+		std::cout << "Empty map";
+	std::cout << "\n";
+}
 
-	return (true);
+template <class Key, class T>
+void reverse_iterate_maps(const NAMESPACE::map<Key, T>& m)
+{
+	typename NAMESPACE::map<Key, T>::const_reverse_iterator it;
+
+	it = m.rbegin();
+
+	if (it != m.rend())
+	{
+		std::cout << "Iteration : ";
+		for (; it != m.rend(); it++)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+	}
+	else
+		std::cout << "Empty map";
+	std::cout << "\n";
+}
+
+template <class Key, class T>
+void compare_maps(NAMESPACE::map<Key, T>& m)
+{
+	std::cout << "Size : " << m.size() << " ";
+	std::cout << "Max size : " << m.max_size() << "\n";
+}
+
+template <class Key, class T>
+void compare_maps(const NAMESPACE::map<Key, T>& m)
+{
+	std::cout << "Size : " << m.size() << " ";
+	std::cout << "Max size : " << m.max_size() << "\n";
 }
 
 void map_tests(void)
 {
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|      CONSTRUCTORS     |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|      CONSTRUCTORS     |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Constructor - Default " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Constructor - Default \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
+	std::cout << "\n";
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "Constructor - Compare \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
+		compare_maps(m);
+		iterate_maps(m);
 
+		NAMESPACE::map<T1, T2> m2(m.key_comp());
 
-	std::cout << BLUE << "Constructor - Compare " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		compare_maps(m2);
+		iterate_maps(m2);
+	}
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
+	std::cout << "\n";
 
-		std::map<int, std::string> stl_map2(stl_map.key_comp());
-		ft::map<int, std::string> ft_map2(ft_map.key_comp());
+	std::cout << "Constructor - Range \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		if (!compare_maps(stl_map2, ft_map2) || !test_empty_map_iterators(ft_map2))
-			throw ko;
+		fill_map(m);
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
 
+		NAMESPACE::map<T1, T2> m_range(m.begin(), m.end());
 
+		compare_maps(m_range);
+		iterate_maps(m_range);
+	}
 
-	std::cout << BLUE << "Constructor - Range " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "\n";
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+	std::cout << "Constructor - Copy \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		fill_map(m);
 
-		std::map<int, std::string> stl_map_range(stl_map.begin(), stl_map.end());
-		ft::map<int, std::string> ft_map_range(ft_map.begin(), ft_map.end());
+		NAMESPACE::map<T1, T2> m_cpy(m);
 
-		if (!compare_maps(stl_map_range, ft_map_range) || !iterate_maps(stl_map_range, ft_map_range))
-			throw ko;
+		compare_maps(m_cpy);
+		iterate_maps(m_cpy);
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		test_deep_copy(m);
 
+		compare_maps(m);
+		iterate_maps(m);
 
+		compare_maps(m_cpy);
+		iterate_maps(m_cpy);
+	}
 
-	std::cout << BLUE << "Constructor - Copy " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "\n";
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+	std::cout << "Operator = \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
-
-		std::map<int, std::string> stl_map_cpy(stl_map);
-		ft::map<int, std::string> ft_map_cpy(ft_map);
-
-		if (!compare_maps(stl_map_cpy, ft_map_cpy) || !iterate_maps(stl_map_cpy, ft_map_cpy))
-			throw ko;
-
-		test_deep_copy_stl(stl_map);
-		test_deep_copy_ft(ft_map);
-
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
-
-		if (!compare_maps(stl_map_cpy, ft_map_cpy) || !iterate_maps(stl_map_cpy, ft_map_cpy))
-			throw ko;
+		fill_map(m);
 		
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		NAMESPACE::map<T1, T2> m_op = m;
 
+		compare_maps(m_op);
+		iterate_maps(m_op);
 
-
-	std::cout << BLUE << "Operator = " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
-
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
-
-		std::map<int, std::string> stl_map_assign = stl_map;
-		ft::map<int, std::string> ft_map_assign = ft_map;
-
-		if (!compare_maps(stl_map_assign, ft_map_assign) || !iterate_maps(stl_map_assign, ft_map_assign))
-			throw ko;
-
-		test_deep_copy_stl(stl_map);
-		test_deep_copy_ft(ft_map);
-
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
-
-		if (!compare_maps(stl_map_assign, ft_map_assign) || !iterate_maps(stl_map_assign, ft_map_assign))
-			throw ko;
+		test_deep_copy(m);
 		
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
+
+		compare_maps(m_op);
+		iterate_maps(m_op);
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|       ITERATORS       |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|       ITERATORS       |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Begin " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Begin \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		if (ft_map.begin() != ft_map.end())
-			throw ko;
+		if (m.begin() != m.end())
+			std::cout << "KO\n";
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::map<int, std::string>::iterator stl_it = stl_map.begin();
-		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
+		NAMESPACE::map<T1, T2>::iterator it = m.begin();
 
-		while (stl_it != stl_map.end())
-		{
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-			stl_it++;
-			ft_it++;
-		}
+		std::cout << "Begin = [" << (*it).first << "," << (*it).second << "]\n";
+
+		iterate_maps(m);
+	}
+
+	std::cout << "\n";
+
+	std::cout << "Begin - Const \n";
+	{
+		const NAMESPACE::map<T1, T2> m_empty;
 		
-		if (ft_it != ft_map.end())
-			throw ko;
+		if (m_empty.begin() != m_empty.end())
+			std::cout << "KO\n";
+			
+		NAMESPACE::map<T1, T2> m;
 
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		fill_map(m);
 
+		const NAMESPACE::map<T1, T2> m_begin(m);
 
+		NAMESPACE::map<T1, T2>::const_iterator it = m_begin.begin();
 
-	std::cout << BLUE << "Begin - Const " << NC;
-	try {
-		const ft::map<int, std::string> ft_map_empty;
+		std::cout << "Begin = [" << (*it).first << "," << (*it).second << "]\n";
+
+		iterate_maps(m_begin);
+	}
+
+	std::cout << "\n";
+
+	std::cout << "End \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::iterator it = m.end();
+
+		--it;
+		for (; it != m.begin(); it--)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+		std::cout << "\n";
+	}
+
+	std::cout << "\n";
+
+	std::cout << "End - Const \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		const NAMESPACE::map<T1, T2> m_end(m);
+
+		NAMESPACE::map<T1, T2>::const_iterator it = m_end.end();
+
+		--it;
+		for (; it != m_end.begin(); it--)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+		std::cout << "\n";
+	}
+
+	std::cout << "\n";
+
+	std::cout << "Rbegin \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		if (m.rbegin() != m.rend())
+			std::cout << "KO\n";
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::reverse_iterator it = m.rbegin();
+
+		std::cout << "Rbegin = [" << (*it).first << "," << (*it).second << "]\n";
+
+		reverse_iterate_maps(m);
+	}
+
+	std::cout << "\n";
 		
-		if (ft_map_empty.begin() != ft_map_empty.end())
-			throw ko;
-			
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
-
-		const std::map<int, std::string> stl_map_begin(stl_map);
-		const ft::map<int, std::string> ft_map_begin(ft_map);
-
-		std::map<int, std::string>::const_iterator stl_it = stl_map_begin.begin();
-		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin.begin();
-
-		while (stl_it != stl_map_begin.end())
-		{
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-			stl_it++;
-			ft_it++;
-		}
-		if (ft_it != ft_map_begin.end())
-			throw ko;
-
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
-
-	std::cout << BLUE << "End " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
-
-		std::map<int, std::string>::iterator stl_it = stl_map.end();
-		ft::map<int, std::string>::iterator ft_it = ft_map.end();
-
-		while (stl_it != stl_map.begin())
-		{
-			--stl_it;
-			--ft_it;
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-		}
-			
-		if (ft_it != ft_map.begin())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
-
-	std::cout << BLUE << "End - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
-
-		const std::map<int, std::string> stl_map_end(stl_map);
-		const ft::map<int, std::string> ft_map_end(ft_map);
-
-		std::map<int, std::string>::const_iterator stl_it = stl_map_end.end();
-		ft::map<int, std::string>::const_iterator ft_it = ft_map_end.end();
-
-		while (stl_it != stl_map_end.begin())
-		{
-			--stl_it;
-			--ft_it;
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-		}
-
-		if (ft_it != ft_map_end.begin())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
-
-	std::cout << BLUE << "Rbegin " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-
-		if (ft_map.rbegin() != ft_map.rend())
-			throw ko;
-
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
-
-		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rbegin();
-		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rbegin();
-
-		while (stl_it != stl_map.rend())
-		{
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-			stl_it++;
-			ft_it++;
-		}
-
-		if (ft_it != ft_map.rend())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
+	std::cout << "Rbegin - Const \n";
+	{
+		const NAMESPACE::map<T1, T2> m_empty;
 		
-	std::cout << BLUE << "Rbegin - Const " << NC;
-	try {
-		const ft::map<int, std::string> ft_map_empty;
-		
-		if (ft_map_empty.rbegin() != ft_map_empty.rend())
-			throw ko;
+		if (m_empty.rbegin() != m_empty.rend())
+			std::cout << "KO\n";
 			
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		const std::map<int, std::string> stl_map_rbegin(stl_map);
-		const ft::map<int, std::string> ft_map_rbegin(ft_map);
+		const NAMESPACE::map<T1, T2> m_rbegin(m);
 
-		std::map<int, std::string>::const_reverse_iterator stl_it = stl_map_rbegin.rbegin();
-		ft::map<int, std::string>::const_reverse_iterator ft_it = ft_map_rbegin.rbegin();
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it = m_rbegin.rbegin();
 
-		while (stl_it != stl_map_rbegin.rend())
-		{
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-			stl_it++;
-			ft_it++;
-		}
-		
-		if (ft_it != ft_map_rbegin.rend())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		std::cout << "Rbegin = [" << (*it).first << "," << (*it).second << "]\n";
 
+		reverse_iterate_maps(m_rbegin);
+	}
 
+	std::cout << "\n";
 
-	std::cout << BLUE << "Rend " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Rend \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rend();
-		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rend();
+		NAMESPACE::map<T1, T2>::reverse_iterator it = m.rend();
 
-		while (stl_it != stl_map.rbegin())
-		{
-			--stl_it;
-			--ft_it;
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-		}
+		it--;
+		for (; it != m.rbegin(); it--)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+		std::cout << "\n";
+	}
 
-		if (ft_it != ft_map.rbegin())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
+	std::cout << "Rend - Const \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
+		fill_map(m);
 
-	std::cout << BLUE << "Rend - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		const NAMESPACE::map<T1, T2> m_rend(m);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it = m_rend.rend();
 
-		const std::map<int, std::string> stl_map_rend(stl_map);
-		const ft::map<int, std::string> ft_map_rend(ft_map);
-
-		std::map<int, std::string>::const_reverse_iterator stl_it = stl_map_rend.rend();
-		ft::map<int, std::string>::const_reverse_iterator ft_it = ft_map_rend.rend();
-
-		while (stl_it != stl_map_rend.rbegin())
-		{
-			--stl_it;
-			--ft_it;
-			if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-				throw ko;
-		}
-
-		if (ft_it != ft_map_rend.rbegin())
-			throw ko;
-			
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		it--;
+		for (; it != m_rend.rbegin(); it--)
+			std::cout << "[" << (*it).first << "," << (*it).second << "]; ";
+		std::cout << "\n";
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|        CAPACITY       |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|        CAPACITY       |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 	
-	std::cout << BLUE << "Empty " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Empty \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		if (stl_map.empty() != ft_map.empty())
-			throw ko;
+		std::cout << (m.empty() ? "True" : "False") << "\n";
 
-		stl_map.insert(std::make_pair(50, "root"));
-		ft_map.insert(ft::make_pair(50, "root"));
+		m.insert(NAMESPACE::make_pair(50, "root"));
 
-		if (stl_map.empty() != ft_map.empty())
-			throw ko;
+		std::cout << (m.empty() ? "True" : "False") << "\n";
 
-		stl_map.erase(50);
-		ft_map.erase(50);
+		m.erase(50);
 
-		if (stl_map.empty() != ft_map.empty())
-			throw ko;
+		std::cout << (m.empty() ? "True" : "False") << "\n";
 		
-		stl_map.insert(std::make_pair(50, "root"));
-		ft_map.insert(ft::make_pair(50, "root"));
+		m.insert(NAMESPACE::make_pair(50, "root"));
 
-		if (stl_map.empty() != ft_map.empty())
-			throw ko;
+		std::cout << (m.empty() ? "True" : "False") << "\n";
 
-		stl_map.clear();
-		ft_map.clear();
+		m.clear();
 
-		if (stl_map.empty() != ft_map.empty())
-			throw ko;
+		std::cout << (m.empty() ? "True" : "False") << "\n";
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
+	std::cout << "Size \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
+		std::cout << "Size : " << m.size() << "\n";
 
-	std::cout << BLUE << "Size " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		fill_map(m);
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
+		std::cout << "Size : " << m.size() << "\n";
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		m.erase(50);
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
-
-		stl_map.erase(50);
-		ft_map.erase(50);
-
-		if (stl_map.size() != ft_map.size())
-			throw ko;
+		std::cout << "Size : " << m.size() << "\n";
 		
-		stl_map.erase(stl_map.find(44), stl_map.end());
-		ft_map.erase(ft_map.find(44), ft_map.end());
+		m.erase(m.find(44), m.end());
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
+		std::cout << "Size : " << m.size() << "\n";
 
-		stl_map.clear();
-		ft_map.clear();
+		m.clear();
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
+		std::cout << "Size : " << m.size() << "\n";
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
+	std::cout << "\n";
 		
-	std::cout << BLUE << "Max size " << NC;
-	try {
-		std::map<unsigned char, std::string> stl_map1;
-		ft::map<unsigned char, std::string> ft_map1;
+	std::cout << "Max size \n";
+	{
+		NAMESPACE::map<unsigned char, std::string> m1;
 
-		if (stl_map1.max_size() != ft_map1.max_size())
-			throw ko;
+		std::cout << "Max size <unsigned char, std::string> : " << m1.max_size() << "\n";
 
-		std::map<std::string, std::string> stl_map2;
-		ft::map<std::string, std::string> ft_map2;
+		NAMESPACE::map<std::string, std::string> m2;
 
-		if (stl_map2.max_size() != ft_map2.max_size())
-			throw ko;
+		std::cout << "Max size <std::string, std::string> : " << m2.max_size() << "\n";
 
-		std::map<size_t, char> stl_map3;
-		ft::map<size_t, char> ft_map3;
+		NAMESPACE::map<size_t, char> m3;
 
-		if (stl_map3.max_size() != ft_map3.max_size())
-			throw ko;
+		std::cout << "Max size <size_t, char> : " << m3.max_size() << "\n";
 
-		std::map<ptrdiff_t, bool> stl_map4;
-		ft::map<ptrdiff_t, bool> ft_map4;
+		NAMESPACE::map<ptrdiff_t, bool> m4;
 
-		if (stl_map4.max_size() != ft_map4.max_size())
-			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		std::cout << "Max size <ptrdiff_t, bool> : " << m4.max_size() << "\n";
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|     ELEMENT ACCESS    |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|     ELEMENT ACCESS    |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 	
-	std::cout << BLUE << "Operator [] " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Operator [] \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		if (stl_map[44] != ft_map[44])
-			throw ko;
+		std::cout << "Iteration : ";
+		for (int i = 0; i < 100; i++)
+			std::cout << "[" << i << "] = " << m[i] << "; ";
+		std::cout << "\n";
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
+		m[5] = m[17];
+		
+		std::cout << "[5] = " << m[5] << "\n";
 
-		stl_map[5] = stl_map[17];
-		ft_map[5] = ft_map[17];
+		m[101] = m[50];
 
-		if (stl_map.size() != ft_map.size())
-			throw ko;
-
-		if (stl_map[5] != ft_map[5])
-			throw ko;
-
-		std::map<int, std::string>::iterator stl_it = stl_map.begin();
-		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
-
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|       MODIFIERS       |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|       MODIFIERS       |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Insert - Single element " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Insert - Single element \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		std::pair<std::map<int, std::string>::iterator, bool> stl_pr;
-		ft::pair<ft::map<int, std::string>::iterator, bool> ft_pr;
+		NAMESPACE::pair<NAMESPACE::map<T1, T2>::iterator, bool> pr;
 		
-		stl_pr = stl_map.insert(std::make_pair(44, "root"));
-		ft_pr = ft_map.insert(ft::make_pair(44, "root"));
+		pr = m.insert(NAMESPACE::make_pair(44, s_string[44]));
 
-		if (stl_pr.second != ft_pr.second || ((*(stl_pr.first)).first != (*(ft_pr.first)).first)
-			|| ((*(stl_pr.first)).second != (*(ft_pr.first)).second))
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << " ";
+		std::cout << (pr.second ? "True" : "False") << "\n";
 
-		ft::map<int, std::string>::iterator ft_it = ft_pr.first;
-		if (++ft_it != ft_map.end())
-			throw ko;
+		NAMESPACE::map<T1, T2>::iterator it = pr.first;
+		if (++it != m.end())
+			std::cout << "KO\n";
 
-		stl_pr = stl_map.insert(std::make_pair(44, "root_clone"));
-		ft_pr = ft_map.insert(ft::make_pair(44, "root_clone"));
+		pr = m.insert(NAMESPACE::make_pair(44, s_string[50]));
 
-		if (stl_pr.second != ft_pr.second || ((*(stl_pr.first)).first != (*(ft_pr.first)).first)
-			|| ((*(stl_pr.first)).second != (*(ft_pr.first)).second))
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << " ";
+		std::cout << (pr.second ? "True" : "False") << "\n";
 
-		ft_it = ft_pr.first;
-		if (++ft_it != ft_map.end())
-			throw ko;
+		it = pr.first;
+		if (++it != m.end())
+			std::cout << "KO\n";
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
+	std::cout << "Insert - Hint \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
+		fill_map(m);
 
-	std::cout << BLUE << "Insert - Hint " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		m.insert(m.find(1), NAMESPACE::make_pair(150, "end"));
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		compare_maps(m);
+		iterate_maps(m);
 
-		stl_map.insert(stl_map.find(88), std::make_pair(19, "left"));
-		ft_map.insert(ft_map.find(88), ft::make_pair(19, "left"));
+		NAMESPACE::map<T1, T2>::iterator it;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		it = m.insert(m.find(50), NAMESPACE::make_pair(150, "end_clone"));
 
-		std::map<int, std::string>::iterator stl_it;
-		ft::map<int, std::string>::iterator ft_it;
+		std::cout << "[" << (*it).first << "," << (*it).second << "\n";
+	}
 
-		stl_it = stl_map.insert(stl_map.find(88), std::make_pair(19, "left_clone"));
-		ft_it = ft_map.insert(ft_map.find(88), ft::make_pair(19, "left_clone"));
+	std::cout << "\n";
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+	std::cout << "Insert - Range \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		fill_map(m);
 
+		NAMESPACE::map<T1, T2> m_insert;
 
+		m_insert.insert(m.begin(), m.end());
 
-	std::cout << BLUE << "Insert - Range " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		compare_maps(m);
+		iterate_maps(m);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		m_insert.clear();
 
-		std::map<int, std::string> stl_map_insert;
-		ft::map<int, std::string> ft_map_insert;
+		m_insert.insert(m.find(25), m.end());
 
-		stl_map_insert.insert(stl_map.begin(), stl_map.end());
-		ft_map_insert.insert(ft_map.begin(), ft_map.end());
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
-		if (!compare_maps(stl_map_insert, ft_map_insert) || !iterate_maps(stl_map_insert, ft_map_insert))
-			throw ko;
+	std::cout << "\n";
 
-		stl_map_insert.clear();
-		ft_map_insert.clear();
+	std::cout << "Erase - Position \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		stl_map_insert.insert(stl_map.find(44), stl_map.end());
-		ft_map_insert.insert(ft_map.find(44), ft_map.end());
+		fill_map(m);
 
-		if (!compare_maps(stl_map_insert, ft_map_insert) || !iterate_maps(stl_map_insert, ft_map_insert))
-			throw ko;
+		m.erase(m.begin());
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
 
+		m.erase(--(m.end()));
 
+		compare_maps(m);
+		iterate_maps(m);
 
-	std::cout << BLUE << "Erase - Position " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		m.erase(m.find(44));
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
-		stl_map.erase(stl_map.begin());
-		ft_map.erase(ft_map.begin());
+	std::cout << "\n";
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+	std::cout << "Erase - Key \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		stl_map.erase(--(stl_map.end()));
-		ft_map.erase(--(ft_map.end()));
+		NAMESPACE::map<T1, T2>::size_type st;
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		fill_map(m);
 
-		stl_map.erase(stl_map.find(44));
-		ft_map.erase(ft_map.find(44));
+		st = m.erase(17);
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		std::cout << st << "\n";
+		compare_maps(m);
+		iterate_maps(m);
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		st = m.erase(100);
 
+		std::cout << st << "\n";
+		compare_maps(m);
+		iterate_maps(m);
 
+		st = m.erase(99);
 
-	std::cout << BLUE << "Erase - Key " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		std::cout << st << "\n";
+		compare_maps(m);
+		iterate_maps(m);
 
-		std::map<int, std::string>::size_type stl_st;
-		ft::map<int, std::string>::size_type ft_st;
+		st = m.erase(17);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		std::cout << st << "\n";
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
-		stl_st = stl_map.erase(17);
-		ft_st = ft_map.erase(17);
+	std::cout << "\n";
 
-		if (stl_st != ft_st || !compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+	std::cout << "Erase - Range \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		stl_st = stl_map.erase(97);
-		ft_map.erase(97);
+		fill_map(m);
 
-		if (stl_st != ft_st || !compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		m.erase(m.begin(), m.begin());
 
-		stl_st = stl_map.erase(44);
-		ft_st = ft_map.erase(44);
+		compare_maps(m);
+		iterate_maps(m);
 
-		if (stl_st != ft_st || !compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		m.erase(m.find(44), m.find(80));
 
-		stl_st = stl_map.erase(50);
-		ft_st = ft_map.erase(50);
+		compare_maps(m);
+		iterate_maps(m);
 
-		if (stl_st != ft_st || !compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		m.erase(m.begin(), m.end());
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
+	std::cout << "\n";
 
+	std::cout << "Swap \n";
+	{
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-	std::cout << BLUE << "Erase - Range " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+		fill_map(m1);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		m1.swap(m2);
 
-		stl_map.erase(stl_map.begin(), stl_map.begin());
-		ft_map.erase(ft_map.begin(), ft_map.begin());
+		compare_maps(m1);
+		iterate_maps(m1);
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
+		compare_maps(m2);
+		iterate_maps(m2);
 
-		stl_map.erase(stl_map.find(44), stl_map.find(80));
-		ft_map.erase(ft_map.find(44), ft_map.find(80));
+		fill_map(m1);
 
-		if (!compare_maps(stl_map, ft_map) || !iterate_maps(stl_map, ft_map))
-			throw ko;
-
-		stl_map.erase(stl_map.begin(), stl_map.end());
-		ft_map.erase(ft_map.begin(), ft_map.end());
-
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
-
-	std::cout << BLUE << "Swap " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
-
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
-
-		stl_map1.swap(stl_map2);
-		ft_map1.swap(ft_map2);
-
-		if (!compare_maps(stl_map1, ft_map1) || !test_empty_map_iterators(ft_map1))
-			throw ko;
-
-		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
-			throw ko;
-
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
-
-		stl_map2.erase(stl_map2.find(29), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(29), ft_map2.find(82));
+		m2.erase(m2.find(29), m2.find(82));
 		
-		stl_map1.swap(stl_map2);
-		ft_map1.swap(ft_map2);
+		m1.swap(m2);
 
-		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1))
-			throw ko;
+		compare_maps(m1);
+		iterate_maps(m1);
 
-		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
-			throw ko;
+		compare_maps(m2);
+		iterate_maps(m2);
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
-
+	std::cout << "\n";
 	
-	std::cout << BLUE << "Clear " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Clear \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 
-		stl_map.clear();
-		ft_map.clear();
+		m.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
+		compare_maps(m);
+		iterate_maps(m);
 
-		stl_map.insert(std::make_pair<int, std::string>(50, "root"));
-		ft_map.insert(ft::make_pair<int, std::string>(50, "root"));
+		m.insert(NAMESPACE::make_pair<T1, T2>(50, "root"));
 
-		stl_map.clear();
-		ft_map.clear();
+		m.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
+		compare_maps(m);
+		iterate_maps(m);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		stl_map.clear();
-		ft_map.clear();
+		m.clear();
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		compare_maps(m);
+		iterate_maps(m);
+	}
 
 	
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|       OBSERVERS       |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|       OBSERVERS       |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Key_comp " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
+	std::cout << "Key_comp \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 		
-		size_t stl_count = 0;
-		size_t ft_count = 0;
+		size_t count = 0;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::map<int, std::string>::key_compare stl_comp = stl_map.key_comp();
-		ft::map<int, std::string>::key_compare ft_comp = ft_map.key_comp();
+		NAMESPACE::map<T1, T2>::key_compare _comp = m.key_comp();
 
-		std::map<int, std::string>::iterator stl_it = stl_map.begin();
-		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
+		NAMESPACE::map<T1, T2>::iterator it = m.begin();
 
-		while (stl_it != stl_map.end())
-			if (stl_comp((*stl_it++).first, 80))
-				stl_count++;
+		while (it != m.end())
+			if (_comp((*it++).first, 42))
+				count++;
 
-		while (ft_it != ft_map.end())
-			if (ft_comp((*ft_it++).first, 80))
-				ft_count++;
+		std::cout << count << "\n";
+	}
 
-		if (stl_count != ft_count)
-			throw ko;
+	std::cout << "\n";
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
-
+	std::cout << "Value_comp \n";
+	{
+		NAMESPACE::map<T1, T2> m;
 		
+		size_t count = 0;
 
-	std::cout << BLUE << "Value_comp " << NC;
-	try {
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
-		
-		size_t stl_count = 0;
-		size_t ft_count = 0;
+		fill_map(m);
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		NAMESPACE::pair<T1, T2> pr = NAMESPACE::make_pair<T1, T2>(42, s_string[42]);
 
-		std::pair<int, std::string> stl_pair = std::make_pair<int, std::string>(80, "root");
-		ft::pair<int, std::string> ft_pair = ft::make_pair<int, std::string>(80, "root");
+		NAMESPACE::map<T1, T2>::iterator it = m.begin();
 
-		std::map<int, std::string>::iterator stl_it = stl_map.begin();
-		ft::map<int, std::string>::iterator ft_it = ft_map.begin();
+		while (it != m.end())
+			if (m.value_comp()(*it++, pr))
+				count++;
 
-		while (stl_it != stl_map.end())
-			if (stl_map.value_comp()(*stl_it++, stl_pair))
-				stl_count++;
-
-		while (ft_it != ft_map.end())
-			if (ft_map.value_comp()(*ft_it++, ft_pair))
-				ft_count++;
-
-		if (stl_count != ft_count)
-			throw ko;
-		
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+		std::cout << count << "\n";
+	}
 
 		
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|       OPERATIONS      |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|       OPERATIONS      |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Find " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Find \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
 		ft::map<int, std::string>::iterator it = ft_map.find(80);
 		if (&(*it) != &(*ft_map.begin()) || &(*it) != &(*ft_map.end()))
 			throw ko;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
 		it = (ft_map.insert(ft::make_pair(55, "right"))).first;
 		stl_map.insert(std::make_pair(55, "right"));
 
-		std::map<int, std::string>::iterator stl_it = stl_map.find(55);
+		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.find(55);
 		ft::map<int, std::string>::iterator ft_it = ft_map.find(55);
 
 		if (&(*it) != &(*ft_it))
@@ -1076,16 +823,13 @@ void map_tests(void)
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 			throw ko;
-		
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
+	std::cout << "\n";
 
-
-	std::cout << BLUE << "Find - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Find - Const \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
 		const ft::map<int, std::string> ft_map_begin1(ft_map);
@@ -1094,13 +838,12 @@ void map_tests(void)
 		if (&(*it) != &(*ft_map_begin1.begin()) || &(*it) != &(*ft_map_begin1.end()))
 			throw ko;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		const std::map<int, std::string> stl_map_begin(stl_map);
+		const NAMESPACE::map<T1, T2> stl_map_begin(stl_map);
 		const ft::map<int, std::string> ft_map_begin2(ft_map);
 
-		std::map<int, std::string>::const_iterator stl_it = stl_map_begin.find(54);
+		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_begin.find(54);
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin2.find(54);
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
@@ -1111,40 +854,32 @@ void map_tests(void)
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
 			throw ko;
+	}
 
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-	
-
-	std::cout << BLUE << "Count " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Count \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
 		for (int i = 0; i < 100; i++)
 			if (stl_map.count(i) != ft_map.count(i))
 				throw ko;
+	}
 
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Lower_bound " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Lower_bound \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::map<int, std::string>::iterator stl_it = stl_map.lower_bound(-5);
+		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.lower_bound(-5);
 		ft::map<int, std::string>::iterator ft_it = ft_map.lower_bound(-5);
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
@@ -1160,25 +895,21 @@ void map_tests(void)
 
 		if (ft_it != ft_map.end())
 			throw ko;
-		
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
+	std::cout << "\n";
 
-
-	std::cout << BLUE << "Lower_bound - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Lower_bound - Const \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		const std::map<int, std::string> stl_map_bound(stl_map);
+		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
 		const ft::map<int, std::string> ft_map_bound(ft_map);
 
-		std::map<int, std::string>::const_iterator stl_it = stl_map_bound.lower_bound(-5);
+		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_bound.lower_bound(-5);
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.lower_bound(-5);
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
@@ -1194,22 +925,18 @@ void map_tests(void)
 
 		if (ft_it != ft_map_bound.end())
 			throw ko;
+	}
 
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Upper_bound " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Upper_bound \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::map<int, std::string>::iterator stl_it = stl_map.upper_bound(-5);
+		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.upper_bound(-5);
 		ft::map<int, std::string>::iterator ft_it = ft_map.upper_bound(-5);
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
@@ -1225,25 +952,21 @@ void map_tests(void)
 
 		if (ft_it != ft_map.end())
 			throw ko;
-		
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
+	std::cout << "\n";
 
-
-	std::cout << BLUE << "Upper_bound - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Upper_bound - Const \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		const std::map<int, std::string> stl_map_bound(stl_map);
+		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
 		const ft::map<int, std::string> ft_map_bound(ft_map);
 
-		std::map<int, std::string>::const_iterator stl_it = stl_map_bound.upper_bound(-5);
+		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_bound.upper_bound(-5);
 		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.upper_bound(-5);
 
 		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
@@ -1259,22 +982,18 @@ void map_tests(void)
 
 		if (ft_it != ft_map_bound.end())
 			throw ko;
+	}
 
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Equal_range " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Equal_range \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> stl_pr;
+		std::pair<NAMESPACE::map<T1, T2>::iterator, NAMESPACE::map<T1, T2>::iterator> stl_pr;
 		ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_pr;
 
 		stl_pr = stl_map.equal_range(5);
@@ -1299,25 +1018,21 @@ void map_tests(void)
 
 		if (ft_pr.first != ft_map.end() || ft_pr.second != ft_map.end())
 			throw ko;
-		
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
+	std::cout << "\n";
 
-
-	std::cout << BLUE << "Equal_range - Const " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Equal_range - Const \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		fill_std_map(stl_map);
-		fill_ft_map(ft_map);
+		fill_map(m);
 
-		const std::map<int, std::string> stl_map_bound(stl_map);
+		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
 		const ft::map<int, std::string> ft_map_bound(ft_map);
 
-		std::pair<std::map<int, std::string>::const_iterator, std::map<int, std::string>::const_iterator> stl_pr;
+		std::pair<NAMESPACE::map<T1, T2>::const_iterator, NAMESPACE::map<T1, T2>::const_iterator> stl_pr;
 		ft::pair<ft::map<int, std::string>::const_iterator, ft::map<int, std::string>::const_iterator> ft_pr;
 
 		stl_pr = stl_map_bound.equal_range(5);
@@ -1342,50 +1057,44 @@ void map_tests(void)
 
 		if (ft_pr.first != ft_map_bound.end() || ft_pr.second != ft_map_bound.end())
 			throw ko;
-
-		std::cout << BGRN << "PASSED!" << NC << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|       ALLOCATOR       |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|       ALLOCATOR       |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Get_allocator " << NC;
-	try {
-		std::map<int, std::string> stl_map;
+	std::cout << "Get_allocator \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map;
 		ft::map<int, std::string> ft_map;
 
-		std::map<int, std::string> stl_map_alloc(stl_map.key_comp(), stl_map.get_allocator());
+		NAMESPACE::map<T1, T2> stl_map_alloc(stl_map.key_comp(), stl_map.get_allocator());
 		ft::map<int, std::string> ft_map_alloc(ft_map.key_comp(), ft_map.get_allocator());
 
 		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
 			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
 
 
 	std::cout << "\n";
 
-	std::cout << BRED << "-------------------------" << NC << "\n";
-	std::cout << BRED << "|  NON-MEMBER FUNCTIONS |" << NC << "\n";
-	std::cout << BRED << "-------------------------" << NC << "\n\n";
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|  NON-MEMBER FUNCTIONS |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
 
 
 
-	std::cout << BLUE << "Operator == " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator == \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1397,17 +1106,14 @@ void map_tests(void)
 
 		if ((stl_map1 == stl_map2) != (ft_map1 == ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Operator != " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator != \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1422,17 +1128,14 @@ void map_tests(void)
 
 		if ((stl_map1 != stl_map2) != (ft_map1 != ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Operator < " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator < \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1447,17 +1150,14 @@ void map_tests(void)
 
 		if ((stl_map1 < stl_map2) != (ft_map1 < ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Operator <= " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator <= \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1472,18 +1172,14 @@ void map_tests(void)
 
 		if ((stl_map1 <= stl_map2) != (ft_map1 <= ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-
-	std::cout << BLUE << "Operator > " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator > \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1498,18 +1194,14 @@ void map_tests(void)
 
 		if ((stl_map1 > stl_map2) != (ft_map1 > ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-
-	std::cout << BLUE << "Operator >= " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Operator >= \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1524,17 +1216,14 @@ void map_tests(void)
 
 		if ((stl_map1 >= stl_map2) != (ft_map1 >= ft_map2))
 			throw ko;
+	}
 
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	std::cout << "\n";
 
-
-
-	std::cout << BLUE << "Swap " << NC;
-	try {
-		std::map<int, std::string> stl_map1;
-		std::map<int, std::string> stl_map2;
+	std::cout << "Swap \n";
+	{
+		NAMESPACE::map<T1, T2> stl_map1;
+		NAMESPACE::map<T1, T2> stl_map2;
 		ft::map<int, std::string> ft_map1;
 		ft::map<int, std::string> ft_map2;
 
@@ -1564,9 +1253,6 @@ void map_tests(void)
 
 		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
 			throw ko;
-
-		std::cout << PASSED << "\n";
-	} catch(std::exception& e)
-		{ std::cout << e.what() << "\n"; }
+	}
 
 }
