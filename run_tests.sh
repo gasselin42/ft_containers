@@ -34,27 +34,26 @@ mkdir -p "$diffdir"
 mkdir -p "$logdir"
 
 calculate_time() {
+	c=$(echo $b | tr 'a-z' 'A-Z')
 	if [ -f "$outdir/ft_$b.out" ]; then
 		if [ -s "$diffdir/$b.diff" ]; then
-			printf "$b $RED===FAILED===$END\n"
+			printf "$c $RED===FAILED===$END\n"
 			printf "(Check $diffdir/$b.diff for more info)\n"
 		else
-			ftime=time -p bash -c "for (( i=0; i<500; i++ )); do ./"$outdir/ft_$b.out" > "$logdir/ft_$b"; done;"
-			stime=time -p bash -c "for (( i=0; i<500; i++ )); do ./"$outdir/std_$b.out" > "$logdir/std_$b"; done;"
-			if [ $((ftime/stime)) -gt $((20)) ]; then
-				printf "$b $RED===FAILED-RUNTIME===$END\n"
-			else
-				printf "$b $GREEN===PASSED===$END\n"
-			fi
+			printf "$c $GREEN===PASSED===$END\n"
+			printf "Runtime FT :\n"
+			time -p bash -c "for (( i=0; i<100; i++ )); do ./"$outdir/ft_$b.out" > "$logdir/ft_$b"; done;"
+			printf "Runtime STD :\n"
+			time -p bash -c "for (( i=0; i<100; i++ )); do ./"$outdir/std_$b.out" > "$logdir/std_$b"; done;"
 		fi
 	else
-		printf "$b $RED===ERROR===$END\n"
+		printf "$c $RED===ERROR===$END\n"
 		printf "(Check err.log for more info)\n"
 	fi
 }
 
 run_all_tests() {
-	b=$(basename "${f%.cpp}")
+	b=$(basename "${f%_tests.cpp}")
 	clang++ "$f" $flags -DNAMESPACE=ft -I$incdir -o "$outdir/ft_$b.out" 2>> $errlog
 	clang++ "$f" $flags -DNAMESPACE=std -I$incdir -o "$outdir/std_$b.out" 2>> $errlog
 	./"$outdir/ft_$b.out" > "$logdir/ft_$b" 2>> $errlog
@@ -67,6 +66,7 @@ printf "\n"
 for f in "$testdir"/*.cpp; do
 	run_all_tests
 	calculate_time
+	printf "\n"
 done
 
 printf "\n"

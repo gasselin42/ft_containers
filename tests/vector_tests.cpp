@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/16 11:03:26 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/16 14:16:27 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -381,8 +381,8 @@ int main(void)
 
 		NAMESPACE::vector<T1>::const_reverse_iterator it = vec_rend.rend();
 
-		for (size_t i = 0; it != vec_rend.rbegin(); it--, i++)
-			std::cout << "[" << i << "] = " << *(it) << "; ";
+		for (size_t i = 0; it != vec_rend.rbegin(); i++)
+			std::cout << "[" << i << "] = " << *(--it) << "; ";
 		std::cout << "\n";
 	}
 
