@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:39:43 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/15 13:23:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/16 13:01:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void compare_maps(const NAMESPACE::map<Key, T>& m)
 	std::cout << "Max size : " << m.max_size() << "\n";
 }
 
-void map_tests(void)
+int main(void)
 {
 	std::cout << "-------------------------" << "\n";
 	std::cout << "|      CONSTRUCTORS     |" << "\n";
@@ -539,7 +539,7 @@ void map_tests(void)
 		
 		pr = m.insert(NAMESPACE::make_pair(44, s_string[44]));
 
-		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << " ";
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "] ";
 		std::cout << (pr.second ? "True" : "False") << "\n";
 
 		NAMESPACE::map<T1, T2>::iterator it = pr.first;
@@ -548,7 +548,7 @@ void map_tests(void)
 
 		pr = m.insert(NAMESPACE::make_pair(44, s_string[50]));
 
-		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << " ";
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "] ";
 		std::cout << (pr.second ? "True" : "False") << "\n";
 
 		it = pr.first;
@@ -573,7 +573,7 @@ void map_tests(void)
 
 		it = m.insert(m.find(50), NAMESPACE::make_pair(150, "end_clone"));
 
-		std::cout << "[" << (*it).first << "," << (*it).second << "\n";
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 	}
 
 	std::cout << "\n";
@@ -800,263 +800,207 @@ void map_tests(void)
 
 	std::cout << "Find \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
-		ft::map<int, std::string>::iterator it = ft_map.find(80);
-		if (&(*it) != &(*ft_map.begin()) || &(*it) != &(*ft_map.end()))
-			throw ko;
+		NAMESPACE::map<T1, T2>::iterator it = m.find(42);
+		if (&(*it) != &(*m.begin()) || &(*it) != &(*m.end()))
+			std::cout << "KO\n";
 
 		fill_map(m);
+		m.erase(42);
 
-		it = (ft_map.insert(ft::make_pair(55, "right"))).first;
-		stl_map.insert(std::make_pair(55, "right"));
+		it = (m.insert(NAMESPACE::make_pair(42, s_string[42]))).first;
 
-		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.find(55);
-		ft::map<int, std::string>::iterator ft_it = ft_map.find(55);
+		NAMESPACE::map<T1, T2>::iterator it2 = m.find(42);
 
-		if (&(*it) != &(*ft_it))
-			throw ko;
+		std::cout << "&(*it) == &(*it2) : " << ((&(*it) == &(*it2)) ? "True" : "False") << "\n";
 
-		stl_it++;
-		ft_it++;
+		it++;
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Find - Const \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
-		const ft::map<int, std::string> ft_map_begin1(ft_map);
+		const NAMESPACE::map<T1, T2> m_begin1(m);
 
-		ft::map<int, std::string>::const_iterator it = ft_map_begin1.find(80);
-		if (&(*it) != &(*ft_map_begin1.begin()) || &(*it) != &(*ft_map_begin1.end()))
-			throw ko;
+		NAMESPACE::map<T1, T2>::const_iterator it = m_begin1.find(42);
+		if (&(*it) != &(*m_begin1.begin()) || &(*it) != &(*m_begin1.end()))
+			std::cout << "KO\n";
 
 		fill_map(m);
 
-		const NAMESPACE::map<T1, T2> stl_map_begin(stl_map);
-		const ft::map<int, std::string> ft_map_begin2(ft_map);
+		const NAMESPACE::map<T1, T2> m_begin2(m);
 
-		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_begin.find(54);
-		ft::map<int, std::string>::const_iterator ft_it = ft_map_begin2.find(54);
+		it = m_begin2.find(54);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		stl_it++;
-		ft_it++;
+		it++;
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Count \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		for (int i = 0; i < 100; i++)
-			if (stl_map.count(i) != ft_map.count(i))
-				throw ko;
+		for (int i = 0; i < 150; i++)
+			std::cout << m.count(i) << " ";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Lower_bound \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.lower_bound(-5);
-		ft::map<int, std::string>::iterator ft_it = ft_map.lower_bound(-5);
+		NAMESPACE::map<T1, T2>::iterator it = m.lower_bound(-5);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		stl_it = stl_map.lower_bound(54);
-		ft_it = ft_map.lower_bound(54);
+		it = m.lower_bound(42);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		ft_it = ft_map.lower_bound(100);
+		it = m.lower_bound(111);
 
-		if (ft_it != ft_map.end())
-			throw ko;
+		if (it != m.end())
+			std::cout << "KO\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Lower_bound - Const \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
-		const ft::map<int, std::string> ft_map_bound(ft_map);
+		const NAMESPACE::map<T1, T2> m_bound(m);
 
-		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_bound.lower_bound(-5);
-		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.lower_bound(-5);
+		NAMESPACE::map<T1, T2>::const_iterator it = m_bound.lower_bound(-5);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		stl_it = stl_map_bound.lower_bound(54);
-		ft_it = ft_map_bound.lower_bound(54);
+		it = m_bound.lower_bound(42);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		ft_it = ft_map_bound.lower_bound(100);
+		it = m_bound.lower_bound(111);
 
-		if (ft_it != ft_map_bound.end())
-			throw ko;
+		if (it != m_bound.end())
+			std::cout << "KO\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Upper_bound \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		NAMESPACE::map<T1, T2>::iterator stl_it = stl_map.upper_bound(-5);
-		ft::map<int, std::string>::iterator ft_it = ft_map.upper_bound(-5);
+		NAMESPACE::map<T1, T2>::iterator it = m.upper_bound(-5);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		stl_it = stl_map.upper_bound(54);
-		ft_it = ft_map.upper_bound(54);
+		it = m.upper_bound(42);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		ft_it = ft_map.upper_bound(100);
+		it = m.upper_bound(111);
 
-		if (ft_it != ft_map.end())
-			throw ko;
+		if (it != m.end())
+			std::cout << "KO\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Upper_bound - Const \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
-		const ft::map<int, std::string> ft_map_bound(ft_map);
+		const NAMESPACE::map<T1, T2> m_bound(m);
 
-		NAMESPACE::map<T1, T2>::const_iterator stl_it = stl_map_bound.upper_bound(-5);
-		ft::map<int, std::string>::const_iterator ft_it = ft_map_bound.upper_bound(-5);
+		NAMESPACE::map<T1, T2>::const_iterator it = m_bound.upper_bound(-5);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		stl_it = stl_map_bound.upper_bound(54);
-		ft_it = ft_map_bound.upper_bound(54);
+		it = m_bound.upper_bound(42);
 
-		if ((*stl_it).first != (*ft_it).first || (*stl_it).second != (*ft_it).second)
-			throw ko;
+		std::cout << "[" << (*it).first << "," << (*it).second << "]\n";
 
-		ft_it = ft_map_bound.upper_bound(100);
+		it = m_bound.upper_bound(111);
 
-		if (ft_it != ft_map_bound.end())
-			throw ko;
+		if (it != m_bound.end())
+			std::cout << "KO\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Equal_range \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		std::pair<NAMESPACE::map<T1, T2>::iterator, NAMESPACE::map<T1, T2>::iterator> stl_pr;
-		ft::pair<ft::map<int, std::string>::iterator, ft::map<int, std::string>::iterator> ft_pr;
+		NAMESPACE::pair<NAMESPACE::map<T1, T2>::iterator, NAMESPACE::map<T1, T2>::iterator> pr;
 
-		stl_pr = stl_map.equal_range(5);
-		ft_pr = ft_map.equal_range(5);
+		pr = m.equal_range(5);
 
-		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
-			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
-			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
-			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "]\n";
+		std::cout << "[" << (*(pr.second)).first << "," << (*(pr.second)).second << "]\n";
 
-		stl_pr = stl_map.equal_range(50);
-		ft_pr = ft_map.equal_range(50);
+		pr = m.equal_range(42);
 
-		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
-			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
-			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
-			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "]\n";
+		std::cout << "[" << (*(pr.second)).first << "," << (*(pr.second)).second << "]\n";
 
-		ft_pr = ft_map.equal_range(100);
+		pr = m.equal_range(111);
 
-		if (ft_pr.first != ft_map.end() || ft_pr.second != ft_map.end())
-			throw ko;
+		if (pr.first != m.end() || pr.second != m.end())
+			std::cout << "KO\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Equal_range - Const \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
 		fill_map(m);
 
-		const NAMESPACE::map<T1, T2> stl_map_bound(stl_map);
-		const ft::map<int, std::string> ft_map_bound(ft_map);
+		const NAMESPACE::map<T1, T2> m_bound(m);
 
-		std::pair<NAMESPACE::map<T1, T2>::const_iterator, NAMESPACE::map<T1, T2>::const_iterator> stl_pr;
-		ft::pair<ft::map<int, std::string>::const_iterator, ft::map<int, std::string>::const_iterator> ft_pr;
+		NAMESPACE::pair<NAMESPACE::map<T1, T2>::const_iterator, NAMESPACE::map<T1, T2>::const_iterator> pr;
 
-		stl_pr = stl_map_bound.equal_range(5);
-		ft_pr = ft_map_bound.equal_range(5);
+		pr = m_bound.equal_range(5);
 
-		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
-			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
-			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
-			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "]\n";
+		std::cout << "[" << (*(pr.second)).first << "," << (*(pr.second)).second << "]\n";
 
-		stl_pr = stl_map_bound.equal_range(50);
-		ft_pr = ft_map_bound.equal_range(50);
+		pr = m_bound.equal_range(42);
 
-		if ((*(stl_pr.first)).first != (*(ft_pr.first)).first
-			|| (*(stl_pr.first)).second != (*(ft_pr.first)).second
-			|| (*(stl_pr.second)).first != (*(ft_pr.second)).first
-			|| (*(stl_pr.second)).second != (*(ft_pr.second)).second)
-			throw ko;
+		std::cout << "[" << (*(pr.first)).first << "," << (*(pr.first)).second << "]\n";
+		std::cout << "[" << (*(pr.second)).first << "," << (*(pr.second)).second << "]\n";
 
-		ft_pr = ft_map_bound.equal_range(100);
+		pr = m_bound.equal_range(111);
 
-		if (ft_pr.first != ft_map_bound.end() || ft_pr.second != ft_map_bound.end())
-			throw ko;
+		if (pr.first != m_bound.end() || pr.second != m_bound.end())
+			std::cout << "KO\n";
 	}
 
 
@@ -1071,14 +1015,12 @@ void map_tests(void)
 
 	std::cout << "Get_allocator \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map;
-		ft::map<int, std::string> ft_map;
+		NAMESPACE::map<T1, T2> m;
 
-		NAMESPACE::map<T1, T2> stl_map_alloc(stl_map.key_comp(), stl_map.get_allocator());
-		ft::map<int, std::string> ft_map_alloc(ft_map.key_comp(), ft_map.get_allocator());
+		NAMESPACE::map<T1, T2> m_alloc(m.key_comp(), m.get_allocator());
 
-		if (!compare_maps(stl_map, ft_map) || !test_empty_map_iterators(ft_map))
-			throw ko;
+		compare_maps(m_alloc);
+		iterate_maps(m_alloc);
 	}
 
 
@@ -1093,166 +1035,263 @@ void map_tests(void)
 
 	std::cout << "Operator == \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 == m2 " << ((m1 == m2) ? "True" : "False") << "\n";
 
-		if ((stl_map1 == stl_map2) != (ft_map1 == ft_map2))
-			throw ko;
+		m2.erase(m2.find(44), m2.find(82));
+		
+		std::cout << "m1 == m2 " << ((m1 == m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator != \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 != m2 " << ((m1 != m2) ? "True" : "False") << "\n";
 
-		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+		m2.erase(m2.find(44), m2.find(82));
 
-		if ((stl_map1 != stl_map2) != (ft_map1 != ft_map2))
-			throw ko;
+		std::cout << "m1 != m2 " << ((m1 != m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator < \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 < m2 " << ((m1 < m2) ? "True" : "False") << "\n";
 
-		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+		m2.erase(m2.find(44), m2.find(82));
 
-		if ((stl_map1 < stl_map2) != (ft_map1 < ft_map2))
-			throw ko;
+		std::cout << "m1 < m2 " << ((m1 < m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator <= \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 <= m2 " << ((m1 <= m2) ? "True" : "False") << "\n";
 
-		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+		m2.erase(m2.find(44), m2.find(82));
 
-		if ((stl_map1 <= stl_map2) != (ft_map1 <= ft_map2))
-			throw ko;
+		std::cout << "m1 <= m2 " << ((m1 <= m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator > \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 > m2 " << ((m1 > m2) ? "True" : "False") << "\n";
 
-		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+		m2.erase(m2.find(44), m2.find(82));
 
-		if ((stl_map1 > stl_map2) != (ft_map1 > ft_map2))
-			throw ko;
+		std::cout << "m1 > m2 " << ((m1 > m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator >= \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
+		fill_map(m2);
 
-		fill_std_map(stl_map2);
-		fill_ft_map(ft_map2);
+		std::cout << "m1 >= m2 " << ((m1 >= m2) ? "True" : "False") << "\n";
 
-		stl_map2.erase(stl_map2.find(44), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(44), ft_map2.find(82));
+		m2.erase(m2.find(44), m2.find(82));
 
-		if ((stl_map1 >= stl_map2) != (ft_map1 >= ft_map2))
-			throw ko;
+		std::cout << "m1 >= m2 " << ((m1 >= m2) ? "True" : "False") << "\n";
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Swap \n";
 	{
-		NAMESPACE::map<T1, T2> stl_map1;
-		NAMESPACE::map<T1, T2> stl_map2;
-		ft::map<int, std::string> ft_map1;
-		ft::map<int, std::string> ft_map2;
+		NAMESPACE::map<T1, T2> m1;
+		NAMESPACE::map<T1, T2> m2;
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
 
-		swap(stl_map1, stl_map2);
-		swap(ft_map1, ft_map2);
+		swap(m1, m2);
 
-		if (!compare_maps(stl_map1, ft_map1) || !test_empty_map_iterators(ft_map1))
-			throw ko;
+		compare_maps(m1);
+		iterate_maps(m1);
 
-		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
-			throw ko;
+		compare_maps(m2);
+		iterate_maps(m2);
 
-		fill_std_map(stl_map1);
-		fill_ft_map(ft_map1);
+		fill_map(m1);
 
-		stl_map2.erase(stl_map2.find(29), stl_map2.find(82));
-		ft_map2.erase(ft_map2.find(29), ft_map2.find(82));
+		m2.erase(m2.find(29), m2.find(82));
 		
-		swap(stl_map1, stl_map2);
-		swap(ft_map1, ft_map2);
+		swap(m1, m2);
 
-		if (!compare_maps(stl_map1, ft_map1) || !iterate_maps(stl_map1, ft_map1))
-			throw ko;
+		compare_maps(m1);
+		iterate_maps(m1);
 
-		if (!compare_maps(stl_map2, ft_map2) || !iterate_maps(stl_map2, ft_map2))
-			throw ko;
+		compare_maps(m2);
+		iterate_maps(m2);
 	}
 
+
+
+	std::cout << "\n";
+
+	std::cout << "-------------------------" << "\n";
+	std::cout << "|  ITERATOR OPERATIONS  |" << "\n";
+	std::cout << "-------------------------" << "\n\n";
+
+
+
+	std::cout << "Iterator - Operator == \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::iterator it = m.begin();
+		NAMESPACE::map<T1, T2>::iterator it2 = m.end()--;
+
+		for (; it != m.end(); it++, it2--)
+			std::cout << ((it == it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Const Iterator - Operator == \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		const NAMESPACE::map<T1, T2> m_op(m);
+
+		NAMESPACE::map<T1, T2>::const_iterator it = m_op.begin();
+		NAMESPACE::map<T1, T2>::const_iterator it2 = m_op.end()--;
+
+		for (; it != m_op.end(); it++, it2--)
+			std::cout << ((it == it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Reverse Iterator - Operator == \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::reverse_iterator it = m.rbegin()++;
+		NAMESPACE::map<T1, T2>::reverse_iterator it2 = m.rend();
+
+		for (; it != m.rend(); it++, it2--)
+			std::cout << ((it == it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Const Reverse Iterator - Operator == \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		const NAMESPACE::map<T1, T2> m_op(m);
+
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it = m_op.rbegin()++;
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it2 = m_op.rend();
+
+		for (int i = 0; it != m_op.rend(); it++, it2--, i++)
+			std::cout << ((it == it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "\n";
+
+	std::cout << "Iterator - Operator != \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::iterator it = m.begin();
+		NAMESPACE::map<T1, T2>::iterator it2 = m.end()--;
+
+		for (; it != m.end(); it++, it2--)
+			std::cout << ((it != it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Const Iterator - Operator != \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		const NAMESPACE::map<T1, T2> m_op(m);
+
+		NAMESPACE::map<T1, T2>::const_iterator it = m_op.begin();
+		NAMESPACE::map<T1, T2>::const_iterator it2 = m_op.end()--;
+
+		for (; it != m_op.end(); it++, it2--)
+			std::cout << ((it != it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Reverse Iterator - Operator != \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		NAMESPACE::map<T1, T2>::reverse_iterator it = m.rbegin()++;
+		NAMESPACE::map<T1, T2>::reverse_iterator it2 = m.rend();
+
+		for (; it != m.rend(); it++, it2--)
+			std::cout << ((it != it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "Const Reverse Iterator - Operator != \n";
+	{
+		NAMESPACE::map<T1, T2> m;
+
+		fill_map(m);
+
+		const NAMESPACE::map<T1, T2> m_op(m);
+
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it = m_op.rbegin()++;
+		NAMESPACE::map<T1, T2>::const_reverse_iterator it2 = m_op.rend();
+
+		for (; it != m_op.rend(); it++, it2--)
+			std::cout << ((it != it2) ? "True" : "False") << " ";
+		std::cout << "\n";
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:35:17 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/16 11:05:08 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,6 @@
 
 namespace ft
 {
-	// Empty structs to identify the category of an iterator as an iterator:
-	// struct input_iterator_tag { };
-	// struct output_iterator_tag { };
-	// struct forward_iterator_tag : public input_iterator_tag { };
-	// struct bidirectional_iterator_tag : public forward_iterator_tag { };
-	// struct random_access_iterator_tag : public bidirectional_iterator_tag { };
-
 	template <bool is_integral, typename T>
 		struct is_iterator_integral {
 			typedef T type;

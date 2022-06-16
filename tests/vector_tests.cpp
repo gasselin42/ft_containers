@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:37:00 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/15 11:59:25 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/16 11:03:26 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int main(void)
 	std::cout << "-------------------------" << "\n\n";
 
 
+
 	std::cout << "Constructor - Default \n";
 	{
 		NAMESPACE::vector<T1> vec;
@@ -241,7 +242,7 @@ int main(void)
 	std::cout << "|       ITERATORS       |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Begin \n";
 	{
@@ -393,7 +394,7 @@ int main(void)
 	std::cout << "|        CAPACITY       |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Size \n";
 	{
@@ -544,7 +545,7 @@ int main(void)
 	std::cout << "|     ELEMENT ACCESS    |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Operator [] \n";
 	{
@@ -685,7 +686,7 @@ int main(void)
 	std::cout << "|       MODIFIERS       |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Assign - Value count \n";
 	{
@@ -977,7 +978,7 @@ int main(void)
 	std::cout << "|       ALLOCATOR       |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Get_allocator \n";
 	{
@@ -996,7 +997,7 @@ int main(void)
 	std::cout << "|  NON-MEMBER FUNCTIONS |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Operator == \n";
 	{
@@ -1121,7 +1122,7 @@ int main(void)
 	std::cout << "|  ITERATOR OPERATIONS  |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
-	std::cout << "\n";
+
 
 	std::cout << "Iterator - Operator + \n";
 	{
