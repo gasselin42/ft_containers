@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 09:38:27 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/15 10:11:45 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/06/28 12:59:19 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <stack>
 #include <vector>
+#include <deque>
 #include <utility>
 #include <iostream>
 #include <exception>
@@ -33,7 +34,7 @@ void fill_stack(NAMESPACE::stack<T>& stk)
 }
 
 template <class T>
-void fill_stack_vec(NAMESPACE::stack<T, NAMESPACE::vector<T> >& stk)
+void fill_stack_deq(NAMESPACE::stack<T, std::deque<T> >& stk)
 {
 	for (int i = 0; i < 25; i++)
 		stk.push(i + 1);
@@ -49,7 +50,7 @@ void compare_stacks(NAMESPACE::stack<T>& stk)
 }
 
 template <class T>
-void compare_stacks_vec(NAMESPACE::stack<T, NAMESPACE::vector<T> >& stk)
+void compare_stacks_deq(NAMESPACE::stack<T, std::deque<T> >& stk)
 {
 	std::cout << "Size : " << stk.size() << " ";
 	if (!stk.empty())
@@ -60,7 +61,7 @@ void compare_stacks_vec(NAMESPACE::stack<T, NAMESPACE::vector<T> >& stk)
 int main(void)
 {
 	std::cout << "-------------------------" << "\n";
-	std::cout << "|   STACK / STD::DEQUE  |" << "\n";
+	std::cout << "|     STACK / VECTOR    |" << "\n";
 	std::cout << "-------------------------" << "\n\n";
 
 	
@@ -369,50 +370,50 @@ int main(void)
 
 	std::cout << "Constructor - Default \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk;
-		compare_stacks_vec(stk);
+		NAMESPACE::stack<T1, std::deque<T1> > stk;
+		compare_stacks_deq(stk);
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Constructor - Copy \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk;
+		NAMESPACE::stack<T1, std::deque<T1> > stk;
 
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk_cpy(stk);
+		NAMESPACE::stack<T1, std::deque<T1> > stk_cpy(stk);
 
-		compare_stacks_vec(stk);
+		compare_stacks_deq(stk);
 
 		stk_cpy.push(10);
 		stk_cpy.push(20);
 		stk_cpy.push(30);
 
-		compare_stacks_vec(stk_cpy);
+		compare_stacks_deq(stk_cpy);
 		
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk_cpy2(stk_cpy);
+		NAMESPACE::stack<T1, std::deque<T1> > stk_cpy2(stk_cpy);
 
-		compare_stacks_vec(stk_cpy2);
+		compare_stacks_deq(stk_cpy2);
 	}
 
 	std::cout << "\n";
 
 	std::cout << "Operator = \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk;
+		NAMESPACE::stack<T1, std::deque<T1> > stk;
 
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk_op = stk;
+		NAMESPACE::stack<T1, std::deque<T1> > stk_op = stk;
 
-		compare_stacks_vec(stk_op);
+		compare_stacks_deq(stk_op);
 
 		stk_op.push(10);
 		stk_op.push(20);
 		stk_op.push(30);
 
-		compare_stacks_vec(stk_op);
+		compare_stacks_deq(stk_op);
 
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk_op2 = stk_op;
+		NAMESPACE::stack<T1, std::deque<T1> > stk_op2 = stk_op;
 
-		compare_stacks_vec(stk_op2);
+		compare_stacks_deq(stk_op2);
 	}
 
 	std::cout << "\n";
@@ -523,22 +524,22 @@ int main(void)
 
 	std::cout << "Push & Pop \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk;
+		NAMESPACE::stack<T1, std::deque<T1> > stk;
 
 		for (int i = 1; i <= 50; i++)
 		{
 			stk.push(i);
-			compare_stacks_vec(stk);
+			compare_stacks_deq(stk);
 		}
 
 		std::cout << "\n";
 
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk_cpy(stk);
+		NAMESPACE::stack<T1, std::deque<T1> > stk_cpy(stk);
 
 		for (int i = 1; i < 50; i++)
 		{
 			stk.pop();
-			compare_stacks_vec(stk);
+			compare_stacks_deq(stk);
 		}
 
 		std::cout << "\n";
@@ -546,7 +547,7 @@ int main(void)
 		for (int i = 51; i <= 100; i++)
 		{
 			stk_cpy.push(i);
-			compare_stacks_vec(stk_cpy);
+			compare_stacks_deq(stk_cpy);
 		}
 
 		std::cout << "\n";
@@ -554,7 +555,7 @@ int main(void)
 		for (int i = 1; i < 100; i++)
 		{
 			stk_cpy.pop();
-			compare_stacks_vec(stk_cpy);
+			compare_stacks_deq(stk_cpy);
 		}
 	}
 
@@ -562,11 +563,11 @@ int main(void)
 
 	std::cout << "Operator == \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 
 		std::cout << "stk1 == stk2 ? " << ((stk1 == stk2) ? "True" : "False") << "\n";
 
@@ -579,11 +580,11 @@ int main(void)
 
 	std::cout << "Operator != \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 		
 		std::cout << "stk1 != stk2 ? " << ((stk1 != stk2) ? "True" : "False") << "\n";
 
@@ -596,11 +597,11 @@ int main(void)
 
 	std::cout << "Operator < \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 		
 		std::cout << "stk1 < stk2 ? " << ((stk1 < stk2) ? "True" : "False") << "\n";
 
@@ -613,11 +614,11 @@ int main(void)
 
 	std::cout << "Operator > \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 		
 		std::cout << "stk1 > stk2 ? " << ((stk1 > stk2) ? "True" : "False") << "\n";
 
@@ -630,11 +631,11 @@ int main(void)
 
 	std::cout << "Operator <= \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 		
 		std::cout << "stk1 <= stk2 ? " << ((stk1 <= stk2) ? "True" : "False") << "\n";
 
@@ -647,11 +648,11 @@ int main(void)
 
 	std::cout << "Operator >= \n";
 	{
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk1;
-		NAMESPACE::stack<T1, NAMESPACE::vector<T1> > stk2;
+		NAMESPACE::stack<T1, std::deque<T1> > stk1;
+		NAMESPACE::stack<T1, std::deque<T1> > stk2;
 
-		fill_stack_vec(stk1);
-		fill_stack_vec(stk2);
+		fill_stack_deq(stk1);
+		fill_stack_deq(stk2);
 		
 		std::cout << "stk1 >= stk2 ? " << ((stk1 >= stk2) ? "True" : "False") << "\n";
 

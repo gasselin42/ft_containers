@@ -10,7 +10,7 @@ diffdir="tests/diff"
 logdir="tests/logs"
 timedir="tests/runtime"
 incdir="includes/"
-errlog="err.log"
+errlog="tests/err.log"
 flags="-Wall -Werror -Wextra -std=c++98"
 
 if [ -d "$outdir" ]; then
