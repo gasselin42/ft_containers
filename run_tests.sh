@@ -8,8 +8,6 @@ testdir="tests"
 outdir="tests/output"
 diffdir="tests/diff"
 logdir="tests/logs"
-timedir="tests/runtime"
-incdir="includes/"
 errlog="tests/err.log"
 flags="-Wall -Werror -Wextra -std=c++98"
 
@@ -54,8 +52,8 @@ calculate_time() {
 
 run_all_tests() {
 	b=$(basename "${f%_tests.cpp}")
-	clang++ "$f" $flags -DNAMESPACE=ft -I$incdir -o "$outdir/ft_$b.out" 2>> $errlog
-	clang++ "$f" $flags -DNAMESPACE=std -I$incdir -o "$outdir/std_$b.out" 2>> $errlog
+	clang++ "$f" $flags -DNAMESPACE=ft -o "$outdir/ft_$b.out" 2>> $errlog
+	clang++ "$f" $flags -DNAMESPACE=std -o "$outdir/std_$b.out" 2>> $errlog
 	./"$outdir/ft_$b.out" > "$logdir/ft_$b" 2>> $errlog
 	./"$outdir/std_$b.out" > "$logdir/std_$b" 2>> $errlog
 	diff -u "$logdir/ft_$b" "$logdir/std_$b" > "$diffdir/$b.diff"
