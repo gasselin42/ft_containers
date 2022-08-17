@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/16 11:05:08 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:53:47 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ namespace ft
 	template <typename T>
 		struct is_integral : public is_integral_type<T> {};
 
-
-
+// const is_integral_type
+// Missing an std::equal
+	// vector erase range
+// map upper_bound
 
 
 	template <typename Category, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, typename Reference = T&>

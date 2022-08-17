@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/13 17:15:47 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:00:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ namespace ft
 			typedef typename	Alloc::const_reference 							const_reference;
 			typedef typename	Alloc::pointer 									pointer;
 			typedef typename	Alloc::const_pointer 							const_pointer;
-			typedef	typename	ft::BST<value_type, Compare>::iterator			iterator;
-			typedef	typename	ft::BST<value_type, Compare>::const_iterator	const_iterator;
+			typedef	typename	ft::BST<value_type, Compare, Alloc>::iterator			iterator;
+			typedef	typename	ft::BST<value_type, Compare, Alloc>::const_iterator	const_iterator;
 			typedef				ft::reverse_iterator<iterator> 		reverse_iterator;
 			typedef				ft::reverse_iterator<const_iterator> 	const_reverse_iterator;
 			typedef				ptrdiff_t										difference_type;
@@ -59,7 +59,7 @@ namespace ft
 		private:
 			allocator_type 		_alloc;
 			Compare				_comp;
-			BST<value_type, key_compare>	_bst;
+			BST<value_type, key_compare, Alloc>	_bst;
 
 			template <class InputIterator>
 				difference_type get_diff(InputIterator first, InputIterator last)

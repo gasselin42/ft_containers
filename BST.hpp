@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/13 17:15:12 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:41:09 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 
 namespace ft
 {	
-	template <class T, class Compare = ft::less<T>, class Node = ft::BST_Node<T>, class Node_Alloc = std::allocator<Node> >
+	template <class T, class Compare, class Alloc, class Node = ft::BST_Node<T> >
 		class BST
 		{	
 			public:
 				typedef BST self;
 				typedef Node * node_ptr;
-				typedef Node_Alloc node_alloc;
+				typedef typename Alloc::template rebind<Node>::other node_alloc;
 				typedef	size_t	size_type;
 				typedef T value_type;
 				typedef typename T::first_type Key;

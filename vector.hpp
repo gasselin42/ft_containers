@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/13 15:44:43 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:53:38 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,20 +484,22 @@ namespace ft
 
 			iterator erase(iterator first, iterator last)
 				{
-					difference_type diff = std::distance(first, last);
+					if (first != last)
+					{
+						if (first != end())
+							std::move(last, end(), first);
 
-					if (diff == 0)
-						return (last);
+						difference_type diff = std::distance(last, end());
 					
-					if (first >= this->end())
-						return (this->end());
+						pointer new_end = first.base() + diff;
 
-					while (diff--) {
-						first = erase(first);
-						if (first >= this->end())
-							break ;
+						for (; new_end != _cont_end; ++new_end) {
+							this->_alloc.destroy(new_end);
+							_cont_size--;	
+						}
+						_cont_end = first.base() + diff; 
 					}
-					
+
 					return (first);
 				}
 
