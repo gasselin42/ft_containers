@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 20:30:33 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/19 14:04:28 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 #include <iostream>
 
 #include "iterators.hpp"
+
+// insert_size
+// resize ?
 
 namespace ft
 {
@@ -214,10 +217,7 @@ namespace ft
 			~vector()
 				{
 					if (!empty())
-					{
-						for (; this->_cont_size;)
-							this->pop_back();
-					}
+						this->clear();
 					if (this->_cont_capacity)
 						this->_alloc.deallocate(this->_cont_start, this->_cont_capacity);
 				}
@@ -434,6 +434,8 @@ namespace ft
 
 			void insert(iterator position, size_type n, const T& val)
 				{
+					difference_type diff;
+					
 					if (n == 0)
 						return ;
 						
@@ -442,11 +444,18 @@ namespace ft
 
 					if (size() + n > capacity())
 					{
-						difference_type diff = std::distance(begin(), position);
+						diff = std::distance(begin(), position);
 						this->reserve(std::max(size() + n, capacity() * 2));
 						position = begin() + diff;
 					}
 					
+					// diff = std::distance(begin(), position);
+					// std::move(position, end(), position + n);
+					// this->_cont_end += n;
+					// this->_cont_size += n;
+
+					// for (size_t i = 0; i < n; i++)
+					// 	this->_alloc.construct(this->_cont_start + diff + i, val);
 					while (n--)
 						position = insert(position, val) + 1;
 				}
