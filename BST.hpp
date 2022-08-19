@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 12:49:41 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 14:41:09 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 20:09:06 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -590,6 +590,78 @@ namespace ft
 
 				size_type get_size() const
 					{ return (this->_map_size); }
+
+				template < typename Key >
+					iterator lower_bound(const Key & key)
+						{
+							node_ptr ptr = _tri_ptr->parent;
+							node_ptr lower = _end;
+
+							while (ptr != NULL && ptr != _begin && ptr != _end) {
+								if (!_comp(ptr->value.first, key)) {
+									lower = ptr;
+									ptr = ptr->left;
+								}
+								else
+									ptr = ptr->right;
+							}
+
+							return (iterator(lower, _tri_ptr));
+						}
+
+				template < typename Key >
+					const_iterator lower_bound(const Key & key) const
+						{
+							node_ptr ptr = _tri_ptr->parent;
+							node_ptr lower = _end;
+
+							while (ptr != NULL && ptr != _begin && ptr != _end) {
+								if (!_comp(ptr->value.first, key)) {
+									lower = ptr;
+									ptr = ptr->left;
+								}
+								else
+									ptr = ptr->right;
+							}
+
+							return (const_iterator(lower, _tri_ptr));
+						}
+
+				template < typename Key >
+					iterator upper_bound(const Key & key)
+						{
+							node_ptr ptr = _tri_ptr->parent;
+							node_ptr upper = _end;
+
+							while (ptr != NULL && ptr != _begin && ptr != _end) {
+								if (_comp(key, ptr->value.first)) {
+									upper = ptr;
+									ptr = ptr->left;
+								}
+								else
+									ptr = ptr->right;
+							}
+
+							return (iterator(upper, _tri_ptr));
+						}
+
+				template < typename Key >
+					const_iterator upper_bound(const Key & key) const
+						{
+							node_ptr ptr = _tri_ptr->parent;
+							node_ptr upper = _end;
+
+							while (ptr != NULL && ptr != _begin && ptr != _end) {
+								if (_comp(key, ptr->value.first)) {
+									upper = ptr;
+									ptr = ptr->left;
+								}
+								else
+									ptr = ptr->right;
+							}
+
+							return (const_iterator(upper, _tri_ptr));
+						}
 
 		};
 }

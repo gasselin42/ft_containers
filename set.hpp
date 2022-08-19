@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:52:47 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/13 16:13:41 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 20:11:04 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,56 +206,16 @@ namespace ft
 				{ return ((this->find(k) == this->end()) ? 0 : 1); }
 
 			iterator lower_bound(const Key& k)
-				{
-					iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(*start, k) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.lower_bound(k)); }
 			
 			const_iterator lower_bound(const Key& k) const
-				{ 
-					const_iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(*start, k) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.lower_bound(k)); }
 
 			iterator upper_bound(const Key& k)
-				{
-					iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(k, *start) == true)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.upper_bound(k)); }
 
 			const_iterator upper_bound(const Key& k) const
-				{
-					const_iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(k, *start) == true)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.upper_bound(k)); }
 
 			ft::pair<iterator, iterator> equal_range(const Key& k)
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }

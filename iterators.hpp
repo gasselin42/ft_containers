@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 15:53:47 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:10:41 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,46 +39,85 @@ namespace ft
 		struct is_integral_type<bool> : public true_type {};
 
 	template <>
+		struct is_integral_type<const bool> : public true_type {};
+
+	template <>
 		struct is_integral_type<char> : public true_type {};
+
+	template <>
+		struct is_integral_type<const char> : public true_type {};
 
 	template <>
 		struct is_integral_type<signed char> : public true_type {};
 
 	template <>
+		struct is_integral_type<const signed char> : public true_type {};
+
+	template <>
 		struct is_integral_type<unsigned char> : public true_type {};
+
+	template <>
+		struct is_integral_type<const unsigned char> : public true_type {};
 
 	template <>
 		struct is_integral_type<wchar_t> : public true_type {};
 
 	template <>
+		struct is_integral_type<const wchar_t> : public true_type {};
+
+	template <>
 		struct is_integral_type<short> : public true_type {};
+
+	template <>
+		struct is_integral_type<const short> : public true_type {};
 
 	template <>
 		struct is_integral_type<int> : public true_type {};
 
 	template <>
+		struct is_integral_type<const int> : public true_type {};
+
+	template <>
 		struct is_integral_type<long> : public true_type {};
+
+	template <>
+		struct is_integral_type<const long> : public true_type {};
 
 	template <>
 		struct is_integral_type<long long> : public true_type {};
 
 	template <>
+		struct is_integral_type<const long long> : public true_type {};
+
+	template <>
 		struct is_integral_type<unsigned short> : public true_type {};
+
+	template <>
+		struct is_integral_type<const unsigned short> : public true_type {};
 
 	template <>
 		struct is_integral_type<unsigned int> : public true_type {};
 
 	template <>
+		struct is_integral_type<const unsigned int> : public true_type {};
+
+	template <>
 		struct is_integral_type<unsigned long> : public true_type {};
+
+	template <>
+		struct is_integral_type<const unsigned long> : public true_type {};
 
 	template <>
 		struct is_integral_type<unsigned long long> : public true_type {};
 
+	template <>
+		struct is_integral_type<const unsigned long long> : public true_type {};
+
 	template <typename T>
 		struct is_integral : public is_integral_type<T> {};
 
-// const is_integral_type
-// Missing an std::equal
+	// const is_integral_type
+	// Missing an std::equal
 	// vector erase range
 // map upper_bound
 

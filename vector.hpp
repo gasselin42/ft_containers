@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 15:53:38 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 20:30:33 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ namespace ft
 				}
 
 			template <class InputIterator>
-				void assign(InputIterator first,  typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
+				void assign(InputIterator first, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
 					{
 						typedef typename iterator_traits<InputIterator>::iterator_category category;
 						assign_range(first, last, category());

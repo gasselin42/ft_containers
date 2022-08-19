@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/06/11 17:55:40 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:09:52 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,17 @@ namespace ft
 				}
 				return true;
 			}
+
+	template <class InputIt1, class InputIt2, class BinaryPredicate>
+		bool equal (InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate pred)
+			{
+				while (first1 != last1) {
+					if (!pred(*first1, *first2))
+						return false;
+					++first1;
+					++first2;
+				}
+				return true;
+			}
+
 }

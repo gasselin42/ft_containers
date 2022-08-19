@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 14:48:23 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 15:00:52 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:48:56 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,56 +258,16 @@ namespace ft
 				{ return ((this->find(k) == this->end()) ? 0 : 1); }
 
 			iterator lower_bound(const Key& k)
-				{
-					iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp((*start).first, k) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.lower_bound(k)); }
 			
 			const_iterator lower_bound(const Key& k) const
-				{ 
-					const_iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp((*start).first, k) == false)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.lower_bound(k)); }
 
 			iterator upper_bound(const Key& k)
-				{
-					iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(k, (*start).first) == true)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.upper_bound(k)); }
 
 			const_iterator upper_bound(const Key& k) const
-				{
-					const_iterator	start = this->begin();
-					
-					while (start != this->end())
-					{
-						if (_comp(k, (*start).first) == true)
-							return (start);
-						start++;
-					}
-					return (this->end());
-				}
+				{ return (_bst.upper_bound(k)); }
 
 			ft::pair<iterator, iterator> equal_range(const Key& k)
 				{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
