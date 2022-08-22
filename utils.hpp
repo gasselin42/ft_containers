@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 15:00:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/17 19:09:52 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:28:05 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 namespace ft
 {
 
-	template <bool B, class T = void> struct enable_if {};
-	template <class T> struct enable_if<true, T> { typedef T _type; };
-	
 	template <class Arg1, class Arg2, class Result>
 		struct binary_function {
 			typedef Arg1 first_argument_type;
@@ -33,21 +30,6 @@ namespace ft
 				{ return x < y; }
 		};
 
-	template < typename T, T Val >
-	struct integral_constant {
-		typedef integral_constant   type;
-		typedef T                   value_type;
-		static const bool           value = Val;
-	};
-
-	typedef integral_constant<bool, true> true_type;
-	typedef integral_constant<bool, false> false_type;
-
-	template<typename _T1, typename _T2>
-		struct is_same : public false_type { };
-
-	template<typename _Tp>
-		struct is_same<_Tp, _Tp> : public true_type { };
 
 	template <class InputIt1, class InputIt2>
 		bool lexicographical_compare(InputIt1 first1, InputIt1 last1,

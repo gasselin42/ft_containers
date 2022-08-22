@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 12:49:52 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/19 14:04:28 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:10:16 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,21 @@ namespace ft
 							_alloc.construct(_cont_end, *first);
 							_cont_end++;
 						}
+					}
+
+			pointer construct_range(pointer dest, const_pointer end, const_reference value)
+				{
+					for (; dest != end; ++dest) 
+						_alloc.construct(dest, value);  
+					return dest;
+				}
+
+			template <typename Iter>
+				pointer construct_range(pointer dest, Iter start, Iter end)
+					{
+						for (; start != end; ++dest, ++start) 
+							_alloc.construct(dest, *start);  
+						return dest;
 					}
 
 			template <class InputIterator>
@@ -154,6 +169,22 @@ namespace ft
 							_alloc.construct(_ptr, *first);
 						}
 					}
+
+			iterator move_right(iterator pos, size_type n)
+				{
+					iterator cpy = end() - 1;
+					iterator dest = cpy + n;
+					if (_cont_size)
+					{
+						for (; dest != pos && cpy >= pos; --cpy, --dest) {
+							if (dest < end())
+								*dest = *cpy;
+							else
+								_alloc.construct(dest.base(), *cpy);
+						}
+					}
+					return ++dest;
+				}
 
 		public:
 			// Constructors and Destructor
@@ -434,31 +465,59 @@ namespace ft
 
 			void insert(iterator position, size_type n, const T& val)
 				{
-					difference_type diff;
-					
-					if (n == 0)
-						return ;
+					if (n <= 0)
+						return;
+					if (this->_cont_size + n > this->_cont_capacity) {
+						size_type new_cap = std::max(size() + n, capacity() * 2);
+						pointer new_start = _alloc.allocate(new_cap);
+						pointer new_end = construct_range(new_start, begin(), position);
+						new_end = construct_range(new_end, new_end + n, val);
+						new_end = construct_range(new_end, position, end());
 						
-					if ((this->_cont_size + n) > this->max_size())
-						throw (std::length_error("vector::insert"));
+						if (_cont_size) {
+							for (size_type i = 0; i < _cont_size; i++)
+								_alloc.destroy(--_cont_end);
+							_alloc.deallocate(_cont_start, _cont_capacity);
+						}
 
-					if (size() + n > capacity())
+						_cont_start = new_start;
+						_cont_end = new_end;
+						_cont_capacity = new_cap;
+					} 
+					else 
 					{
-						diff = std::distance(begin(), position);
-						this->reserve(std::max(size() + n, capacity() * 2));
-						position = begin() + diff;
+						iterator cpy_end = move_right(position, n);
+						for (; position != cpy_end; ++position) {
+							if (position.base() < _cont_end)
+								*position = val;
+							else
+								_alloc.construct(position.base(), val);
+						}
+						_cont_end += n;
 					}
-					
-					// diff = std::distance(begin(), position);
-					// std::move(position, end(), position + n);
-					// this->_cont_end += n;
-					// this->_cont_size += n;
-
-					// for (size_t i = 0; i < n; i++)
-					// 	this->_alloc.construct(this->_cont_start + diff + i, val);
-					while (n--)
-						position = insert(position, val) + 1;
+					_cont_size += n;
 				}
+
+			// void insert(iterator position, size_type n, const T& val)
+			// 	{
+			// 		difference_type diff;
+					
+			// 		if (n <= 0)
+			// 			return ;
+						
+			// 		if ((this->_cont_size + n) > this->max_size())
+			// 			throw (std::length_error("vector::insert"));
+
+			// 		if (size() + n > capacity())
+			// 		{
+			// 			diff = std::distance(begin(), position);
+			// 			this->reserve(std::max(size() + n, capacity() * 2));
+			// 			position = begin() + diff;
+			// 		}
+
+			// 		while (n--)
+			// 			position = insert(position, val) + 1;
+			// 	}
 
 			template <class InputIterator>
 				void insert(iterator position, InputIterator first,  typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)

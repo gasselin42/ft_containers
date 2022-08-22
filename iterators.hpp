@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 13:20:51 by gasselin          #+#    #+#             */
-/*   Updated: 2022/08/19 13:13:02 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:20:39 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "utils.hpp"
+#include "type_traits.hpp"
 
 #include <iostream>
 
@@ -31,90 +32,6 @@ namespace ft
 			typedef T type;
 			static const bool value = is_valid;
 		};
-
-	template < typename >
-		struct is_integral_type : public false_type {};
-
-	template <>
-		struct is_integral_type<bool> : public true_type {};
-
-	template <>
-		struct is_integral_type<const bool> : public true_type {};
-
-	template <>
-		struct is_integral_type<char> : public true_type {};
-
-	template <>
-		struct is_integral_type<const char> : public true_type {};
-
-	template <>
-		struct is_integral_type<signed char> : public true_type {};
-
-	template <>
-		struct is_integral_type<const signed char> : public true_type {};
-
-	template <>
-		struct is_integral_type<unsigned char> : public true_type {};
-
-	template <>
-		struct is_integral_type<const unsigned char> : public true_type {};
-
-	template <>
-		struct is_integral_type<wchar_t> : public true_type {};
-
-	template <>
-		struct is_integral_type<const wchar_t> : public true_type {};
-
-	template <>
-		struct is_integral_type<short> : public true_type {};
-
-	template <>
-		struct is_integral_type<const short> : public true_type {};
-
-	template <>
-		struct is_integral_type<int> : public true_type {};
-
-	template <>
-		struct is_integral_type<const int> : public true_type {};
-
-	template <>
-		struct is_integral_type<long> : public true_type {};
-
-	template <>
-		struct is_integral_type<const long> : public true_type {};
-
-	template <>
-		struct is_integral_type<long long> : public true_type {};
-
-	template <>
-		struct is_integral_type<const long long> : public true_type {};
-
-	template <>
-		struct is_integral_type<unsigned short> : public true_type {};
-
-	template <>
-		struct is_integral_type<const unsigned short> : public true_type {};
-
-	template <>
-		struct is_integral_type<unsigned int> : public true_type {};
-
-	template <>
-		struct is_integral_type<const unsigned int> : public true_type {};
-
-	template <>
-		struct is_integral_type<unsigned long> : public true_type {};
-
-	template <>
-		struct is_integral_type<const unsigned long> : public true_type {};
-
-	template <>
-		struct is_integral_type<unsigned long long> : public true_type {};
-
-	template <>
-		struct is_integral_type<const unsigned long long> : public true_type {};
-
-	template <typename T>
-		struct is_integral : public is_integral_type<T> {};
 		
 
 		
